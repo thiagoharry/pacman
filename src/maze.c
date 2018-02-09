@@ -23,18 +23,27 @@ static struct interface *maze_image;
 
 void maze_init(void){
   int i, j;
+  // In which y coordinate each part of the maze is:
   int y_pos[MAZE_HEIGHT] = {63, 90, 115, 140, 165, 188, 210, 233, 254, 275, 296,
                             316, 336, 355, 375, 393, 411, 429, 446, 463, 480,
                             497, 514, 530, 546, 562, 578, 594, 609, 624, 639};
+  // The center of the first block in each line of the maze:
+  int x_start[MAZE_HEIGHT] = {-426, -418, -410, -402, -396, -390, -383, -377,
+                              -372, -367, -362,
+                              600, 600, 600, 600, 600, 600, 600, 600, 600,
+                              600, 600, 600, 600, 600, 600, 600, 600, 600, 600,
+                              600};
+  // Tile size in each line:
+  float tile_size[MAZE_HEIGHT] = {29.35, 28.8, 28.25, 27.7, 27.3, 26.85, 26.4,
+                                  25.97, 25.65, 25.3, 24.95,
+                                  600, 600, 600, 600, 600, 600, 600, 600, 600,
+                              600, 600, 600, 600, 600, 600, 600, 600, 600, 600,
+                              600};
   for(i = 0; i < MAZE_HEIGHT; i ++)
     for(j = 0; j < MAZE_WIDTH; j ++){
-      float proportion = ((740.0 - y_pos[i]) / 1480.0) + 0.5;
       maze_space[i][j].y = y_pos[i];
       maze_space[i][j].size_multiplier = 1.0 - 0.00073529 * maze_space[i][j].y;
-      maze_space[i][j].x = W.width / 2 - 445 * proportion -
-        i * 1.4 +
-        (29.3 * j) * proportion +
-        j * 1.17 / (proportion * proportion);
+      maze_space[i][j].x = W.width / 2 + x_start[i] + tile_size[i] * j;
     }
   // Size should be multiple of 640x740
   maze_image = W.new_interface(4, W.width / 2, 550, 1024, 1184,
