@@ -31,14 +31,6 @@ void main(){
   }
   else{
     vec4 texture = texture2D(texture1, vec2(x, y));
-    // 0: 0.046875 0.09594594
-    // 0.109375 0.8890625
-    // 0, 0
-    if(distance(vec2(x, y), vec2(0.046875, 0.663513)) < 0.0046)
-      gl_FragData[0] = vec4(1.0, 0.0, 0.0, 1.0);
-    else if(distance(vec2(x, y), vec2(0.953125, 0.663513)) < 0.0046)
-      gl_FragData[0] = vec4(1.0, 0.0, 0.0, 1.0);
-    else
-      gl_FragData[0] = texture;
+    gl_FragData[0] = texture;
   }
 }
