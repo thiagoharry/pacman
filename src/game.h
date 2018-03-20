@@ -33,6 +33,7 @@ struct _game_struct{
     int pellets_eaten;
     int level;
     bool game_over;
+    int stored_high_score;
 } _game;
 
 MAIN_LOOP main_loop(void);

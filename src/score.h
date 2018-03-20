@@ -25,5 +25,6 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 void score_init(void);
 void score_increment(int);
+void score_save(void);
 
 #endif

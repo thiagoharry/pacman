@@ -21,12 +21,14 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "score.h"
 
 static bool initialized = false;
-static int score;
+static int score, high_score;
 static struct interface *digits[6];
 static struct interface *one_hundred, *two_hundred, *three_hundred,
     *four_hundred, *five_hundred, *seven_hundred, *eight_hundred,
     *one_thousand, *combo_ghost_point, *two_thousand, *three_thousand,
     *five_thousand;
+static struct interface *record;
+static struct interface *record_digits[6];
 
 static void hidden_score(void){
     one_hundred -> visible = false;
@@ -45,10 +47,21 @@ static void hidden_score(void){
 
 void score_init(void){
     int i;
+    int division = 100000;
+    bool visible = false;
     if(!initialized){
+        high_score = W.game -> stored_high_score;
         for(i = 0; i < 6; i ++){
-            digits[i] = W.new_interface(9, i * 15 + 7, W.height - 7, 15, 15, "digits.png");
+            digits[i] = W.new_interface(9, i * 15 + 7, W.height - 7, 15, 15,
+                                        "digits.png");
             digits[i] -> integer = 0;
+            record_digits[i] = W.new_interface(9, i * 15 + W.width / 2 - 38, W.height - 22, 15,
+                                               15, "digits.png");
+            record_digits[i] -> integer = (high_score / division) % 10;
+            if(record_digits[i] -> integer != 0 || i == 5)
+                visible = true;
+            record_digits[i] -> visible = visible;
+            division /= 10;
         }
         one_hundred = W.new_interface(5, 0, 0, 30, 30, "one_hundred.png");
         two_hundred = W.new_interface(5, 0, 0, 30, 30, "two_hundred.png");
@@ -62,6 +75,7 @@ void score_init(void){
         two_thousand = W.new_interface(5, 0, 0, 30, 30, "two_thousand.png");
         three_thousand = W.new_interface(5, 0, 0, 30, 30, "three_thousand.png");
         five_thousand = W.new_interface(5, 0, 0, 30, 30, "five_thousand.png");
+        record = W.new_interface(5, W.width / 2, W.height - 15, 91, 30, "record.png");
     }
     hidden_score();
     for(i = 0; i < 5; i ++)
@@ -80,6 +94,18 @@ void score_increment(int increment){
     int i, division = 100000;
     bool visible = false;
     score += increment;
+    if(score > high_score){
+        high_score = score;
+        for(i = 0; i < 6; i ++){
+            record_digits[i] -> integer = (score / division) % 10;
+            if(record_digits[i] -> integer != 0 || i == 5)
+                visible = true;
+            record_digits[i] -> visible = visible;
+            division /= 10;
+        }
+    }
+    visible = false;
+    division = 100000;
     for(i = 0; i < 6; i ++){
         digits[i] -> integer = (score / division) % 10;
         if(digits[i] -> integer != 0 || i == 5)
@@ -143,4 +169,11 @@ void score_increment(int increment){
     }
     if(increment >= 100)
         W.run_futurelly(hidden_score, 1.0);
+}
+
+void score_save(void){
+    if(high_score > W.game -> stored_high_score){
+        W.write_integer("high_score", high_score);
+        W.game -> stored_high_score = high_score;
+    }
 }

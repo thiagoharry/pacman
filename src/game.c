@@ -79,8 +79,10 @@ void lose_life(void){
     ghosts_init();
     new_life = pacman_increment_life(-1);
     ghosts_use_global_pellet_counter = true;
-    if(new_life == 0)
+    if(new_life == 0){
         W.game -> game_over = true;
+        score_save();
+    }
 }
 
 int main(void){
@@ -94,4 +96,7 @@ int main(void){
 void game_init(void){
     W.game -> level = 1;
     W.game -> game_over = false;
+    if(!W.read_integer("high_score", &(W.game -> stored_high_score))){
+        W.game -> stored_high_score = 0;
+    }
 }
