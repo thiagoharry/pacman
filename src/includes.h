@@ -21,3 +21,4 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "weaver/weaver.h"
 #include "pellet.h"
 #include "maze.h"
+#include "pacman.h"

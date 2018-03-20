@@ -1,5 +1,5 @@
 /*243:*/
-#line 5589 "cweb/weaver.w"
+#line 5594 "cweb/weaver.w"
 
 #ifndef _canvas_H_
 #define _canvas_h_
@@ -13,7 +13,7 @@ extern"C"{
 #include "../../conf/conf.h"
 #include "conf_end.h"
 /*:66*/
-#line 5595 "cweb/weaver.w"
+#line 5600 "cweb/weaver.w"
 
 #include "weaver.h"
 #include <stdio.h>  
@@ -23,15 +23,15 @@ extern"C"{
 void _initialize_canvas(void);
 void _finalize_canvas(void);
 /*252:*/
-#line 5800 "cweb/weaver.w"
+#line 5805 "cweb/weaver.w"
 
 void _Wresize_window(int width,int height);
 /*:252*//*258:*/
-#line 5863 "cweb/weaver.w"
+#line 5868 "cweb/weaver.w"
 
 void _Wmove_window(int x,int y);
 /*:258*/
-#line 5603 "cweb/weaver.w"
+#line 5608 "cweb/weaver.w"
 
 #ifdef __cplusplus
 }

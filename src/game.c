@@ -30,8 +30,9 @@ MAIN_LOOP main_loop(void){ // The game loop
                           "grass.png");
   horizon = W.new_interface(3, W.width / 2, 653,
                             W.width, 10, "horizon.png");
-  maze_init();
-  pellet_init();
+  //maze_init();
+  //pellet_init();
+  pacman_init();
  LOOP_BODY: // Code executed every loop iteration
     if(W.keyboard[W_ANY])
         Wexit_loop();

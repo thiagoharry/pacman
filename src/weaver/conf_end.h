@@ -47,7 +47,7 @@
 #define W_WIDTH 0
 #endif
 /*:209*//*328:*/
-#line 7326 "cweb/weaver.w"
+#line 7331 "cweb/weaver.w"
 
 #ifndef W_INSTALL_DATA
 #define W_INSTALL_DATA "/usr/share/games/"W_PROG
@@ -66,7 +66,7 @@
 #define W_MAX_SCHEDULING 8
 #endif
 /*:328*//*737:*/
-#line 16156 "cweb/weaver.w"
+#line 16298 "cweb/weaver.w"
 
 
 #ifndef W_MAX_MUSIC
