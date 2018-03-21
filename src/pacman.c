@@ -17,9 +17,10 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#include "weaver/weaver.h"
-#include "pellet.h"
-#include "maze.h"
 #include "pacman.h"
-#include "resolution.h"
+
+static struct interface *image;
+
+void pacman_init(void){
+  image = W.new_interface(5, 100, 100, 64, 64, "pacman.gif");
+}

@@ -81,7 +81,7 @@ void _change_resolution(int resolution_x,int resolution_y);
 
 void _change_final_shader(int type);
 /*:502*//*658:*/
-#line 14655 "cweb/weaver.w"
+#line 14767 "cweb/weaver.w"
 
 extern char _vertex_image_interface[];
 extern char _fragment_image_interface[];

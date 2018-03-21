@@ -17,9 +17,12 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _resolution_h_
+#define _resolution_h_
 
 #include "weaver/weaver.h"
-#include "pellet.h"
-#include "maze.h"
-#include "pacman.h"
-#include "resolution.h"
+#include "includes.h"
+
+void resolution_init(void);
+
+#endif

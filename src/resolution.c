@@ -17,9 +17,14 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#include "weaver/weaver.h"
-#include "pellet.h"
-#include "maze.h"
-#include "pacman.h"
 #include "resolution.h"
+
+#define MAX_HEIGHT 800
+
+void resolution_init(void){
+  if(W.resolution_y > MAX_HEIGHT){
+    float multiplier = ((float) MAX_HEIGHT) / W.resolution_y;
+    W.change_resolution(W.resolution_x * multiplier,
+                        W.resolution_y * multiplier);
+  }
+}

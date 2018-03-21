@@ -47,35 +47,4 @@ void maze_init(void){
   // Size should be multiple of 640x740
   maze_image = W.new_interface(4, W.width / 2, 550, 1024, 1184,
                                "maze.png");
-
-  // X 28.7 X X 27.2 X X 25.96 X X 24.9 X X X X X X X X X X 21.76 X X 21.17 X X X
-  // 20.5
-  /*for(i = 0; i < 30; i ++){
-    maze_space[0][i].x = maze_space[0][i].y = maze_space[0][i].size_multiplier = -1.0;
-  }
-  for(i = 0; i < 30; i ++){
-    maze_space[i][1].y = 90;
-    maze_space[i][1].size_multiplier = 0.8906;
-    maze_space[i][1].x = W.width / 2 - 417.4 + 28.7 * i;
-  }
-  for(i = 0; i < 30; i ++){
-    maze_space[i][2].y = 115;
-    maze_space[i][2].size_multiplier = 0.875;
-    maze_space[i][2].x = W.width / 2 - 410 + 28.0 * i;
-  }
-  for(i = 0; i < 30; i ++){
-    maze_space[i][3].y = 140;
-    maze_space[i][3].size_multiplier = 0.84375;
-    maze_space[i][3].x = W.width / 2 - 403.52 + 27.76 * i;
-  }
-  for(i = 0; i < 30; i ++){
-    maze_space[i][4].y = 165;
-    maze_space[i][4].size_multiplier = 0.828125;
-    maze_space[i][4].x = W.width / 2 - 395.4 + 27.2 * i;
-  }
-  for(i = 0; i < 30; i ++){
-    maze_space[i][5].y = 188;
-    maze_space[i][5].size_multiplier = 0.8125;
-    maze_space[i][5].x = W.width / 2 - 389.0476 + 26.7619 * i;
-    }*/
 }

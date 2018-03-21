@@ -29,9 +29,9 @@ MAIN_LOOP main_loop(void){ // The game loop
                           W.width, 648,
                           "grass.png");
   horizon = W.new_interface(3, W.width / 2, 653,
-                            W.width, 10, "horizon.png");
-  //maze_init();
-  //pellet_init();
+  W.width, 10, "horizon.png");
+  maze_init();
+  pellet_init();
   pacman_init();
  LOOP_BODY: // Code executed every loop iteration
     if(W.keyboard[W_ANY])
@@ -42,6 +42,7 @@ MAIN_LOOP main_loop(void){ // The game loop
 
 int main(void){
   Winit(); // Initializes Weaver
+  resolution_init();
   Wloop(main_loop); // Enter a new game loop
   return 0;
 }

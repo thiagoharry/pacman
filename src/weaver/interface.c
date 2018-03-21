@@ -8,13 +8,13 @@
 #include <sys/types.h>  
 #endif
 /*649:*/
-#line 14455 "cweb/weaver.w"
+#line 14567 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 #include <SDL/SDL_image.h> 
 #endif
 /*:649*//*667:*/
-#line 14930 "cweb/weaver.w"
+#line 15042 "cweb/weaver.w"
 
 #if !defined(W_DISABLE_PNG) && (W_TARGET == W_ELF)
 #include <png.h> 
@@ -23,7 +23,7 @@
 #line 8721 "cweb/weaver.w"
 
 /*648:*/
-#line 14435 "cweb/weaver.w"
+#line 14547 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 static void onerror_texture(unsigned undocumented,void*interface,
@@ -40,7 +40,7 @@ pthread_mutex_unlock(&(W._pending_files_mutex));
 }
 #endif
 /*:648*//*650:*/
-#line 14461 "cweb/weaver.w"
+#line 14573 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 static void onload_texture(unsigned undocumented,
@@ -128,7 +128,7 @@ pthread_mutex_unlock(&(W._pending_files_mutex));
 }
 #endif
 /*:650*//*651:*/
-#line 14552 "cweb/weaver.w"
+#line 14664 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 static void onprogress_texture(unsigned int undocumented,void*snd,
@@ -201,7 +201,7 @@ _interfaces[_number_of_loops][i].height= (float)height;
 
 _interfaces[_number_of_loops][i]._mode= GL_TRIANGLE_FAN;
 /*645:*/
-#line 14319 "cweb/weaver.w"
+#line 14431 "cweb/weaver.w"
 
 {
 _interfaces[_number_of_loops][i]._texture= &_empty_texture;
@@ -242,7 +242,7 @@ _interfaces[_number_of_loops][i].a= va_arg(valist,double);
 va_end(valist);
 break;
 /*647:*/
-#line 14350 "cweb/weaver.w"
+#line 14462 "cweb/weaver.w"
 
 case W_INTERFACE_IMAGE:
 _interfaces[_number_of_loops][i]._loaded_texture= false;
@@ -308,7 +308,7 @@ _finalize_after(&(_interfaces[_number_of_loops][i]),
 _finalize_interface_texture);
 }
 /*685:*/
-#line 15293 "cweb/weaver.w"
+#line 15405 "cweb/weaver.w"
 
 #ifndef W_DISABLE_PNG
 if(!strcmp(ext,".png")||!strcmp(ext,".PNG")){
@@ -331,7 +331,7 @@ _finalize_interface_texture);
 }
 #endif
 /*:685*/
-#line 14414 "cweb/weaver.w"
+#line 14526 "cweb/weaver.w"
 
 #endif
 }
@@ -341,7 +341,7 @@ break;
 
 default:
 /*663:*/
-#line 14757 "cweb/weaver.w"
+#line 14869 "cweb/weaver.w"
 
 {
 #if W_TARGET == W_WEB
@@ -405,7 +405,7 @@ _finalize_after(&(_interfaces[_number_of_loops][i]),
 _finalize_interface_texture);
 }
 /*685:*/
-#line 15293 "cweb/weaver.w"
+#line 15405 "cweb/weaver.w"
 
 #ifndef W_DISABLE_PNG
 if(!strcmp(ext,".png")||!strcmp(ext,".PNG")){
@@ -428,7 +428,7 @@ _finalize_interface_texture);
 }
 #endif
 /*:685*/
-#line 14819 "cweb/weaver.w"
+#line 14931 "cweb/weaver.w"
 
 #endif
 }
@@ -509,7 +509,7 @@ return false;
 
 _remove_interface_queue(&(_interfaces[_number_of_loops][i]));
 /*:475*//*654:*/
-#line 14583 "cweb/weaver.w"
+#line 14695 "cweb/weaver.w"
 
 {
 _finalize_this(&_interfaces[_number_of_loops][i],true);
@@ -802,7 +802,7 @@ for(i= 0;i<W_MAX_INTERFACES;i++)
 _interface_queue[_number_of_loops][i]= NULL;
 }
 /*:471*//*653:*/
-#line 14568 "cweb/weaver.w"
+#line 14680 "cweb/weaver.w"
 
 
 
@@ -811,7 +811,7 @@ struct interface*p= (struct interface*)data;
 glDeleteTextures(p->number_of_frames,p->_texture);
 }
 /*:653*//*669:*/
-#line 14953 "cweb/weaver.w"
+#line 15065 "cweb/weaver.w"
 
 #if !defined(W_DISABLE_PNG) && (W_TARGET == W_ELF)
 GLuint*_extract_png(char*filename,unsigned*number_of_frames,
@@ -835,7 +835,7 @@ fprintf(stderr,"ERROR: Can't open file %s.\n",filename);
 goto error_png;
 }
 /*670:*/
-#line 14998 "cweb/weaver.w"
+#line 15110 "cweb/weaver.w"
 
 {
 size_t size_t_ret;
@@ -853,7 +853,7 @@ goto error_png;
 }
 }
 /*:670*//*671:*/
-#line 15019 "cweb/weaver.w"
+#line 15131 "cweb/weaver.w"
 
 {
 
@@ -874,7 +874,7 @@ goto error_png;
 }
 }
 /*:671*//*672:*/
-#line 15047 "cweb/weaver.w"
+#line 15159 "cweb/weaver.w"
 
 {
 if(setjmp(png_jmpbuf(png_ptr))){
@@ -883,19 +883,19 @@ goto error_png;
 }
 }
 /*:672*//*673:*/
-#line 15060 "cweb/weaver.w"
+#line 15172 "cweb/weaver.w"
 
 {
 png_init_io(png_ptr,fp);
 }
 /*:673*//*674:*/
-#line 15071 "cweb/weaver.w"
+#line 15183 "cweb/weaver.w"
 
 {
 png_set_sig_bytes(png_ptr,8);
 }
 /*:674*//*675:*/
-#line 15082 "cweb/weaver.w"
+#line 15194 "cweb/weaver.w"
 
 {
 png_read_info(png_ptr,info_ptr);
@@ -905,7 +905,7 @@ color_type= png_get_color_type(png_ptr,info_ptr);
 bit_depth= png_get_bit_depth(png_ptr,info_ptr);
 }
 /*:675*//*676:*/
-#line 15095 "cweb/weaver.w"
+#line 15207 "cweb/weaver.w"
 
 {
 
@@ -932,7 +932,7 @@ color_type==PNG_COLOR_TYPE_GRAY_ALPHA)
 png_set_gray_to_rgb(png_ptr);
 }
 /*:676*//*677:*/
-#line 15127 "cweb/weaver.w"
+#line 15239 "cweb/weaver.w"
 
 {
 png_read_update_info(png_ptr,info_ptr);
@@ -942,7 +942,7 @@ goto error_png;
 }
 }
 /*:677*//*678:*/
-#line 15143 "cweb/weaver.w"
+#line 15255 "cweb/weaver.w"
 
 {
 int y,z;
@@ -986,14 +986,14 @@ goto error_png;
 png_read_image(png_ptr,row_pointers);
 }
 /*:678*//*680:*/
-#line 15207 "cweb/weaver.w"
+#line 15319 "cweb/weaver.w"
 
 {
 color_type= png_get_color_type(png_ptr,info_ptr);
 switch(color_type){
 case PNG_COLOR_TYPE_RGB:
 /*682:*/
-#line 15241 "cweb/weaver.w"
+#line 15353 "cweb/weaver.w"
 
 {
 int x,y;
@@ -1009,12 +1009,12 @@ pixel_array[4*width*(height-y-1)+x*4+3]= 255;
 }
 }
 /*:682*/
-#line 15212 "cweb/weaver.w"
+#line 15324 "cweb/weaver.w"
 
 break;
 case PNG_COLOR_TYPE_RGBA:
 /*681:*/
-#line 15223 "cweb/weaver.w"
+#line 15335 "cweb/weaver.w"
 
 {
 int x,y;
@@ -1030,13 +1030,13 @@ pixel_array[4*width*(height-y-1)+x*4+3]= ptr[3];
 }
 }
 /*:681*/
-#line 15215 "cweb/weaver.w"
+#line 15327 "cweb/weaver.w"
 
 break;
 }
 }
 /*:680*//*683:*/
-#line 15261 "cweb/weaver.w"
+#line 15373 "cweb/weaver.w"
 
 {
 int z;
@@ -1046,7 +1046,7 @@ Wfree(row_pointers);
 row_pointers= NULL;
 }
 /*:683*//*684:*/
-#line 15274 "cweb/weaver.w"
+#line 15386 "cweb/weaver.w"
 
 {
 glGenTextures(1,returned_data);
@@ -1061,7 +1061,7 @@ glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 glBindTexture(GL_TEXTURE_2D,0);
 }
 /*:684*/
-#line 14975 "cweb/weaver.w"
+#line 15087 "cweb/weaver.w"
 
 goto end_of_png;
 error_png:
@@ -1074,7 +1074,7 @@ end_of_png:
 fclose(fp);
 #else
 /*679:*/
-#line 15190 "cweb/weaver.w"
+#line 15302 "cweb/weaver.w"
 
 {
 if(row_pointers!=NULL){
@@ -1087,7 +1087,7 @@ if(pixel_array!=NULL)
 Wfree(pixel_array);
 }
 /*:679*/
-#line 14986 "cweb/weaver.w"
+#line 15098 "cweb/weaver.w"
 
 #endif
 return returned_data;

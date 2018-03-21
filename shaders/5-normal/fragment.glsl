@@ -21,5 +21,5 @@ varying mediump vec2 texture_coordinate;
 
 void main(){
   vec4 texture = texture2D(texture1, texture_coordinate);
-  gl_FragData[0] = texture + vec4(0.2, 0.2, 0.2, 0.0);
+  gl_FragData[0] = texture;
 }

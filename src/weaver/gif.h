@@ -21,7 +21,7 @@ extern"C"{
 
 GLuint*_extract_gif(char*,unsigned*,unsigned**,int*,bool*);
 /*:601*//*618:*/
-#line 13391 "cweb/weaver.w"
+#line 13512 "cweb/weaver.w"
 
 struct _image_list{
 unsigned char*rgba_image;

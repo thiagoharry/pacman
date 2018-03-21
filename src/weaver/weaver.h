@@ -482,12 +482,12 @@ void _finalize_this(void*,bool);
 
 #include "gif.h"
 /*:599*//*642:*/
-#line 14293 "cweb/weaver.w"
+#line 14405 "cweb/weaver.w"
 
 GLuint _empty_texture;
 char _empty_image[4];
 /*:642*//*690:*/
-#line 15393 "cweb/weaver.w"
+#line 15505 "cweb/weaver.w"
 
 #include "database.h"
 /*:690*/
@@ -727,48 +727,48 @@ void(*play_sound)(struct sound*);
 
 void(*destroy_sound)(struct sound*);
 /*:581*//*701:*/
-#line 15584 "cweb/weaver.w"
+#line 15696 "cweb/weaver.w"
 
 void(*write_integer)(char*,int);
 /*:701*//*706:*/
-#line 15656 "cweb/weaver.w"
+#line 15768 "cweb/weaver.w"
 
 void(*write_float)(char*,float);
 /*:706*//*711:*/
-#line 15724 "cweb/weaver.w"
+#line 15836 "cweb/weaver.w"
 
 void(*write_string)(char*,char*);
 /*:711*//*717:*/
-#line 15796 "cweb/weaver.w"
+#line 15908 "cweb/weaver.w"
 
 bool(*read_integer)(char*,int*);
 bool(*read_float)(char*,float*);
 bool(*read_string)(char*,char*,int);
 /*:717*//*727:*/
-#line 16045 "cweb/weaver.w"
+#line 16157 "cweb/weaver.w"
 
 void(*delete_integer)(char*);
 void(*delete_float)(char*);
 void(*delete_string)(char*);
 void(*delete_all)(void);
 /*:727*//*750:*/
-#line 16560 "cweb/weaver.w"
+#line 16672 "cweb/weaver.w"
 
 bool(*play_music)(char*,bool);
 /*:750*//*754:*/
-#line 16621 "cweb/weaver.w"
+#line 16733 "cweb/weaver.w"
 
 bool(*pause_music)(char*);
 /*:754*//*760:*/
-#line 16726 "cweb/weaver.w"
+#line 16838 "cweb/weaver.w"
 
 bool(*stop_music)(char*);
 /*:760*//*764:*/
-#line 16757 "cweb/weaver.w"
+#line 16869 "cweb/weaver.w"
 
 float(*get_volume)(char*);
 /*:764*//*768:*/
-#line 16817 "cweb/weaver.w"
+#line 16929 "cweb/weaver.w"
 
 float(*increase_volume)(char*,float);
 /*:768*/

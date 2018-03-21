@@ -349,7 +349,7 @@ fclose(fp);
 return returned_buffer;
 }
 /*:552*//*742:*/
-#line 16367 "cweb/weaver.w"
+#line 16479 "cweb/weaver.w"
 
 struct _music_data _music[W_MAX_MUSIC];
 #ifdef W_MULTITHREAD
@@ -434,7 +434,7 @@ return;
 }
 #endif
 /*:572*//*739:*/
-#line 16320 "cweb/weaver.w"
+#line 16432 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 static char*basename(char*path){
@@ -532,7 +532,7 @@ fprintf(stderr,"WARNING(0)): No sound source could be created. "
 }
 }
 /*:545*//*744:*/
-#line 16387 "cweb/weaver.w"
+#line 16499 "cweb/weaver.w"
 
 {
 int i,j;
@@ -572,7 +572,7 @@ exit(1);
 #endif
 }
 /*:744*//*774:*/
-#line 16956 "cweb/weaver.w"
+#line 17068 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -607,7 +607,7 @@ return;
 
 void _finalize_sound(void){
 /*745:*/
-#line 16430 "cweb/weaver.w"
+#line 16542 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -651,7 +651,7 @@ if(default_context!=NULL)
 alcDestroyContext(default_context);
 }
 /*:546*//*775:*/
-#line 16984 "cweb/weaver.w"
+#line 17096 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -688,7 +688,7 @@ if(default_context!=NULL)
 alcDestroyContext(default_context);
 }
 /*:547*//*746:*/
-#line 16458 "cweb/weaver.w"
+#line 16570 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -704,7 +704,7 @@ alGenSources(1,&_music[i].sound_source);
 alcCloseDevice(default_device);
 default_device= alcOpenDevice(W.sound_device_name[position]);
 /*747:*/
-#line 16472 "cweb/weaver.w"
+#line 16584 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -790,12 +790,12 @@ snd->_data= extract_wave(complete_path,&(snd->size),
 _finalize_after(&(snd->_data),_finalize_openal);
 }
 /*779:*/
-#line 17207 "cweb/weaver.w"
+#line 17319 "cweb/weaver.w"
 
 #ifndef W_DISABLE_MP3
 else if(!strcmp(ext,".mp3")||!strcmp(ext,".MP3")){
 /*780:*/
-#line 17225 "cweb/weaver.w"
+#line 17337 "cweb/weaver.w"
 
 int current_format= 0xfff5;
 size_t buffer_size;
@@ -866,7 +866,7 @@ else break;
 snd->size= buffer_size;
 }
 /*:780*//*781:*/
-#line 17301 "cweb/weaver.w"
+#line 17413 "cweb/weaver.w"
 
 if(buffer!=NULL){
 int status;
@@ -901,7 +901,7 @@ _finalize_after(&(snd->_data),_finalize_openal);
 }
 }
 /*:781*/
-#line 17210 "cweb/weaver.w"
+#line 17322 "cweb/weaver.w"
 
 }
 #endif
@@ -970,7 +970,7 @@ _finalize_this(&(snd->_data),false);
 Wfree(snd);
 }
 /*:580*//*749:*/
-#line 16498 "cweb/weaver.w"
+#line 16610 "cweb/weaver.w"
 
 bool _play_music(char*name,bool loop){
 int i;
@@ -1030,7 +1030,7 @@ return success;
 #endif
 }
 /*:749*//*753:*/
-#line 16579 "cweb/weaver.w"
+#line 16691 "cweb/weaver.w"
 
 bool _pause_music(char*name){
 int i;
@@ -1070,7 +1070,7 @@ return success;
 #endif
 }
 /*:753*//*757:*/
-#line 16635 "cweb/weaver.w"
+#line 16747 "cweb/weaver.w"
 
 bool _resume_music(char*name){
 int i;
@@ -1108,7 +1108,7 @@ return success;
 #endif
 }
 /*:757*//*759:*/
-#line 16682 "cweb/weaver.w"
+#line 16794 "cweb/weaver.w"
 
 bool _stop_music(char*name){
 int i;
@@ -1150,7 +1150,7 @@ return success;
 #endif
 }
 /*:759*//*763:*/
-#line 16743 "cweb/weaver.w"
+#line 16855 "cweb/weaver.w"
 
 float _get_volume(char*name){
 int i;
@@ -1162,7 +1162,7 @@ return _music[i].volume[_number_of_loops];
 return-1.0;
 }
 /*:763*//*767:*/
-#line 16777 "cweb/weaver.w"
+#line 16889 "cweb/weaver.w"
 
 float _increase_volume(char*name,float increment){
 int i;
@@ -1200,7 +1200,7 @@ return success;
 #endif
 }
 /*:767*//*777:*/
-#line 17007 "cweb/weaver.w"
+#line 17119 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF && !defined(W_DISABLE_MP3)
 void*_music_thread(void*arg){

@@ -405,7 +405,7 @@ void _change_final_shader(int type){
 _final_shader[_number_of_loops]= type;
 }
 /*:503*//*659:*/
-#line 14660 "cweb/weaver.w"
+#line 14772 "cweb/weaver.w"
 
 char _vertex_image_interface[]= {
 #include "vertex_image_interface.data"

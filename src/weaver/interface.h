@@ -33,7 +33,7 @@ GLfloat _transform_matrix[16];
 
 GLenum _mode;
 /*641:*/
-#line 14273 "cweb/weaver.w"
+#line 14385 "cweb/weaver.w"
 
 
 GLuint*_texture;
@@ -121,15 +121,15 @@ void _remove_interface_queue(struct interface*inter);
 
 void _clean_interface_queue(void);
 /*:470*//*646:*/
-#line 14342 "cweb/weaver.w"
+#line 14454 "cweb/weaver.w"
 
 #define W_INTERFACE_IMAGE -3
 /*:646*//*652:*/
-#line 14564 "cweb/weaver.w"
+#line 14676 "cweb/weaver.w"
 
 void _finalize_interface_texture(void*);
 /*:652*//*668:*/
-#line 14939 "cweb/weaver.w"
+#line 15051 "cweb/weaver.w"
 
 #if !defined(W_DISABLE_PNG) && (W_TARGET == W_ELF)
 GLuint*_extract_png(char*,unsigned*,unsigned**,int*,bool*);
