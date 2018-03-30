@@ -33,6 +33,8 @@ MAIN_LOOP main_loop(void){ // The game loop
   maze_init();
   pellet_init();
   pacman_init();
+  printf("R: %d x %d -- %d x %d\n", W.resolution_x, W.resolution_y,
+         W.width, W.height);
  LOOP_BODY: // Code executed every loop iteration
     if(W.keyboard[W_ANY])
         Wexit_loop();

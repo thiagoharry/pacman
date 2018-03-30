@@ -20,9 +20,10 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "resolution.h"
 
 #define MAX_HEIGHT 800
+#define MIN_HEIGHT 650
 
 void resolution_init(void){
-  if(W.resolution_y > MAX_HEIGHT){
+  if(W.resolution_y > MAX_HEIGHT || W.resolution_y < MIN_HEIGHT){
     float multiplier = ((float) MAX_HEIGHT) / W.resolution_y;
     W.change_resolution(W.resolution_x * multiplier,
                         W.resolution_y * multiplier);
