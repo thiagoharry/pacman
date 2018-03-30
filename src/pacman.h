@@ -24,5 +24,10 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "includes.h"
 
 void pacman_init(void);
+void pacman_transform(void);
+void pacman_turn_left(void);
+void pacman_turn_right(void);
+void pacman_turn_up(void);
+void pacman_turn_down(void);
 
 #endif

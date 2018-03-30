@@ -25,6 +25,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #define MAZE_WIDTH  30
 #define MAZE_HEIGHT 31
+#define TILE_SIZE   38.0
+
 
 struct maze_tile{
   float x, y, size_multiplier;
