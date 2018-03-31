@@ -20,6 +20,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "pacman.h"
 
 #define PACMAN_SIZE  46.0
+#define BASE_SPEED    0.4
 #define LEFT            0
 #define RIGHT           1
 #define UP_FROM_LEFT    2
@@ -57,28 +58,44 @@ void pacman_transform(void){
 }
 
 void pacman_turn_right(void){
-    image -> integer = RIGHT;
+    if((offset_y == 0.0 && !maze_walls[position_y][position_x + 1]) ||
+       (offset_y > 0.0 && !maze_walls[position_y + 1][position_x + 1])){
+        image -> integer = RIGHT;
+        image -> animate = true;
+    }
 }
 
 void pacman_turn_left(void){
-    image -> integer = LEFT;
+    if((offset_y == 0.0 && !maze_walls[position_y][position_x - 1]) ||
+       (offset_y > 0.0 && !maze_walls[position_y + 1][position_x - 1])){
+        image -> integer = LEFT;
+        image -> animate = true;
+    }
 }
 
 void pacman_turn_up(void){
-    if(image -> integer == UP_FROM_LEFT || image -> integer == UP_FROM_RIGHT)
-        return;
-    else if(image -> integer == LEFT || image -> integer == DOWN_FROM_RIGHT)
-        image -> integer = UP_FROM_LEFT;
-    else
-        image -> integer = UP_FROM_RIGHT;
+    if((offset_x == 0.0 && !maze_walls[position_y + 1][position_x]) ||
+       (offset_x > 0.0 && !maze_walls[position_y + 1][position_x + 1])){
+        if(image -> integer == UP_FROM_LEFT || image -> integer == UP_FROM_RIGHT)
+            return;
+        else if(image -> integer == LEFT || image -> integer == DOWN_FROM_RIGHT)
+            image -> integer = UP_FROM_LEFT;
+        else
+            image -> integer = UP_FROM_RIGHT;
+        image -> animate = true;
+    }
 }
 
 void pacman_turn_down(void){
-    if(image -> integer == DOWN_FROM_LEFT ||
-       image -> integer == DOWN_FROM_RIGHT)
-        return;
-    else if(image -> integer == LEFT || image -> integer == UP_FROM_RIGHT)
-        image -> integer = DOWN_FROM_LEFT;
-    else
-        image -> integer = DOWN_FROM_RIGHT;
+    if((offset_x == 0.0 && !maze_walls[position_y - 1][position_x]) ||
+       (offset_x > 0.0 && !maze_walls[position_y - 1][position_x + 1])){
+        if(image -> integer == DOWN_FROM_LEFT ||
+           image -> integer == DOWN_FROM_RIGHT)
+            return;
+        else if(image -> integer == LEFT || image -> integer == UP_FROM_RIGHT)
+            image -> integer = DOWN_FROM_LEFT;
+        else
+            image -> integer = DOWN_FROM_RIGHT;
+        image -> animate = true;
+    }
 }

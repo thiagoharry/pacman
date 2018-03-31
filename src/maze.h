@@ -32,6 +32,8 @@ struct maze_tile{
   float x, y, size_multiplier;
 } maze_space[MAZE_HEIGHT][MAZE_WIDTH];
 
+extern bool maze_walls[MAZE_HEIGHT][MAZE_WIDTH];
+
 void maze_init(void);
 
 #endif
