@@ -29,7 +29,7 @@ MAIN_LOOP main_loop(void){ // The game loop
                           W.width, 648,
                           "grass.png");
   horizon = W.new_interface(3, W.width / 2, 653,
-  W.width, 10, "horizon.png");
+                            W.width, 10, "horizon.png");
   maze_init();
   pellet_init();
   pacman_init();
@@ -45,6 +45,7 @@ MAIN_LOOP main_loop(void){ // The game loop
         pacman_turn_left();
     else if(W.keyboard[W_RIGHT])
         pacman_turn_right();
+    pacman_move();
  LOOP_END: // Code executed at the end of the loop
     return;
 }
@@ -52,6 +53,11 @@ MAIN_LOOP main_loop(void){ // The game loop
 int main(void){
   Winit(); // Initializes Weaver
   resolution_init();
+  game_init();
   Wloop(main_loop); // Enter a new game loop
   return 0;
+}
+
+void game_init(void){
+    W.game -> speed_multiplier = 1.0;
 }

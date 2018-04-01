@@ -29,5 +29,6 @@ void pacman_turn_left(void);
 void pacman_turn_right(void);
 void pacman_turn_up(void);
 void pacman_turn_down(void);
+void pacman_move(void);
 
 #endif
