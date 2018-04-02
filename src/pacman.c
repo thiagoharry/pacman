@@ -37,7 +37,7 @@ void pacman_init(void){
     position_y = 7;
     offset_x = 0.5;
     offset_y = 0.0;
-    image = W.new_interface(5, 100, 100, PACMAN_SIZE,
+    image = W.new_interface(6, 100, 100, PACMAN_SIZE,
                             PACMAN_SIZE, "pacman.gif");
     image -> animate = false;
     image -> current_frame = 2;
@@ -60,23 +60,23 @@ void pacman_transform(void){
 }
 
 void pacman_turn_right(void){
-    if((offset_y == 0.0 && !maze_walls[position_y][position_x + 1]) ||
-       (offset_y > 0.0 && !maze_walls[position_y + 1][position_x + 1])){
+    if((offset_y < 0.5 && !maze_walls[position_y][position_x + 1]) ||
+       (offset_y > 0.5 && !maze_walls[position_y + 1][position_x + 1])){
         image -> integer = RIGHT;
         image -> animate = true;
     }
 }
 
 void pacman_turn_left(void){
-    if((offset_y == 0.0 && !maze_walls[position_y][position_x - 1]) ||
-       (offset_y > 0.0 && !maze_walls[position_y + 1][position_x - 1])){
+    if((offset_y < 0.5 && !maze_walls[position_y][position_x - 1]) ||
+       (offset_y > 0.5 && !maze_walls[position_y + 1][position_x - 1])){
         image -> integer = LEFT;
         image -> animate = true;
     }
 }
 
 void pacman_turn_up(void){
-    if((offset_x == 0.0 && !maze_walls[position_y + 1][position_x]) ||
+    if((offset_x < 0.5 && !maze_walls[position_y + 1][position_x]) ||
        (offset_x > 0.5 && !maze_walls[position_y + 1][position_x + 1])){
         if(image -> integer == UP_FROM_LEFT || image -> integer == UP_FROM_RIGHT)
             return;
@@ -89,7 +89,9 @@ void pacman_turn_up(void){
 }
 
 void pacman_turn_down(void){
-    if((offset_x == 0.0 && !maze_walls[position_y - 1][position_x]) ||
+    if(position_x > 12 && position_x < 16 && position_y == 19)
+        return; // Não entre na área dos fantasmas
+    if((offset_x < 0.5 && !maze_walls[position_y - 1][position_x]) ||
        (offset_x > 0.5 && !maze_walls[position_y - 1][position_x + 1])){
         if(image -> integer == DOWN_FROM_LEFT ||
            image -> integer == DOWN_FROM_RIGHT)
@@ -103,6 +105,7 @@ void pacman_turn_down(void){
 }
 
 static void pacman_half_move(void){
+    float movement = BASE_SPEED * W.game -> speed_multiplier;
     switch(image -> integer){
     case LEFT:
         if(offset_y == 0.0){
@@ -114,7 +117,26 @@ static void pacman_half_move(void){
                 position_x ++;
             }
             else
-                offset_x -= BASE_SPEED * W.game -> speed_multiplier;
+                offset_x -= movement;
+        }
+        else if(offset_y < 0.5){
+            if(offset_y > movement)
+                offset_y -= movement;
+            else{
+                float square_offset = offset_y * offset_y;
+                offset_x -= sqrtf(movement * movement - square_offset);
+                offset_y = 0.0;
+            }
+        }
+        else{
+            if((1.0 - offset_y) > movement)
+                offset_y += movement;
+            else{
+                float square_offset = (1.0 - offset_y) * (1.0 - offset_y);
+                offset_x -= sqrtf(movement * movement - square_offset);
+                offset_y = 0.0;
+                position_y ++;
+            }
         }
         if(offset_x < 0.0){
             position_x --;
@@ -134,6 +156,31 @@ static void pacman_half_move(void){
             else
                 offset_y -= BASE_SPEED * W.game -> speed_multiplier;
         }
+        else if(offset_x < 0.5){
+            if(offset_x > movement)
+                offset_x -= movement;
+            else{
+                float square_offset = offset_x * offset_x;
+                offset_y -= sqrtf(movement * movement - square_offset);
+                offset_x = 0.0;
+            }
+        }
+        else{
+            if((1.0 - offset_x) > movement){
+                offset_x += movement;
+                if(offset_x > 1.0){
+                    offset_x = 1.0 - offset_x;
+                    position_x ++;
+                }
+            }
+            else{
+                float square_offset = (1.0 - offset_x) * (1.0 - offset_x);
+                offset_y -= sqrtf(movement * movement - square_offset);
+                offset_x = 0.0;
+                position_x ++;
+                position_y --;
+            }
+        }
         if(offset_y < 0.0){
             position_y --;
             offset_y = 1.0 - offset_y;
@@ -146,6 +193,30 @@ static void pacman_half_move(void){
             else{
                 offset_x = 0.0;
                 image -> animate = false;
+            }
+        }
+        else if(offset_y < 0.5){
+            if(offset_y > movement)
+                offset_y -= movement;
+            else{
+                float square_offset = offset_y * offset_y;
+                offset_x += sqrtf(movement * movement - square_offset);
+                offset_y = 0.0;
+            }
+        }
+        else{
+            if((1.0 - offset_y) > movement){
+                offset_y += movement;
+                if(offset_y >= 1.0){
+                    offset_y = 1.0 - offset_y;
+                    position_y ++;
+                }
+            }
+            else{
+                float square_offset = (1.0 - offset_y) * (1.0 - offset_y);
+                offset_x += sqrtf(movement * movement - square_offset);
+                offset_y = 0.0;
+                position_y ++;
             }
         }
         if(offset_x >= 1.0){
@@ -161,6 +232,30 @@ static void pacman_half_move(void){
             else{
                 offset_y = 0.0;
                 image -> animate = false;
+            }
+        }
+        else if(offset_x < 0.5){
+            if(offset_x > movement)
+                offset_x -= movement;
+            else{
+                float square_offset = offset_x * offset_x;
+                offset_y += sqrtf(movement * movement - square_offset);
+                offset_x = 0.0;
+            }
+        }
+        else{
+            if((1.0 - offset_x) > movement){
+                offset_x += movement;
+                if(offset_x > 1.0){
+                    offset_x = 1.0 - offset_x;
+                    position_x ++;
+                }
+            }
+            else{
+                float square_offset = (1.0 - offset_x) * (1.0 - offset_x);
+                offset_y += sqrtf(movement * movement - square_offset);
+                offset_x = 0.0;
+                position_x ++;
             }
         }
         if(offset_y >= 1.0){
