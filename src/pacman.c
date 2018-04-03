@@ -17,6 +17,7 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <math.h>
 #include "pacman.h"
 
 #define PACMAN_SIZE  46.0
@@ -46,6 +47,7 @@ void pacman_init(void){
 
 void pacman_transform(void){
     float size;
+    float rotation = 0.0;
     int screen_x, screen_y;
     float size_multiplier =
         maze_space[position_y][position_x].size_multiplier * (1.0 - offset_y) +
@@ -57,6 +59,19 @@ void pacman_transform(void){
         maze_space[position_y + 1][position_x].y * offset_y;
     W.resize_interface(image, size, size);
     W.move_interface(image, screen_x, screen_y);
+    if(position_x == 0)
+        image -> a = (1.0 - offset_x);
+    else if(position_x == MAZE_WIDTH - 2)
+        image -> a = offset_x;
+    else
+        image -> a = 1.0;
+    if(image -> a < 0.2)
+        image -> a = 0.2;
+    // Rotação
+    // ?? -12 ?? -12 ?? -7.5 ?? ?? -5 ?? ?? 0
+    if(image -> integer != LEFT && image -> integer != RIGHT)
+        rotation = (M_PI * (position_x - 15)) / 180.0;
+    W.rotate_interface(image, rotation);
 }
 
 void pacman_turn_right(void){
@@ -265,6 +280,15 @@ static void pacman_half_move(void){
         break;
     default:
         return;
+    }
+    if(image -> integer == LEFT &&
+       (position_x < 0 || (position_x == 0 && offset_x == 0))){
+        position_x = MAZE_WIDTH - 1;
+        offset_x = 0;
+    }
+    else if(image -> integer == RIGHT && position_x >= MAZE_WIDTH - 1){
+        position_x = 0;
+        offset_x = 0;
     }
 }
 

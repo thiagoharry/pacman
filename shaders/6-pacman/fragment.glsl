@@ -42,5 +42,5 @@ void main(){
     else
         coordinate = vec2(1.0 - texture_coordinate.y, 1.0 - texture_coordinate.x);
     texture = texture2D(texture1, coordinate);
-    gl_FragData[0] = texture;
+    gl_FragData[0] = vec4(texture.rgb, min(object_color.a, texture.a));
 }
