@@ -1,5 +1,5 @@
 /*186:*/
-#line 4546 "cweb/weaver.w"
+#line 4547 "cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 #include <pthread.h> 
@@ -15,7 +15,7 @@
 #include <fcntl.h>  
 #endif
 /*189:*/
-#line 4611 "cweb/weaver.w"
+#line 4612 "cweb/weaver.w"
 
 
 static uint32_t _sfmt_sequence[624];
@@ -26,10 +26,10 @@ static int _sfmt_index;
 static pthread_mutex_t _sfmt_mutex;
 #endif
 /*:189*/
-#line 4560 "cweb/weaver.w"
+#line 4561 "cweb/weaver.w"
 
 /*201:*/
-#line 4829 "cweb/weaver.w"
+#line 4830 "cweb/weaver.w"
 
 static void _regenerate_sequence(void){
 int i;
@@ -94,15 +94,15 @@ memcpy(r2,&(_sfmt_sequence[4*i]),16);
 }
 }
 /*:201*/
-#line 4561 "cweb/weaver.w"
+#line 4562 "cweb/weaver.w"
 
 /*191:*/
-#line 4628 "cweb/weaver.w"
+#line 4629 "cweb/weaver.w"
 
 void _initialize_numeric_functions(void){
 uint32_t seed;
 /*194:*/
-#line 4653 "cweb/weaver.w"
+#line 4654 "cweb/weaver.w"
 
 #if defined(W_MULTITHREAD)
 if(pthread_mutex_init(&_sfmt_mutex,NULL)!=0){
@@ -111,7 +111,7 @@ exit(1);
 }
 #endif
 /*:194*//*196:*/
-#line 4677 "cweb/weaver.w"
+#line 4678 "cweb/weaver.w"
 
 {
 #ifndef W_SEED
@@ -142,7 +142,7 @@ _sfmt_sequence[0]= seed= (uint32_t)W_SEED;
 #endif
 }
 /*:196*//*197:*/
-#line 4720 "cweb/weaver.w"
+#line 4721 "cweb/weaver.w"
 
 {
 int i;
@@ -155,7 +155,7 @@ _sfmt_sequence[i]= 1812433253ul*
 _sfmt_index= 0;
 }
 /*:197*//*198:*/
-#line 4764 "cweb/weaver.w"
+#line 4765 "cweb/weaver.w"
 
 {
 int i;
@@ -171,29 +171,29 @@ _sfmt_sequence[0]++;
 }
 }
 /*:198*//*204:*/
-#line 4924 "cweb/weaver.w"
+#line 4925 "cweb/weaver.w"
 
 {
 _sfmt_index= -1;
 _regenerate_sequence();
 }
 /*:204*/
-#line 4631 "cweb/weaver.w"
+#line 4632 "cweb/weaver.w"
 
 }
 void _finalize_numeric_functions(void){
 /*195:*/
-#line 4662 "cweb/weaver.w"
+#line 4663 "cweb/weaver.w"
 
 #if defined(W_MULTITHREAD)
 pthread_mutex_destroy(&_sfmt_mutex);
 #endif
 /*:195*/
-#line 4634 "cweb/weaver.w"
+#line 4635 "cweb/weaver.w"
 
 }
 /*:191*//*200:*/
-#line 4787 "cweb/weaver.w"
+#line 4788 "cweb/weaver.w"
 
 unsigned long _random(void){
 unsigned long number;
@@ -215,6 +215,6 @@ pthread_mutex_unlock(&_sfmt_mutex);
 return number;
 }
 /*:200*/
-#line 4562 "cweb/weaver.w"
+#line 4563 "cweb/weaver.w"
 
 /*:186*/

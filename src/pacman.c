@@ -68,7 +68,6 @@ void pacman_transform(void){
     if(image -> a < 0.2)
         image -> a = 0.2;
     // Rotação
-    // ?? -12 ?? -12 ?? -7.5 ?? ?? -5 ?? ?? 0
     if(image -> integer != LEFT && image -> integer != RIGHT)
         rotation = (M_PI * (position_x - 15)) / 180.0;
     W.rotate_interface(image, rotation);
@@ -151,11 +150,13 @@ static void pacman_half_move(void){
                 offset_x -= sqrtf(movement * movement - square_offset);
                 offset_y = 0.0;
                 position_y ++;
+                pellet_eat(position_x, position_y);
             }
         }
         if(offset_x < 0.0){
             position_x --;
             offset_x = 1.0 - offset_x;
+            pellet_eat(position_x + 1, position_y);
         }
         break;
     case DOWN_FROM_LEFT:
@@ -186,6 +187,7 @@ static void pacman_half_move(void){
                 if(offset_x > 1.0){
                     offset_x = 1.0 - offset_x;
                     position_x ++;
+                    pellet_eat(position_x, position_y);
                 }
             }
             else{
@@ -193,12 +195,14 @@ static void pacman_half_move(void){
                 offset_y -= sqrtf(movement * movement - square_offset);
                 offset_x = 0.0;
                 position_x ++;
+                pellet_eat(position_x, position_y);
                 position_y --;
             }
         }
         if(offset_y < 0.0){
             position_y --;
             offset_y = 1.0 - offset_y;
+            pellet_eat(position_x, position_y + 1);
         }
         break;
     case RIGHT:
@@ -217,6 +221,7 @@ static void pacman_half_move(void){
                 float square_offset = offset_y * offset_y;
                 offset_x += sqrtf(movement * movement - square_offset);
                 offset_y = 0.0;
+                pellet_eat(position_x, position_y);
             }
         }
         else{
@@ -225,6 +230,7 @@ static void pacman_half_move(void){
                 if(offset_y >= 1.0){
                     offset_y = 1.0 - offset_y;
                     position_y ++;
+                    pellet_eat(position_x, position_y);
                 }
             }
             else{
@@ -232,11 +238,13 @@ static void pacman_half_move(void){
                 offset_x += sqrtf(movement * movement - square_offset);
                 offset_y = 0.0;
                 position_y ++;
+                pellet_eat(position_x, position_y);
             }
         }
         if(offset_x >= 1.0){
             position_x ++;
             offset_x -= 1.0;
+            pellet_eat(position_x, position_y);
         }
         break;
     case UP_FROM_LEFT:
@@ -256,6 +264,7 @@ static void pacman_half_move(void){
                 float square_offset = offset_x * offset_x;
                 offset_y += sqrtf(movement * movement - square_offset);
                 offset_x = 0.0;
+                pellet_eat(position_x, position_y);
             }
         }
         else{
@@ -264,6 +273,7 @@ static void pacman_half_move(void){
                 if(offset_x > 1.0){
                     offset_x = 1.0 - offset_x;
                     position_x ++;
+                    pellet_eat(position_x, position_y);
                 }
             }
             else{
@@ -271,11 +281,13 @@ static void pacman_half_move(void){
                 offset_y += sqrtf(movement * movement - square_offset);
                 offset_x = 0.0;
                 position_x ++;
+                pellet_eat(position_x, position_y);
             }
         }
         if(offset_y >= 1.0){
             position_y ++;
             offset_y -= 1.0;
+            pellet_eat(position_x, position_y);
         }
         break;
     default:

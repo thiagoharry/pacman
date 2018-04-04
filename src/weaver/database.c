@@ -1,9 +1,9 @@
 /*689:*/
-#line 15498 "cweb/weaver.w"
+#line 15490 "cweb/weaver.w"
 
 #include "weaver.h"
 /*691:*/
-#line 15513 "cweb/weaver.w"
+#line 15505 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #include <sys/stat.h>   
@@ -14,20 +14,20 @@
 #include "../misc/sqlite/sqlite3.h"
 #endif
 /*:691*/
-#line 15500 "cweb/weaver.w"
+#line 15492 "cweb/weaver.w"
 
 /*692:*/
-#line 15527 "cweb/weaver.w"
+#line 15519 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 static sqlite3*database;
 #endif
 /*:692*/
-#line 15501 "cweb/weaver.w"
+#line 15493 "cweb/weaver.w"
 
 
 /*694:*/
-#line 15547 "cweb/weaver.w"
+#line 15539 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _initialize_database(void){
@@ -122,7 +122,7 @@ sqlite3_free(zErrMsg);
 }
 #endif
 /*:694*//*697:*/
-#line 15661 "cweb/weaver.w"
+#line 15653 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _finalize_database(void){
@@ -130,7 +130,7 @@ sqlite3_close(database);
 }
 #endif
 /*:697*//*703:*/
-#line 15705 "cweb/weaver.w"
+#line 15697 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _write_integer(char*name,int value){
@@ -167,7 +167,7 @@ sqlite3_finalize(stmt);
 }
 #endif
 /*:703*//*704:*/
-#line 15744 "cweb/weaver.w"
+#line 15736 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 void _write_integer(char*name,int value){
@@ -178,7 +178,7 @@ document.cookie= "int_"+Pointer_stringify($0)+"="+$1+
 }
 #endif
 /*:704*//*708:*/
-#line 15777 "cweb/weaver.w"
+#line 15769 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _write_float(char*name,float value){
@@ -215,7 +215,7 @@ sqlite3_finalize(stmt);
 }
 #endif
 /*:708*//*709:*/
-#line 15816 "cweb/weaver.w"
+#line 15808 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 void _write_float(char*name,float value){
@@ -226,7 +226,7 @@ document.cookie= "float_"+Pointer_stringify($0)+"="+$1+
 }
 #endif
 /*:709*//*713:*/
-#line 15845 "cweb/weaver.w"
+#line 15837 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _write_string(char*name,char*value){
@@ -263,7 +263,7 @@ sqlite3_finalize(stmt);
 }
 #endif
 /*:713*//*714:*/
-#line 15884 "cweb/weaver.w"
+#line 15876 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 void _write_string(char*name,char*value){
@@ -274,7 +274,7 @@ Pointer_stringify($1)+"; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 }
 #endif
 /*:714*//*719:*/
-#line 15926 "cweb/weaver.w"
+#line 15918 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 bool _read_integer(char*name,int*value){
@@ -306,7 +306,7 @@ return false;
 }
 #endif
 /*:719*//*720:*/
-#line 15960 "cweb/weaver.w"
+#line 15952 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 bool _read_float(char*name,float*value){
@@ -338,7 +338,7 @@ return false;
 }
 #endif
 /*:720*//*721:*/
-#line 15997 "cweb/weaver.w"
+#line 15989 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 bool _read_string(char*name,char*value,int size){
@@ -372,7 +372,7 @@ return false;
 }
 #endif
 /*:721*//*722:*/
-#line 16033 "cweb/weaver.w"
+#line 16025 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 bool _read_integer(char*name,int*value){
@@ -405,7 +405,7 @@ return true;
 }
 #endif
 /*:722*//*723:*/
-#line 16070 "cweb/weaver.w"
+#line 16062 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 bool _read_float(char*name,float*value){
@@ -438,7 +438,7 @@ return true;
 }
 #endif
 /*:723*//*724:*/
-#line 16107 "cweb/weaver.w"
+#line 16099 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 bool _read_string(char*name,char*value,int size){
@@ -472,7 +472,7 @@ return true;
 }
 #endif
 /*:724*//*729:*/
-#line 16172 "cweb/weaver.w"
+#line 16164 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _delete_integer(char*name){
@@ -497,7 +497,7 @@ sqlite3_finalize(stmt);
 }
 #endif
 /*:729*//*730:*/
-#line 16199 "cweb/weaver.w"
+#line 16191 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _delete_float(char*name){
@@ -522,7 +522,7 @@ sqlite3_finalize(stmt);
 }
 #endif
 /*:730*//*731:*/
-#line 16226 "cweb/weaver.w"
+#line 16218 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _delete_string(char*name){
@@ -547,7 +547,7 @@ sqlite3_finalize(stmt);
 }
 #endif
 /*:731*//*732:*/
-#line 16253 "cweb/weaver.w"
+#line 16245 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _delete_all(void){
@@ -557,7 +557,7 @@ sqlite3_exec(database,"DELETE * FROM string_data; ",NULL,NULL,NULL);
 }
 #endif
 /*:732*//*733:*/
-#line 16266 "cweb/weaver.w"
+#line 16258 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 void _delete_integer(char*name){
@@ -580,7 +580,7 @@ document.cookie= "string_"+Pointer_stringify($0)+"=0"+
 }
 #endif
 /*:733*//*734:*/
-#line 16292 "cweb/weaver.w"
+#line 16284 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 void _delete_all(void){
@@ -596,6 +596,6 @@ document.cookie= name+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
 #endif
 /*:734*/
-#line 15503 "cweb/weaver.w"
+#line 15495 "cweb/weaver.w"
 
 /*:689*/

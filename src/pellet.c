@@ -22,6 +22,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 static const float normal_pellet_size = 64.0;
 static bool initialized = false;
 static struct interface *pellets[MAZE_HEIGHT][MAZE_WIDTH];
+static struct sound *wakka;
 static int pellet_distribution[MAZE_HEIGHT][MAZE_WIDTH] =
   {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
    {0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0},
@@ -72,5 +73,14 @@ void pellet_init(void){
                                           maze_space[i][j].y, size, size,
                                           "power_pellet.png");
       }
+  wakka = W.new_sound("wakka.wav");
   initialized = true;
+}
+
+void pellet_eat(int x, int y){
+    if(x >= 0 && y >=0 && x < MAZE_WIDTH && y < MAZE_HEIGHT &&
+       pellets[y][x] != NULL && pellets[y][x] -> visible){
+        W.play_sound(wakka);
+        pellets[y][x] -> visible = false;
+    }
 }
