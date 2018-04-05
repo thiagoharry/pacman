@@ -24,3 +24,4 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "maze.h"
 #include "pacman.h"
 #include "resolution.h"
+#include "fruits.h"

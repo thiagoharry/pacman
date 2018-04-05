@@ -17,19 +17,16 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _pacman_h_
-#define _pacman_h_
+#ifndef _fruits_h_
+#define _fruits_h_
 
 #include "weaver/weaver.h"
 #include "includes.h"
 
-void pacman_init(void);
-void pacman_transform(void);
-void pacman_turn_left(void);
-void pacman_turn_right(void);
-void pacman_turn_up(void);
-void pacman_turn_down(void);
-void pacman_move(void);
-void pacman_slow_down(float);
+void fruits_init(void);
+void fruits_appear(void);
+void fruits_disappear(void);
+void fruits_get_eaten(void);
+bool fruits_are_visible(void);
 
 #endif

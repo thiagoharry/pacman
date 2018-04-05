@@ -27,6 +27,7 @@ struct _game_struct{
   // You can personalize this struct putting your variables here. But
   // don't change it's name. Access it in W.game variable.
     float speed_multiplier;
+    int pellets_eaten;
 } _game;
 
 MAIN_LOOP main_loop(void);

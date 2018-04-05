@@ -33,6 +33,7 @@ MAIN_LOOP main_loop(void){ // The game loop
   maze_init();
   pellet_init();
   pacman_init();
+  fruits_init();
   W.play_music("music1.mp3", true);
    LOOP_BODY: // Code executed every loop iteration
       pacman_transform();

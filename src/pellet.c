@@ -58,6 +58,7 @@ static int pellet_distribution[MAZE_HEIGHT][MAZE_WIDTH] =
 
 void pellet_init(void){
   int i, j;
+  W.game -> pellets_eaten = 0;
   if(initialized)
     return;
   for(i = 0; i < MAZE_HEIGHT; i ++)
@@ -77,10 +78,19 @@ void pellet_init(void){
   initialized = true;
 }
 
-void pellet_eat(int x, int y){
+int pellet_eat(int x, int y){
+    int value = pellet_distribution[y][x];;
     if(x >= 0 && y >=0 && x < MAZE_WIDTH && y < MAZE_HEIGHT &&
        pellets[y][x] != NULL && pellets[y][x] -> visible){
         W.play_sound(wakka);
         pellets[y][x] -> visible = false;
+        W.game -> pellets_eaten ++;
+        if(value == 2)
+            pacman_slow_down(0.358);
+        else
+            pacman_slow_down(0.85);
+        if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
+            fruits_appear();
     }
+    return value;
 }

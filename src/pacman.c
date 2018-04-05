@@ -32,6 +32,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 static struct interface *image;
 static int position_x, position_y;
 static float offset_x, offset_y;
+static float slow_down;
 
 void pacman_init(void){
     position_x = 14;
@@ -43,6 +44,7 @@ void pacman_init(void){
     image -> animate = false;
     image -> current_frame = 2;
     image -> integer = RIGHT;
+    slow_down = 1.0;
 }
 
 void pacman_transform(void){
@@ -119,7 +121,12 @@ void pacman_turn_down(void){
 }
 
 static void pacman_half_move(void){
-    float movement = BASE_SPEED * W.game -> speed_multiplier;
+    float begin_slow_down = slow_down;
+    float movement;
+    if(slow_down < W.game -> speed_multiplier)
+        movement = slow_down * BASE_SPEED;
+    else
+        movement = BASE_SPEED * W.game -> speed_multiplier;
     switch(image -> integer){
     case LEFT:
         if(offset_y == 0.0){
@@ -170,7 +177,7 @@ static void pacman_half_move(void){
                 position_y ++;
             }
             else
-                offset_y -= BASE_SPEED * W.game -> speed_multiplier;
+                offset_y -= movement;
         }
         else if(offset_x < 0.5){
             if(offset_x > movement)
@@ -208,7 +215,7 @@ static void pacman_half_move(void){
     case RIGHT:
         if(offset_y == 0.0){
             if(!maze_walls[position_y][position_x + 1])
-                offset_x += BASE_SPEED * W.game -> speed_multiplier;
+                offset_x += movement;
             else{
                 offset_x = 0.0;
                 image -> animate = false;
@@ -251,7 +258,7 @@ static void pacman_half_move(void){
     case UP_FROM_RIGHT:
         if(offset_x == 0.0){
             if(!maze_walls[position_y + 1][position_x])
-                offset_y += BASE_SPEED * W.game -> speed_multiplier;
+                offset_y += movement;
             else{
                 offset_y = 0.0;
                 image -> animate = false;
@@ -302,6 +309,12 @@ static void pacman_half_move(void){
         position_x = 0;
         offset_x = 0;
     }
+    if(position_y == 13 && ((position_x == 14 && offset_x > 0.5) ||
+                            (position_x == 14 && offset_x < 0.5)) &&
+       fruits_are_visible())
+        fruits_get_eaten();
+    if(begin_slow_down == slow_down)
+        slow_down = 1.0;
 }
 
 void pacman_move(void){
@@ -309,4 +322,8 @@ void pacman_move(void){
         pacman_half_move();
         pacman_half_move();
     }
+}
+
+void pacman_slow_down(float slow){
+    slow_down = slow;
 }

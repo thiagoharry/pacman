@@ -24,6 +24,6 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "includes.h"
 
 void pellet_init(void);
-void pellet_eat(int x, int y);
+int pellet_eat(int x, int y);
 
 #endif
