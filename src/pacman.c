@@ -22,17 +22,16 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #define PACMAN_SIZE  46.0
 #define BASE_SPEED    0.2
-#define LEFT            0
-#define RIGHT           1
-#define UP_FROM_LEFT    2
-#define UP_FROM_RIGHT   3
-#define DOWN_FROM_LEFT  4
-#define DOWN_FROM_RIGHT 5
 
 static struct interface *image;
 static int position_x, position_y;
 static float offset_x, offset_y;
 static float slow_down;
+static float default_speed[21][2] = {
+    {0.8, 0.9}, {0.9, 0.95}, {0.9, 0.95}, {0.9, 0.95}, {1.0, 1.0}, {1.0, 1.0},
+    {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0},
+    {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0},
+    {1.0, 1.0}, {1.0, 1.0}, {0.9, 0.9}};
 
 void pacman_init(void){
     position_x = 14;
@@ -45,34 +44,6 @@ void pacman_init(void){
     image -> current_frame = 2;
     image -> integer = RIGHT;
     slow_down = 1.0;
-}
-
-void pacman_transform(void){
-    float size;
-    float rotation = 0.0;
-    int screen_x, screen_y;
-    float size_multiplier =
-        maze_space[position_y][position_x].size_multiplier * (1.0 - offset_y) +
-        maze_space[position_y + 1][position_x].size_multiplier * offset_y;
-    size =  size_multiplier * PACMAN_SIZE;
-    screen_x = maze_space[position_y][position_x].x * (1.0 - offset_x) +
-        maze_space[position_y][position_x + 1].x * offset_x;
-    screen_y = maze_space[position_y][position_x].y * (1.0 - offset_y) +
-        maze_space[position_y + 1][position_x].y * offset_y;
-    W.resize_interface(image, size, size);
-    W.move_interface(image, screen_x, screen_y);
-    if(position_x == 0)
-        image -> a = (1.0 - offset_x);
-    else if(position_x == MAZE_WIDTH - 2)
-        image -> a = offset_x;
-    else
-        image -> a = 1.0;
-    if(image -> a < 0.2)
-        image -> a = 0.2;
-    // Rotação
-    if(image -> integer != LEFT && image -> integer != RIGHT)
-        rotation = (M_PI * (position_x - 15)) / 180.0;
-    W.rotate_interface(image, rotation);
 }
 
 void pacman_turn_right(void){
@@ -126,10 +97,10 @@ static void pacman_half_move(void){
 
     float prev_x = offset_x, prev_y = offset_y;
 
-    if(slow_down < W.game -> speed_multiplier)
+    if(slow_down < default_speed[W.game -> level - 1][0])
         movement = slow_down * BASE_SPEED;
     else
-        movement = BASE_SPEED * W.game -> speed_multiplier;
+        movement = default_speed[W.game -> level - 1][0] * BASE_SPEED;
     switch(image -> integer){
     case LEFT:
         if(offset_y == 0.0){
@@ -338,4 +309,8 @@ void pacman_slow_down(float slow){
 
 void pacman_print_position(void){
     printf("%d %d %f %f\n", position_x, position_y, offset_x, offset_y);
+}
+
+void pacman_transform(void){
+    perspective_transform(image, position_x, position_y, offset_x, offset_y, PACMAN_SIZE);
 }

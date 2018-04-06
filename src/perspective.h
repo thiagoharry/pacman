@@ -17,27 +17,12 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _game_h_
-#define _game_h_
+#ifndef _perspective_h_
+#define _perspective_h_
 
 #include "weaver/weaver.h"
 #include "includes.h"
 
-#define LEFT            0
-#define RIGHT           1
-#define UP_FROM_LEFT    2
-#define UP_FROM_RIGHT   3
-#define DOWN_FROM_LEFT  4
-#define DOWN_FROM_RIGHT 5
-
-struct _game_struct{
-  // You can personalize this struct putting your variables here. But
-  // don't change it's name. Access it in W.game variable.
-    int pellets_eaten;
-    int level;
-} _game;
-
-MAIN_LOOP main_loop(void);
-void game_init(void);
+void perspective_transform(struct interface *, int, int, float, float, float);
 
 #endif

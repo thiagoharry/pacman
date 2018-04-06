@@ -34,9 +34,9 @@ MAIN_LOOP main_loop(void){ // The game loop
   pellet_init();
   pacman_init();
   fruits_init();
+  ghosts_init();
   W.play_music("music1.mp3", true);
    LOOP_BODY: // Code executed every loop iteration
-      pacman_transform();
     if(W.keyboard[W_ESC])
         Wexit_loop();
     else if(W.keyboard[W_UP])
@@ -50,6 +50,9 @@ MAIN_LOOP main_loop(void){ // The game loop
     else if(W.keyboard[W_C])
         pacman_print_position();
     pacman_move();
+
+    pacman_transform();
+    ghosts_transform();
  LOOP_END: // Code executed at the end of the loop
     return;
 }
@@ -63,6 +66,5 @@ int main(void){
 }
 
 void game_init(void){
-    W.game -> speed_multiplier = 1.0;
     W.game -> level = 1;
 }

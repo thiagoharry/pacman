@@ -25,3 +25,5 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "pacman.h"
 #include "resolution.h"
 #include "fruits.h"
+#include "ghosts.h"
+#include "perspective.h"

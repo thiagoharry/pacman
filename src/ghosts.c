@@ -17,27 +17,24 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _game_h_
-#define _game_h_
+#include "ghosts.h"
 
-#include "weaver/weaver.h"
-#include "includes.h"
+#define GHOST_SIZE 46.0
+#define BASE_SPEED    0.2
 
-#define LEFT            0
-#define RIGHT           1
-#define UP_FROM_LEFT    2
-#define UP_FROM_RIGHT   3
-#define DOWN_FROM_LEFT  4
-#define DOWN_FROM_RIGHT 5
+static struct interface *blinky;
+int blinky_position_x, blinky_position_y;
+float blinky_offset_x, blinky_offset_y;
 
-struct _game_struct{
-  // You can personalize this struct putting your variables here. But
-  // don't change it's name. Access it in W.game variable.
-    int pellets_eaten;
-    int level;
-} _game;
+void ghosts_init(void){
+    blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
+    blinky_position_x = 14;
+    blinky_position_y = 19;
+    blinky_offset_x = 0.5;
+    blinky_offset_y = 0.0;
+}
 
-MAIN_LOOP main_loop(void);
-void game_init(void);
-
-#endif
+void ghosts_transform(void){
+    perspective_transform(blinky, blinky_position_x, blinky_position_y,
+                          blinky_offset_x, blinky_offset_y, GHOST_SIZE);
+}
