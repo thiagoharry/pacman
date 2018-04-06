@@ -55,6 +55,12 @@ static int pellet_distribution[MAZE_HEIGHT][MAZE_WIDTH] =
    {0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0},
    {0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0},
    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+static float slow_down[21][2] = {
+    {0.71, 0.79}, {0.79, 0.83}, {0.79, 0.83}, {0.79, 0.83}, {0.87, 0.87},
+    {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87},
+    {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87},
+    {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87},
+    {0.79, 0.79}};
 
 void pellet_init(void){
   int i, j;
@@ -79,16 +85,19 @@ void pellet_init(void){
 }
 
 int pellet_eat(int x, int y){
-    int value = pellet_distribution[y][x];;
+    int value = pellet_distribution[y][x];
     if(x >= 0 && y >=0 && x < MAZE_WIDTH && y < MAZE_HEIGHT &&
        pellets[y][x] != NULL && pellets[y][x] -> visible){
+        int level = W.game -> level - 1;
+        if(level >= 21)
+            level = 20;
         W.play_sound(wakka);
         pellets[y][x] -> visible = false;
         W.game -> pellets_eaten ++;
         if(value == 2)
-            pacman_slow_down(0.358);
+            pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][0]));
         else
-            pacman_slow_down(0.85);
+            pacman_slow_down(slow_down[level][0]);
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
             fruits_appear();
     }

@@ -123,6 +123,9 @@ void pacman_turn_down(void){
 static void pacman_half_move(void){
     float begin_slow_down = slow_down;
     float movement;
+
+    float prev_x = offset_x, prev_y = offset_y;
+
     if(slow_down < W.game -> speed_multiplier)
         movement = slow_down * BASE_SPEED;
     else
@@ -141,7 +144,7 @@ static void pacman_half_move(void){
                 offset_x -= movement;
         }
         else if(offset_y < 0.5){
-            if(offset_y > movement)
+            if(offset_y >= movement)
                 offset_y -= movement;
             else{
                 float square_offset = offset_y * offset_y;
@@ -150,7 +153,7 @@ static void pacman_half_move(void){
             }
         }
         else{
-            if((1.0 - offset_y) > movement)
+            if((1.0 - offset_y) >= movement)
                 offset_y += movement;
             else{
                 float square_offset = (1.0 - offset_y) * (1.0 - offset_y);
@@ -162,7 +165,7 @@ static void pacman_half_move(void){
         }
         if(offset_x < 0.0){
             position_x --;
-            offset_x = 1.0 - offset_x;
+            offset_x = 1.0 + offset_x;
             pellet_eat(position_x + 1, position_y);
         }
         break;
@@ -180,7 +183,7 @@ static void pacman_half_move(void){
                 offset_y -= movement;
         }
         else if(offset_x < 0.5){
-            if(offset_x > movement)
+            if(offset_x >= movement)
                 offset_x -= movement;
             else{
                 float square_offset = offset_x * offset_x;
@@ -189,10 +192,10 @@ static void pacman_half_move(void){
             }
         }
         else{
-            if((1.0 - offset_x) > movement){
+            if((1.0 - offset_x) >= movement){
                 offset_x += movement;
                 if(offset_x > 1.0){
-                    offset_x = 1.0 - offset_x;
+                    offset_x = offset_x - 1.0;
                     position_x ++;
                     pellet_eat(position_x, position_y);
                 }
@@ -208,7 +211,7 @@ static void pacman_half_move(void){
         }
         if(offset_y < 0.0){
             position_y --;
-            offset_y = 1.0 - offset_y;
+            offset_y = 1.0 + offset_y;
             pellet_eat(position_x, position_y + 1);
         }
         break;
@@ -222,7 +225,7 @@ static void pacman_half_move(void){
             }
         }
         else if(offset_y < 0.5){
-            if(offset_y > movement)
+            if(offset_y >= movement)
                 offset_y -= movement;
             else{
                 float square_offset = offset_y * offset_y;
@@ -232,10 +235,10 @@ static void pacman_half_move(void){
             }
         }
         else{
-            if((1.0 - offset_y) > movement){
+            if((1.0 - offset_y) >= movement){
                 offset_y += movement;
                 if(offset_y >= 1.0){
-                    offset_y = 1.0 - offset_y;
+                    offset_y = offset_y - 1.0;
                     position_y ++;
                     pellet_eat(position_x, position_y);
                 }
@@ -265,7 +268,7 @@ static void pacman_half_move(void){
             }
         }
         else if(offset_x < 0.5){
-            if(offset_x > movement)
+            if(offset_x >= movement)
                 offset_x -= movement;
             else{
                 float square_offset = offset_x * offset_x;
@@ -275,7 +278,7 @@ static void pacman_half_move(void){
             }
         }
         else{
-            if((1.0 - offset_x) > movement){
+            if((1.0 - offset_x) >= movement){
                 offset_x += movement;
                 if(offset_x > 1.0){
                     offset_x = 1.0 - offset_x;
@@ -315,6 +318,11 @@ static void pacman_half_move(void){
         fruits_get_eaten();
     if(begin_slow_down == slow_down)
         slow_down = 1.0;
+
+    if(isnan(offset_x) || isnan(offset_y)){
+        printf("%f %f\n", prev_x, prev_y);
+        pacman_print_position();
+    }
 }
 
 void pacman_move(void){
@@ -326,4 +334,8 @@ void pacman_move(void){
 
 void pacman_slow_down(float slow){
     slow_down = slow;
+}
+
+void pacman_print_position(void){
+    printf("%d %d %f %f\n", position_x, position_y, offset_x, offset_y);
 }

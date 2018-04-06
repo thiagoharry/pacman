@@ -47,6 +47,8 @@ MAIN_LOOP main_loop(void){ // The game loop
         pacman_turn_left();
     else if(W.keyboard[W_RIGHT])
         pacman_turn_right();
+    else if(W.keyboard[W_C])
+        pacman_print_position();
     pacman_move();
  LOOP_END: // Code executed at the end of the loop
     return;
@@ -62,4 +64,5 @@ int main(void){
 
 void game_init(void){
     W.game -> speed_multiplier = 1.0;
+    W.game -> level = 1;
 }
