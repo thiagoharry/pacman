@@ -19,8 +19,13 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #include "ghosts.h"
 
-#define GHOST_SIZE 46.0
+#define GHOST_SIZE   46.0
 #define BASE_SPEED    0.2
+#define LEFT            0
+#define RIGHT           1
+#define UP              2
+#define DOWN            3
+
 
 static struct interface *blinky;
 int blinky_position_x, blinky_position_y;
@@ -28,6 +33,7 @@ float blinky_offset_x, blinky_offset_y;
 
 void ghosts_init(void){
     blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
+    blinky -> integer = LEFT;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
