@@ -25,5 +25,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 void ghosts_init(void);
 void ghosts_transform(void);
+void ghosts_move(void);
+void ghosts_debug(void);
 
 #endif

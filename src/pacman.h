@@ -23,6 +23,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "weaver/weaver.h"
 #include "includes.h"
 
+extern int pacman_position_x, pacman_position_y;
+
 void pacman_init(void);
 void pacman_transform(void);
 void pacman_turn_left(void);

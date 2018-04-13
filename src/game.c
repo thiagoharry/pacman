@@ -22,21 +22,21 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 static struct interface *sky, *grass, *horizon;
 
 MAIN_LOOP main_loop(void){ // The game loop
- LOOP_INIT: // Code executed during loop initialization
-  sky = W.new_interface(1, W.width / 2, 0.5 * W.height + 324,
-                        W.width, W.height - 648, NULL);
-  grass = W.new_interface(2, W.width / 2, 324,
-                          W.width, 648,
-                          "grass.png");
-  horizon = W.new_interface(3, W.width / 2, 653,
-                            W.width, 10, "horizon.png");
-  maze_init();
-  pellet_init();
-  pacman_init();
-  fruits_init();
-  ghosts_init();
-  W.play_music("music1.mp3", true);
-   LOOP_BODY: // Code executed every loop iteration
+LOOP_INIT: // Code executed during loop initialization
+    sky = W.new_interface(1, W.width / 2, 0.5 * W.height + 324,
+                          W.width, W.height - 648, NULL);
+    grass = W.new_interface(2, W.width / 2, 324,
+                            W.width, 648,
+                            "grass.png");
+    horizon = W.new_interface(3, W.width / 2, 653,
+                              W.width, 10, "horizon.png");
+    maze_init();
+    pellet_init();
+    pacman_init();
+    fruits_init();
+    ghosts_init();
+    W.play_music("music1.mp3", true);
+LOOP_BODY: // Code executed every loop iteration
     if(W.keyboard[W_ESC])
         Wexit_loop();
     else if(W.keyboard[W_UP])
@@ -47,13 +47,18 @@ MAIN_LOOP main_loop(void){ // The game loop
         pacman_turn_left();
     else if(W.keyboard[W_RIGHT])
         pacman_turn_right();
-    else if(W.keyboard[W_C])
+    else if(W.keyboard[W_C] == 1){
         pacman_print_position();
+        ghosts_debug();
+    }
+    ghosts_move();
     pacman_move();
 
     pacman_transform();
     ghosts_transform();
- LOOP_END: // Code executed at the end of the loop
+
+LOOP_END: // Code executed at the end of the loop
+    W.stop_music("music1.mp3");
     return;
 }
 
