@@ -96,7 +96,7 @@ void ghosts_init(void){
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
     blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
-    blinky -> integer = RIGHT;
+    blinky -> integer = LEFT;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
