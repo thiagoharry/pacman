@@ -1,5 +1,5 @@
 /*657:*/
-#line 14733 "cweb/weaver.w"
+#line 14736 "cweb/weaver.w"
 
 
 #version 100
@@ -16,7 +16,7 @@ precision lowp samplerCube;
 
 
 /*446:*/
-#line 9730 "cweb/weaver.w"
+#line 9733 "cweb/weaver.w"
 
 uniform vec4 object_color;
 uniform mat4 model_view_matrix;
@@ -25,7 +25,7 @@ uniform float time;
 uniform sampler2D texture1;
 uniform int integer;
 /*:446*/
-#line 14748 "cweb/weaver.w"
+#line 14751 "cweb/weaver.w"
 
 
 varying mediump vec2 coordinate;

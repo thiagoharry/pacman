@@ -345,7 +345,7 @@ return;
 }
 #endif
 /*:358*//*381:*/
-#line 8495 "cweb/weaver.w"
+#line 8498 "cweb/weaver.w"
 
 bool _Wenable_plugin(int plugin_id){
 #ifdef W_PREVENT_SELF_ENABLING_PLUGINS
@@ -400,7 +400,7 @@ return false;
 return _plugins[plugin_id].enabled;
 }
 /*:381*//*385:*/
-#line 8585 "cweb/weaver.w"
+#line 8588 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void*_Wget_plugin_data(int plugin_id){

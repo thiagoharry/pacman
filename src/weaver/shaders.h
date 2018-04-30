@@ -1,5 +1,5 @@
 /*439:*/
-#line 9635 "cweb/weaver.w"
+#line 9638 "cweb/weaver.w"
 
 #ifndef _shaders_h_
 #define _shaders_h_
@@ -14,26 +14,26 @@ extern"C"{
 #include "../../conf/conf.h"
 #include "conf_end.h"
 /*:66*/
-#line 9642 "cweb/weaver.w"
+#line 9645 "cweb/weaver.w"
 
 /*447:*/
-#line 9745 "cweb/weaver.w"
+#line 9748 "cweb/weaver.w"
 
 extern char _vertex_interface[];
 extern char _fragment_interface[];
 struct _shader _default_interface_shader;
 /*:447*//*449:*/
-#line 9762 "cweb/weaver.w"
+#line 9765 "cweb/weaver.w"
 
 GLuint _compile_shader(char*source,bool vertex);
 #define _compile_vertex_shader(source) _compile_shader(source, true)
 #define _compile_fragment_shader(source) _compile_shader(source, false)
 /*:449*//*451:*/
-#line 9809 "cweb/weaver.w"
+#line 9812 "cweb/weaver.w"
 
 GLuint _link_and_clean_shaders(GLuint vertex,GLuint fragment);
 /*:451*//*456:*/
-#line 9923 "cweb/weaver.w"
+#line 9926 "cweb/weaver.w"
 
 struct _shader{
 bool initialized;
@@ -62,32 +62,32 @@ struct _shader*_shader_list;
 #include "../../.hidden_code/shader.h"
 #endif
 /*:456*//*461:*/
-#line 10139 "cweb/weaver.w"
+#line 10142 "cweb/weaver.w"
 
 void _compile_and_insert_new_shader(char*dir,int position);
 /*:461*//*491:*/
-#line 10930 "cweb/weaver.w"
+#line 10933 "cweb/weaver.w"
 
 extern char _vertex_interface_texture[];
 extern char _fragment_interface_texture[];
 struct _shader _framebuffer_shader;
 GLfloat _framebuffer_matrix[16];
 /*:491*//*497:*/
-#line 11114 "cweb/weaver.w"
+#line 11117 "cweb/weaver.w"
 
 void _change_resolution(int resolution_x,int resolution_y);
 /*:497*//*502:*/
-#line 11208 "cweb/weaver.w"
+#line 11211 "cweb/weaver.w"
 
 void _change_final_shader(int type);
 /*:502*//*658:*/
-#line 14759 "cweb/weaver.w"
+#line 14762 "cweb/weaver.w"
 
 extern char _vertex_image_interface[];
 extern char _fragment_image_interface[];
 struct _shader _image_interface_shader;
 /*:658*/
-#line 9643 "cweb/weaver.w"
+#line 9646 "cweb/weaver.w"
 
 #ifdef __cplusplus
 }

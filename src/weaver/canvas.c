@@ -89,11 +89,11 @@ W.width= width;
 W.height= height;
 glViewport(0,0,W.width,W.height);
 /*436:*/
-#line 9588 "cweb/weaver.w"
+#line 9591 "cweb/weaver.w"
 
 _update_interface_screen_size();
 /*:436*//*478:*/
-#line 10665 "cweb/weaver.w"
+#line 10668 "cweb/weaver.w"
 
 {
 
