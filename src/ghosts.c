@@ -73,7 +73,7 @@ static void enter_mode(int new_mode){
     switch(mode){
     case SCATTER:
         blinky_target_x = 27;
-        blinky_target_y = MAZE_HEIGHT;
+        blinky_target_y = MAZE_HEIGHT + 2;
         break;
     }
 }
@@ -168,6 +168,15 @@ static void ghosts_half_move(struct interface *ghost, int *position_x,
         *offset_y += 1.0;
         (*position_y) --;
     }
+    if(ghost -> integer == LEFT &&
+       (*position_x < 0 || (*position_x == 0 && *offset_x == 0))){
+        *position_x = MAZE_WIDTH - 1;
+        *offset_x = 0;
+    }
+    else if(ghost -> integer == RIGHT && *position_x >= MAZE_WIDTH - 1){
+        *position_x = 0;
+        *offset_x = 0;
+    }
 }
 
 static void choose_direction(struct interface *ghost, int position_x,
@@ -192,6 +201,11 @@ static void choose_direction(struct interface *ghost, int position_x,
             distance[LEFT] = hypot(blinky_target_x - (position_x - 1),
                                    blinky_target_y - position_y);
     }
+    if(position_y == 19 && ghost -> integer != DOWN)
+        return;
+    if(position_y == 7 && position_x > 12 && position_x < 18 &&
+       ghost -> integer != DOWN)
+        return;
     if(distance[UP] <= distance[DOWN] && distance[UP] <= distance[LEFT] &&
        distance[UP] <= distance[RIGHT])
         ghost -> integer = UP;
@@ -255,7 +269,10 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     float movement;
     int level = W.game -> level - 1;
     if(level > 20) level = 20;
-    movement = default_speed[level][0] * BASE_SPEED;
+    if(*position_y == 16 && (*position_x < 7 || *position_x > 22))
+        movement = default_speed[level][2] * BASE_SPEED;
+    else
+        movement = default_speed[level][0] * BASE_SPEED;
     if(ghost == stopped_ghost)
         movement *= 0.25;
     // Try to kill pacman:
