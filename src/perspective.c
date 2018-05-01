@@ -29,6 +29,8 @@ void perspective_transform(struct interface *image, int position_x,
         maze_space[position_y][position_x].size_multiplier * (1.0 - offset_y) +
         maze_space[position_y + 1][position_x].size_multiplier * offset_y;
     size =  size_multiplier * natural_size;
+    if(image -> integer == DEAD)
+        size *= 0.7;
     screen_x = maze_space[position_y][position_x].x * (1.0 - offset_x) +
         maze_space[position_y][position_x + 1].x * offset_x;
     screen_y = maze_space[position_y][position_x].y * (1.0 - offset_y) +

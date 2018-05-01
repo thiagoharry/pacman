@@ -23,12 +23,9 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "weaver/weaver.h"
 #include "includes.h"
 
+#define DEAD           -1
 #define LEFT            0
 #define RIGHT           1
-#define UP_FROM_LEFT    2
-#define UP_FROM_RIGHT   3
-#define DOWN_FROM_LEFT  4
-#define DOWN_FROM_RIGHT 5
 
 struct _game_struct{
   // You can personalize this struct putting your variables here. But

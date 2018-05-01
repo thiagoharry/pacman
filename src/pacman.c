@@ -21,9 +21,16 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "pacman.h"
 
 #define PACMAN_SIZE  46.0
-#define BASE_SPEED    0.2
+#define BASE_SPEED    0.4
 
-static struct interface *image;
+// LEFT and RIGHT defined at game.h
+#define UP_FROM_LEFT    2
+#define UP_FROM_RIGHT   3
+#define DOWN_FROM_LEFT  4
+#define DOWN_FROM_RIGHT 5
+
+static struct interface *image, *killer = NULL;
+struct sound *kill_sound;
 static float offset_x, offset_y;
 static float slow_down;
 static float default_speed[21][2] = {
@@ -45,6 +52,7 @@ void pacman_init(void){
     image -> current_frame = 2;
     image -> integer = RIGHT;
     slow_down = 1.0;
+    kill_sound = W.new_sound("ghost.wav");
 }
 
 void pacman_turn_right(void){
@@ -106,9 +114,9 @@ static void pacman_half_move(void){
     float prev_x = offset_x, prev_y = offset_y;
     if(level > 20) level = 20;
     if(slow_down < default_speed[level][0])
-        movement = slow_down * BASE_SPEED;
+        movement = slow_down * BASE_SPEED * 0.5;
     else
-        movement = default_speed[level][0] * BASE_SPEED;
+        movement = default_speed[level][0] * BASE_SPEED * 0.5;
     switch(image -> integer){
     case LEFT:
         if(offset_y == 0.0){
@@ -305,7 +313,11 @@ static void pacman_half_move(void){
 }
 
 void pacman_move(void){
-    if(image -> animate){
+    if(image -> integer == DEAD){
+        ghost_carry_pacman(killer, &pacman_position_x,
+                           &pacman_position_y, &offset_x, &offset_y);
+    }
+    else if(image -> animate){
         pacman_half_move();
         pacman_half_move();
     }
@@ -321,4 +333,15 @@ void pacman_print_position(void){
 
 void pacman_transform(void){
     perspective_transform(image, pacman_position_x, pacman_position_y, offset_x, offset_y, PACMAN_SIZE);
+}
+
+void pacman_killed_by(struct interface *ghost){
+    if(image -> integer != DEAD){
+        image -> integer = DEAD;
+        killer = ghost;
+        image -> animate = false;
+        W.stop_music("music1.mp3");
+        W.play_sound(kill_sound);
+        ghost_slow_down(ghost);
+    }
 }

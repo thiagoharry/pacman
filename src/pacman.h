@@ -34,5 +34,6 @@ void pacman_turn_down(void);
 void pacman_move(void);
 void pacman_slow_down(float);
 void pacman_print_position(void);
+void pacman_killed_by(struct interface *);
 
 #endif

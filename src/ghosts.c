@@ -62,7 +62,7 @@ static float mode_duration[5][8] =
      {7.0, 20.0, 7.0, 20.0, 5.0, 1033.0, 0.017, INFINITY},
      {5.0, 20.0, 5.0, 20.0, 5.0, 1037.0, 0.017, INFINITY}
     };
-static struct interface *blinky;
+static struct interface *blinky, *stopped_ghost = NULL;
 static int mode, mode_count;
 static int blinky_position_x, blinky_position_y;
 static float blinky_offset_x, blinky_offset_y;
@@ -256,6 +256,11 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     int level = W.game -> level - 1;
     if(level > 20) level = 20;
     movement = default_speed[level][0] * BASE_SPEED;
+    if(ghost == stopped_ghost)
+        movement *= 0.25;
+    // Try to kill pacman:
+    if(*position_x == pacman_position_x && *position_y == pacman_position_y)
+        pacman_killed_by(ghost);
     // Move to next tile
     if(*offset_x <= EPSILON && *offset_y <= EPSILON){
         if(is_in_decision_point(*position_x, *position_y))
@@ -273,6 +278,9 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
         else
             turn_if_necessary(ghost, *position_x, *position_y);
     }
+    // Try to kill pacman again:
+    if(*position_x == pacman_position_x && *position_y == pacman_position_y)
+        pacman_killed_by(ghost);
     // Resume movement:
     ghosts_half_move(ghost, position_x, position_y,
                      offset_x, offset_y, &movement);
@@ -283,7 +291,21 @@ void ghosts_move(void){
                      &blinky_offset_x, &blinky_offset_y);
 }
 
+void ghost_carry_pacman(struct interface *ghost, int *position_x,
+                        int *position_y, float *offset_x, float *offset_y){
+    if(ghost == blinky){
+        *position_x = blinky_position_x;
+        *position_y = blinky_position_y;
+        *offset_x = blinky_offset_x;
+        *offset_y = blinky_offset_y;
+    }
+}
+
 void ghosts_debug(void){
     printf("BLINKY: %d %d %f %f\n", blinky_position_x, blinky_position_y,
            blinky_offset_x, blinky_offset_y);
+}
+
+void ghost_slow_down(struct interface *ghost){
+    stopped_ghost = ghost;
 }

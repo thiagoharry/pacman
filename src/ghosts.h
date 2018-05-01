@@ -26,6 +26,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 void ghosts_init(void);
 void ghosts_transform(void);
 void ghosts_move(void);
+void ghost_carry_pacman(struct interface *, int *, int *, float *, float *);
 void ghosts_debug(void);
+void ghost_slow_down(struct interface *);
 
 #endif

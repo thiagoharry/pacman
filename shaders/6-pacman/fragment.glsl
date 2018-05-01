@@ -1,5 +1,6 @@
 #version 100
 
+#define DEAD           -1
 #define LEFT            0
 #define RIGHT           1
 #define UP_FROM_LEFT    2
@@ -39,8 +40,10 @@ void main(){
         coordinate = vec2(texture_coordinate.y, 1.0 - texture_coordinate.x);
     else if(integer == DOWN_FROM_RIGHT)
         coordinate = vec2(1.0 - texture_coordinate.y, texture_coordinate.x);
-    else
+    else if(integer == DOWN_FROM_LEFT)
         coordinate = vec2(1.0 - texture_coordinate.y, 1.0 - texture_coordinate.x);
+    else
+        coordinate = vec2(texture_coordinate.x, 1.0 - texture_coordinate.y);
     texture = texture2D(texture1, coordinate);
     gl_FragData[0] = vec4(texture.rgb, min(object_color.a, texture.a));
 }
