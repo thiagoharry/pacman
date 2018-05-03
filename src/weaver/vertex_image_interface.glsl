@@ -1,5 +1,5 @@
 /*656:*/
-#line 14706 "cweb/weaver.w"
+#line 14719 "cweb/weaver.w"
 
 
 #version 100
@@ -15,16 +15,16 @@ precision lowp sampler2D;
 precision lowp samplerCube;
 
 /*445:*/
-#line 9726 "cweb/weaver.w"
+#line 9739 "cweb/weaver.w"
 
 attribute vec3 vertex_position;
 /*:445*/
-#line 14720 "cweb/weaver.w"
+#line 14733 "cweb/weaver.w"
 
 
 
 /*446:*/
-#line 9733 "cweb/weaver.w"
+#line 9746 "cweb/weaver.w"
 
 uniform vec4 object_color;
 uniform mat4 model_view_matrix;
@@ -33,7 +33,7 @@ uniform float time;
 uniform sampler2D texture1;
 uniform int integer;
 /*:446*/
-#line 14723 "cweb/weaver.w"
+#line 14736 "cweb/weaver.w"
 
 
 varying mediump vec2 coordinate;

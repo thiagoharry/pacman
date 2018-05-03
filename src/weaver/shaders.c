@@ -1,5 +1,5 @@
 /*440:*/
-#line 9652 "cweb/weaver.w"
+#line 9665 "cweb/weaver.w"
 
 #include <sys/types.h>  
 #include <sys/stat.h>  
@@ -10,7 +10,7 @@
 #include <fcntl.h>  
 #include "shaders.h"
 /*448:*/
-#line 9753 "cweb/weaver.w"
+#line 9766 "cweb/weaver.w"
 
 char _vertex_interface[]= {
 #include "vertex_interface.data"
@@ -19,7 +19,7 @@ char _fragment_interface[]= {
 #include "fragment_interface.data"
 ,0x00};
 /*:448*//*450:*/
-#line 9771 "cweb/weaver.w"
+#line 9784 "cweb/weaver.w"
 
 GLuint _compile_shader(char*source,bool vertex){
 GLuint shader;
@@ -56,7 +56,7 @@ exit(1);
 return shader;
 }
 /*:450*//*452:*/
-#line 9816 "cweb/weaver.w"
+#line 9829 "cweb/weaver.w"
 
 GLuint _link_and_clean_shaders(GLuint vertex,GLuint fragment){
 GLuint program= glCreateProgram();
@@ -91,7 +91,7 @@ glDetachShader(program,fragment);
 return program;
 }
 /*:452*//*462:*/
-#line 10146 "cweb/weaver.w"
+#line 10159 "cweb/weaver.w"
 
 void _compile_and_insert_new_shader(char*dir,int position){
 char*vertex_file= NULL,*fragment_file= NULL;
@@ -324,7 +324,7 @@ if(fragment_source!=NULL)Wfree(fragment_source);
 if(vertex_source!=NULL)Wfree(vertex_source);
 }
 /*:462*//*492:*/
-#line 10940 "cweb/weaver.w"
+#line 10953 "cweb/weaver.w"
 
 char _vertex_interface_texture[]= {
 #include "vertex_interface_texture.data"
@@ -333,7 +333,7 @@ char _fragment_interface_texture[]= {
 #include "fragment_interface_texture.data"
 ,0x00};
 /*:492*//*498:*/
-#line 11121 "cweb/weaver.w"
+#line 11134 "cweb/weaver.w"
 
 void _change_resolution(int resolution_x,int resolution_y){
 #if W_WIDTH != 0 || W_HEIGHT != 0
@@ -399,13 +399,13 @@ W.resize_interface(&_interfaces[i][j],new_width,new_height);
 #endif
 }
 /*:498*//*503:*/
-#line 11215 "cweb/weaver.w"
+#line 11228 "cweb/weaver.w"
 
 void _change_final_shader(int type){
 _final_shader[_number_of_loops]= type;
 }
 /*:503*//*659:*/
-#line 14767 "cweb/weaver.w"
+#line 14780 "cweb/weaver.w"
 
 char _vertex_image_interface[]= {
 #include "vertex_image_interface.data"
@@ -414,6 +414,6 @@ char _fragment_image_interface[]= {
 #include "fragment_image_interface.data"
 ,0x00};
 /*:659*/
-#line 9661 "cweb/weaver.w"
+#line 9674 "cweb/weaver.w"
 
 /*:440*/
