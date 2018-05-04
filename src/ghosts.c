@@ -68,7 +68,27 @@ static int blinky_position_x, blinky_position_y;
 static float blinky_offset_x, blinky_offset_y;
 static int blinky_target_x, blinky_target_y;
 
+static void reverse_direction(struct interface *ghost){
+    switch(ghost -> integer){
+    case LEFT:
+        ghost -> integer = RIGHT;
+        break;
+    case RIGHT:
+        ghost -> integer = LEFT;
+        break;
+    case UP:
+        ghost -> integer = DOWN;
+        break;
+    case DOWN:
+        ghost -> integer = UP;
+        break;
+    }
+}
+
 static void enter_mode(int new_mode){
+    if(mode == CHASE || mode == SCATTER){
+        reverse_direction(blinky);
+    }
     mode = new_mode;
     switch(mode){
     case SCATTER:
@@ -96,7 +116,7 @@ void ghosts_init(void){
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
     blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
-    blinky -> integer = LEFT;
+    blinky -> integer = RIGHT;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
