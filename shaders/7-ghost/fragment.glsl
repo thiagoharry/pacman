@@ -27,6 +27,7 @@ varying mediump vec2 texture_coordinate;
 void main(){
   vec4 texture = texture2D(texture1, texture_coordinate);
   vec4 color = texture;
+  int eye = 0;
   if(integer == DOWN){
     if(distance(texture_coordinate, vec2(0.37, 0.6)) < 0.1 ||
        distance(texture_coordinate, vec2(0.63, 0.6)) < 0.1){
@@ -37,6 +38,7 @@ void main(){
        else{
          color = vec4(1.0, 1.0, 1.0, 1.0);
        }
+       eye = 1;
     }
   }
   else if(integer == LEFT){
@@ -49,6 +51,7 @@ void main(){
        else{
          color = vec4(1.0, 1.0, 1.0, 1.0);
        }
+       eye = 1;
     }
   }
   else if(integer == RIGHT){
@@ -61,6 +64,7 @@ void main(){
        else{
          color = vec4(1.0, 1.0, 1.0, 1.0);
        }
+       eye = 1;
     }
   }
   else{
@@ -73,7 +77,11 @@ void main(){
        else{
          color = vec4(1.0, 1.0, 1.0, 1.0);
        }
+       eye = 1;
     }
   }
-  gl_FragData[0] = color;
+  if(eye == 0 && object_color.b == 1.0)
+      gl_FragData[0] = vec4(0.0, 0.0, 1.0, color.a);
+  else
+      gl_FragData[0] = color;
 }

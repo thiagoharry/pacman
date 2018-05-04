@@ -46,14 +46,14 @@ static int decision_points[DECISION_POINTS][2] =
      {2, 25}, {7, 25}, {10, 25}, {13, 25}, {16, 25}, {19, 25}, {22, 25},
      {27, 25},
      {7, 29}, {MAZE_WIDTH - 8, 29}};
-static float default_speed[21][3] = {// Normal, frightned, tunnel
-    {0.75, 0.7, 0.4}, {0.85, 0.55, 0.45}, {0.85, 0.55, 0.45},
-    {0.85, 0.55, 0.45}, {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5},
-    {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5},
-    {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5},
-    {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5},
-    {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5},
-    {0.95, 0.6, 0.5}, {0.95, 0.6, 0.5}, {0.95, 0.95, 0.5}};
+static float default_speed[21][4] = {// Normal, frightned, tunnel, fright time
+    {0.75, 0.7, 0.4, 6.0}, {0.85, 0.55, 0.45, 5.0}, {0.85, 0.55, 0.45, 4.0},
+    {0.85, 0.55, 0.45, 3.0}, {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 5.0},
+    {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 1.0},
+    {0.95, 0.6, 0.5, 5.0}, {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 1.0},
+    {0.95, 0.6, 0.5, 1.0}, {0.95, 0.6, 0.5, 3.0}, {0.95, 0.6, 0.5, 1.0},
+    {0.95, 0.6, 0.5, 1.0}, {0.95, 0.6, 0.5, 0.0}, {0.95, 0.6, 0.5, 1.0},
+    {0.95, 0.6, 0.5, 0.0}, {0.95, 0.6, 0.5, 0.0}, {0.95, 0.95, 0.5, 0.0}};
 static float mode_duration[5][8] =
     {
      {7.0, 20.0, 7.0, 20.0, 5.0, 20.0, 5.0, INFINITY},
@@ -63,7 +63,8 @@ static float mode_duration[5][8] =
      {5.0, 20.0, 5.0, 20.0, 5.0, 1037.0, 0.017, INFINITY}
     };
 static struct interface *blinky, *stopped_ghost = NULL;
-static int mode, mode_count;
+static int mode, mode_count, last_mode = CHASE;
+static float remaining_time_to_change_mode;
 static int blinky_position_x, blinky_position_y;
 static float blinky_offset_x, blinky_offset_y;
 static int blinky_target_x, blinky_target_y;
@@ -86,14 +87,21 @@ static void reverse_direction(struct interface *ghost){
 }
 
 static void enter_mode(int new_mode){
+    int level = W.game -> level - 1;
+    if(level >= 21) level = 20;
     if(mode == CHASE || mode == SCATTER){
         reverse_direction(blinky);
     }
+    last_mode = mode;
     mode = new_mode;
     switch(mode){
     case SCATTER:
         blinky_target_x = 27;
         blinky_target_y = MAZE_HEIGHT + 2;
+        break;
+    case FRIGHTNED:
+        blinky -> b = 1.0;
+        W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
         break;
     }
 }
@@ -117,6 +125,7 @@ void ghosts_init(void){
     if(level >= 5) level = 4;
     blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
     blinky -> integer = RIGHT;
+    blinky -> b = 0.0;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
@@ -226,6 +235,20 @@ static void choose_direction(struct interface *ghost, int position_x,
     if(position_y == 7 && position_x > 12 && position_x < 18 &&
        ghost -> integer != DOWN)
         return;
+    if(ghost -> b == 1.0){
+        int direction = W.random() % 4;
+        if(distance[direction] != 5000.0)
+            ghost -> integer = direction;
+        else if(distance[UP] != 5000.0)
+            ghost -> integer = UP;
+        else if(distance[LEFT] != 5000.0)
+            ghost -> integer = LEFT;
+        else if(distance[DOWN] != 5000.0)
+            ghost -> integer = DOWN;
+        else
+            ghost -> integer = RIGHT;
+        return;
+    }
     if(distance[UP] <= distance[DOWN] && distance[UP] <= distance[LEFT] &&
        distance[UP] <= distance[RIGHT])
         ghost -> integer = UP;
@@ -345,4 +368,15 @@ void ghosts_debug(void){
 
 void ghost_slow_down(struct interface *ghost){
     stopped_ghost = ghost;
+}
+
+void ghosts_fright(void){
+    remaining_time_to_change_mode = W.cancel(mode_change);
+    enter_mode(FRIGHTNED);
+}
+
+void ghosts_stop_frightned_mode(void){
+    blinky -> b = 0.0;
+    W.run_futurelly(mode_change, remaining_time_to_change_mode);
+    enter_mode(last_mode);
 }

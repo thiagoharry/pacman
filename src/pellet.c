@@ -94,8 +94,10 @@ int pellet_eat(int x, int y){
         W.play_sound(wakka);
         pellets[y][x] -> visible = false;
         W.game -> pellets_eaten ++;
-        if(value == 2)
+        if(value == 2){
             pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][0]));
+            ghosts_fright();
+        }
         else
             pacman_slow_down(slow_down[level][0]);
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)

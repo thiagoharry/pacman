@@ -29,5 +29,7 @@ void ghosts_move(void);
 void ghost_carry_pacman(struct interface *, int *, int *, float *, float *);
 void ghosts_debug(void);
 void ghost_slow_down(struct interface *);
+void ghosts_fright(void);
+void ghosts_stop_frightned_mode(void);
 
 #endif
