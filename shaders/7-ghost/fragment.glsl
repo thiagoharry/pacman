@@ -80,7 +80,15 @@ void main(){
        eye = 1;
     }
   }
-  if(eye == 0 && object_color.b == 1.0)
+  if(eye == 0 && object_color.r <= 0.2)
+      gl_FragData[0] = vec4(0.0, 0.0, 0.0, 0.0);
+  else if(eye == 0 && object_color.g >= 0.9 && object_color.b >= 0.9){
+      if(sin(60.0 * time) > 0.0)
+          gl_FragData[0] = vec4(0.0, 0.0, 1.0, color.a);
+      else
+          gl_FragData[0] = color;
+  }
+  else if(eye == 0 && object_color.b == 1.0 && texture_coordinate.y > 0.09)
       gl_FragData[0] = vec4(0.0, 0.0, 1.0, color.a);
   else
       gl_FragData[0] = color;

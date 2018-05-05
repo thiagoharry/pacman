@@ -22,7 +22,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 static const float normal_pellet_size = 64.0;
 static bool initialized = false;
 static struct interface *pellets[MAZE_HEIGHT][MAZE_WIDTH];
-static struct sound *wakka;
+static struct sound *wakka, *super_wakka;
 static int pellet_distribution[MAZE_HEIGHT][MAZE_WIDTH] =
   {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
    {0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0},
@@ -81,6 +81,7 @@ void pellet_init(void){
                                           "power_pellet.png");
       }
   wakka = W.new_sound("wakka.wav");
+  super_wakka = W.new_sound("wakka2.wav");
   initialized = true;
 }
 
@@ -91,15 +92,17 @@ int pellet_eat(int x, int y){
         int level = W.game -> level - 1;
         if(level >= 21)
             level = 20;
-        W.play_sound(wakka);
         pellets[y][x] -> visible = false;
         W.game -> pellets_eaten ++;
         if(value == 2){
             pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][0]));
+            W.play_sound(super_wakka);
             ghosts_fright();
         }
-        else
+        else{
+            W.play_sound(wakka);
             pacman_slow_down(slow_down[level][0]);
+        }
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
             fruits_appear();
     }

@@ -310,6 +310,11 @@ static void pacman_half_move(void){
         printf("%f %f\n", prev_x, prev_y);
         pacman_print_position();
     }
+    if(image -> integer != DEAD){
+        if(pacman_position_x == blinky_position_x &&
+           pacman_position_y == blinky_position_y)
+            ghost_eat_or_get_eaten(blinky);
+    }
 }
 
 void pacman_move(void){

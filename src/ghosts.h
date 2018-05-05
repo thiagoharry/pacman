@@ -23,6 +23,9 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "weaver/weaver.h"
 #include "includes.h"
 
+extern int blinky_position_x, blinky_position_y;
+extern struct interface *blinky;
+
 void ghosts_init(void);
 void ghosts_transform(void);
 void ghosts_move(void);
@@ -31,5 +34,6 @@ void ghosts_debug(void);
 void ghost_slow_down(struct interface *);
 void ghosts_fright(void);
 void ghosts_stop_frightned_mode(void);
+void ghost_eat_or_get_eaten(struct interface *);
 
 #endif

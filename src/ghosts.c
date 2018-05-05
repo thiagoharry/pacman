@@ -62,12 +62,19 @@ static float mode_duration[5][8] =
      {7.0, 20.0, 7.0, 20.0, 5.0, 1033.0, 0.017, INFINITY},
      {5.0, 20.0, 5.0, 20.0, 5.0, 1037.0, 0.017, INFINITY}
     };
-static struct interface *blinky, *stopped_ghost = NULL;
+static struct interface *stopped_ghost = NULL;
 static int mode, mode_count, last_mode = CHASE;
 static float remaining_time_to_change_mode;
-static int blinky_position_x, blinky_position_y;
 static float blinky_offset_x, blinky_offset_y;
 static int blinky_target_x, blinky_target_y;
+static struct sound *eaten;
+int blinky_position_x, blinky_position_y;
+struct interface *blinky;
+
+static void ghosts_blink(void){
+    blinky -> g = 1.0;
+    W.run_futurelly(ghosts_stop_frightned_mode, 1.0);
+}
 
 static void reverse_direction(struct interface *ghost){
     switch(ghost -> integer){
@@ -92,7 +99,8 @@ static void enter_mode(int new_mode){
     if(mode == CHASE || mode == SCATTER){
         reverse_direction(blinky);
     }
-    last_mode = mode;
+    if(mode != FRIGHTNED)
+        last_mode = mode;
     mode = new_mode;
     switch(mode){
     case SCATTER:
@@ -101,7 +109,12 @@ static void enter_mode(int new_mode){
         break;
     case FRIGHTNED:
         blinky -> b = 1.0;
-        W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
+        if(default_speed[level][3] >= 1.0)
+            W.run_futurelly(ghosts_blink, default_speed[level][3] - 1.0);
+        else{
+            ghosts_blink();
+            W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
+        }
         break;
     }
 }
@@ -111,7 +124,7 @@ static void mode_change(void){
     if(level >= 5) level = 4;
     mode_count ++;
     if(mode_count >= 8) mode_count = 7;
-        if(mode == SCATTER)
+    if(mode == SCATTER)
         enter_mode(CHASE);
     else
         enter_mode(SCATTER);
@@ -124,8 +137,11 @@ void ghosts_init(void){
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
     blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
+    eaten = W.new_sound("bite2.wav");
     blinky -> integer = RIGHT;
     blinky -> b = 0.0;
+    blinky -> r = 1.0;
+    blinky -> g = 0.0;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
@@ -206,13 +222,21 @@ static void ghosts_half_move(struct interface *ghost, int *position_x,
         *position_x = 0;
         *offset_x = 0;
     }
+    if(ghost -> r == 0.0 && *position_y == 19 && *position_x == 14){
+        ghost -> r = 1.0;
+        ghost -> b = 0.0;
+    }
 }
 
 static void choose_direction(struct interface *ghost, int position_x,
                              int position_y){
     float distance[4] = {5000.0, 5000.0, 5000.0, 5000.0};
     if(ghost == blinky){
-        if(mode == CHASE){
+        if(blinky -> r == 0.0){
+            blinky_target_x = 14;
+            blinky_target_y = 19;
+        }
+        else if(mode == CHASE){
             blinky_target_x = pacman_position_x;
             blinky_target_y = pacman_position_y;
         }
@@ -235,7 +259,7 @@ static void choose_direction(struct interface *ghost, int position_x,
     if(position_y == 7 && position_x > 12 && position_x < 18 &&
        ghost -> integer != DOWN)
         return;
-    if(ghost -> b == 1.0){
+    if(ghost -> b == 1.0 && ghost -> r == 1.0){
         int direction = W.random() % 4;
         if(distance[direction] != 5000.0)
             ghost -> integer = direction;
@@ -313,14 +337,17 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     int level = W.game -> level - 1;
     if(level > 20) level = 20;
     if(*position_y == 16 && (*position_x < 7 || *position_x > 22))
-        movement = default_speed[level][2] * BASE_SPEED;
+        movement = default_speed[level][2] * BASE_SPEED; // Tunnel
+    else if(ghost -> b == 1.0 || ghost -> r == 0.0)
+        movement = default_speed[level][1] * BASE_SPEED; // Frightened
     else
-        movement = default_speed[level][0] * BASE_SPEED;
+        movement = default_speed[level][0] * BASE_SPEED; // Normal
     if(ghost == stopped_ghost)
         movement *= 0.25;
     // Try to kill pacman:
-    if(*position_x == pacman_position_x && *position_y == pacman_position_y)
-        pacman_killed_by(ghost);
+    if(*position_x == pacman_position_x && *position_y == pacman_position_y &&
+        ghost -> r == 1.0)
+        ghost_eat_or_get_eaten(ghost);
     // Move to next tile
     if(*offset_x <= EPSILON && *offset_y <= EPSILON){
         if(is_in_decision_point(*position_x, *position_y))
@@ -339,8 +366,13 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
             turn_if_necessary(ghost, *position_x, *position_y);
     }
     // Try to kill pacman again:
-    if(*position_x == pacman_position_x && *position_y == pacman_position_y)
-        pacman_killed_by(ghost);
+    if(*position_x == pacman_position_x && *position_y == pacman_position_y &&
+        ghost -> r == 1.0){
+        if(ghost -> b < 0.2)
+            pacman_killed_by(ghost);
+        else
+            ghost_eat_or_get_eaten(ghost);
+    }
     // Resume movement:
     ghosts_half_move(ghost, position_x, position_y,
                      offset_x, offset_y, &movement);
@@ -371,12 +403,27 @@ void ghost_slow_down(struct interface *ghost){
 }
 
 void ghosts_fright(void){
-    remaining_time_to_change_mode = W.cancel(mode_change);
-    enter_mode(FRIGHTNED);
-}
+    W.cancel(ghosts_stop_frightned_mode);
+    W.cancel(ghosts_blink);
+    if(mode != FRIGHTNED)
+        remaining_time_to_change_mode = W.cancel(mode_change);
+    enter_mode(FRIGHTNED);}
+
 
 void ghosts_stop_frightned_mode(void){
     blinky -> b = 0.0;
+    blinky -> g = 0.0;
     W.run_futurelly(mode_change, remaining_time_to_change_mode);
     enter_mode(last_mode);
+}
+
+void ghost_eat_or_get_eaten(struct interface *ghost){
+    if(ghost -> r == 0.0)
+        return;
+    if(ghost -> b < 0.2)
+        pacman_killed_by(ghost);
+    else{
+        ghost -> r = 0.0;
+        W.play_sound(eaten);
+    }
 }
