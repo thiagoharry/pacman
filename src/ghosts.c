@@ -46,14 +46,19 @@ static int decision_points[DECISION_POINTS][2] =
      {2, 25}, {7, 25}, {10, 25}, {13, 25}, {16, 25}, {19, 25}, {22, 25},
      {27, 25},
      {7, 29}, {MAZE_WIDTH - 8, 29}};
-static float default_speed[21][4] = {// Normal, frightned, tunnel, fright time
-    {0.75, 0.7, 0.4, 6.0}, {0.85, 0.55, 0.45, 5.0}, {0.85, 0.55, 0.45, 4.0},
-    {0.85, 0.55, 0.45, 3.0}, {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 5.0},
-    {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 1.0},
-    {0.95, 0.6, 0.5, 5.0}, {0.95, 0.6, 0.5, 2.0}, {0.95, 0.6, 0.5, 1.0},
-    {0.95, 0.6, 0.5, 1.0}, {0.95, 0.6, 0.5, 3.0}, {0.95, 0.6, 0.5, 1.0},
-    {0.95, 0.6, 0.5, 1.0}, {0.95, 0.6, 0.5, 0.0}, {0.95, 0.6, 0.5, 1.0},
-    {0.95, 0.6, 0.5, 0.0}, {0.95, 0.6, 0.5, 0.0}, {0.95, 0.95, 0.5, 0.0}};
+static float default_speed[21][6] = {// Normal, frightned, tunnel, fright time,
+                                     // cruise elroy1, cruise elroy2
+    {0.75, 0.7, 0.4, 6.0, 0.8, 0.85}, {0.85, 0.55, 0.45, 5.0, 0.9, 0.95},
+    {0.85, 0.55, 0.45, 4.0, 0.9, 0.95}, {0.85, 0.55, 0.45, 3.0, 0.9, 0.95},
+    {0.95, 0.6, 0.5, 2.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 5.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 2.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 2.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 1.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 5.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 2.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 1.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 1.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 3.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 1.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 1.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 0.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 1.0, 1.0, 1.05},
+    {0.95, 0.6, 0.5, 0.0, 1.0, 1.05}, {0.95, 0.6, 0.5, 0.0, 1.0, 1.05},
+    {0.95, 0.95, 0.5, 0.0, 1.0, 1.05}};
 static float mode_duration[5][8] =
     {
      {7.0, 20.0, 7.0, 20.0, 5.0, 20.0, 5.0, INFINITY},
@@ -62,6 +67,12 @@ static float mode_duration[5][8] =
      {7.0, 20.0, 7.0, 20.0, 5.0, 1033.0, 0.017, INFINITY},
      {5.0, 20.0, 5.0, 20.0, 5.0, 1037.0, 0.017, INFINITY}
     };
+static int cruise_elroy_activation[21][2] = {//244
+    {224, 234}, {214, 229}, {204, 224}, {204, 224}, {204, 224}, {194, 219},
+    {194, 219}, {194, 219}, {184, 214}, {184, 214}, {184, 214}, {164, 204},
+    {164, 204}, {164, 204}, {144, 194}, {144, 194}, {144, 194}, {144, 194},
+    {124, 184}, {124, 184}, {124, 184}
+};
 static struct interface *stopped_ghost = NULL;
 static int mode, mode_count, last_mode = CHASE;
 static float remaining_time_to_change_mode;
@@ -104,8 +115,10 @@ static void enter_mode(int new_mode){
     mode = new_mode;
     switch(mode){
     case SCATTER:
-        blinky_target_x = 27;
-        blinky_target_y = MAZE_HEIGHT + 2;
+        if(W.game -> pellets_eaten < cruise_elroy_activation[level][0]){
+            blinky_target_x = 27;
+            blinky_target_y = MAZE_HEIGHT + 2;
+        }
         break;
     case FRIGHTNED:
         blinky -> b = 1.0;
@@ -231,12 +244,15 @@ static void ghosts_half_move(struct interface *ghost, int *position_x,
 static void choose_direction(struct interface *ghost, int position_x,
                              int position_y){
     float distance[4] = {5000.0, 5000.0, 5000.0, 5000.0};
+    int level = W.game -> level - 1;
+    if(level >= 21) level = 20;
     if(ghost == blinky){
         if(blinky -> r == 0.0){
             blinky_target_x = 14;
             blinky_target_y = 19;
         }
-        else if(mode == CHASE){
+        else if(mode == CHASE ||
+                W.game -> pellets_eaten >= cruise_elroy_activation[level][0]){
             blinky_target_x = pacman_position_x;
             blinky_target_y = pacman_position_y;
         }
@@ -340,6 +356,12 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
         movement = default_speed[level][2] * BASE_SPEED; // Tunnel
     else if(ghost -> b == 1.0 || ghost -> r == 0.0)
         movement = default_speed[level][1] * BASE_SPEED; // Frightened
+    else if(ghost == blinky &&
+            W.game -> pellets_eaten >= cruise_elroy_activation[level][1])
+        movement = default_speed[level][5] * BASE_SPEED; // Cruise elroy 2
+    else if(ghost == blinky &&
+            W.game -> pellets_eaten >= cruise_elroy_activation[level][0])
+        movement = default_speed[level][4] * BASE_SPEED; // Cruise elroy 1
     else
         movement = default_speed[level][0] * BASE_SPEED; // Normal
     if(ghost == stopped_ghost)
