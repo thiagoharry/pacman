@@ -37,7 +37,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #define ghost_blue(G)   (G -> r = 1.0, G -> b = 1.0, G -> g = 0.0)
 #define ghost_blink(G)  (G -> r = 1.0, G -> b = 1.0, G -> g = 1.0)
 
-#define is_alive(G) (G -> r == 1.0)
+#define is_alive(G)  (G -> r == 1.0)
+#define is_scared(G) (G -> b == 1.0)
 
 static int decision_points[DECISION_POINTS][2] =
     {
@@ -91,8 +92,10 @@ int pinky_position_x, pinky_position_y;
 struct interface *blinky, *pinky;
 
 static void ghosts_blink(void){
-    blinky -> g = 1.0;
-    pinky -> g = 1.0;
+    if(is_scared(blinky))
+        ghost_blink(blinky);
+    if(is_scared(pinky))
+        ghost_blink(pinky);
     W.run_futurelly(ghosts_stop_frightned_mode, 1.0);
 }
 
@@ -128,9 +131,9 @@ static void enter_mode(int new_mode){
         if(W.game -> pellets_eaten < cruise_elroy_activation[level][0]){
             blinky_target_x = 27;
             blinky_target_y = MAZE_HEIGHT + 2;
-            pinky_target_x = 3;
-            pinky_target_y = MAZE_HEIGHT + 2;
         }
+        pinky_target_x = 3;
+        pinky_target_y = MAZE_HEIGHT + 2;
         break;
     case FRIGHTNED:
         if(is_alive(blinky))
@@ -428,10 +431,7 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
             if(*offset_x >= 0.5){
                 movement = *offset_x - 0.5;
                 *offset_x = 0.5;
-                if(ghost == blinky)
-                    ghost_normal(blinky);
-                else
-                    ghost -> integer = DOWN;
+                ghost -> integer = DOWN;
             }
         }
         else{
@@ -440,10 +440,7 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
                 movement = 0.5 - *offset_x;
                 *offset_x = 0.5;
                 ghost -> integer = DOWN;
-                if(ghost == blinky)
-                    ghost_normal(blinky);
-                else
-                    ghost -> integer = DOWN;
+                ghost -> integer = DOWN;
             }
         }
     }
@@ -478,9 +475,11 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     }
     else if(*position_x == 14 && *position_y == 16 && *offset_y == 0.0 &&
             *offset_x == 0.5){
-        if(ghost == pinky || is_alive(ghost)){ // After entering the ghost pen
+        if(ghost == pinky || ghost == blinky || is_alive(ghost)){
+            // After entering the ghost pen
             ghost -> integer = UP;
-            ghost_normal(pinky);
+            if(!is_alive(ghost))
+                ghost_normal(ghost);
         }
     }
     // Resume movement:
