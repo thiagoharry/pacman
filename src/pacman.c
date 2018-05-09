@@ -23,13 +23,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #define PACMAN_SIZE  46.0
 #define BASE_SPEED    0.4
 
-// LEFT and RIGHT defined at game.h
-#define UP_FROM_LEFT    2
-#define UP_FROM_RIGHT   3
-#define DOWN_FROM_LEFT  4
-#define DOWN_FROM_RIGHT 5
-
-static struct interface *image, *killer = NULL;
+struct interface *pacman;
+static struct interface *killer = NULL;
 struct sound *kill_sound;
 static float offset_x, offset_y;
 static float slow_down;
@@ -46,11 +41,11 @@ void pacman_init(void){
     pacman_position_y = 7;
     offset_x = 0.5;
     offset_y = 0.0;
-    image = W.new_interface(6, 100, 100, PACMAN_SIZE,
+    pacman = W.new_interface(6, 100, 100, PACMAN_SIZE,
                             PACMAN_SIZE, "pacman.gif");
-    image -> animate = false;
-    image -> current_frame = 2;
-    image -> integer = RIGHT;
+    pacman -> animate = false;
+    pacman -> current_frame = 2;
+    pacman -> integer = RIGHT;
     slow_down = 1.0;
     kill_sound = W.new_sound("ghost.wav");
 }
@@ -59,8 +54,8 @@ void pacman_turn_right(void){
     if((offset_y < 0.5 &&
         !maze_walls[pacman_position_y][pacman_position_x + 1]) ||
        (offset_y > 0.5 && !maze_walls[pacman_position_y + 1][pacman_position_x + 1])){
-        image -> integer = RIGHT;
-        image -> animate = true;
+        pacman -> integer = RIGHT;
+        pacman -> animate = true;
     }
 }
 
@@ -68,8 +63,8 @@ void pacman_turn_left(void){
     if((offset_y < 0.5 &&
         !maze_walls[pacman_position_y][pacman_position_x - 1]) ||
        (offset_y > 0.5 && !maze_walls[pacman_position_y + 1][pacman_position_x - 1])){
-        image -> integer = LEFT;
-        image -> animate = true;
+        pacman -> integer = LEFT;
+        pacman -> animate = true;
     }
 }
 
@@ -78,13 +73,13 @@ void pacman_turn_up(void){
         !maze_walls[pacman_position_y + 1][pacman_position_x]) ||
        (offset_x > 0.5 &&
         !maze_walls[pacman_position_y + 1][pacman_position_x + 1])){
-        if(image -> integer == UP_FROM_LEFT || image -> integer == UP_FROM_RIGHT)
+        if(pacman -> integer == UP_FROM_LEFT || pacman -> integer == UP_FROM_RIGHT)
             return;
-        else if(image -> integer == LEFT || image -> integer == DOWN_FROM_RIGHT)
-            image -> integer = UP_FROM_LEFT;
+        else if(pacman -> integer == LEFT || pacman -> integer == DOWN_FROM_RIGHT)
+            pacman -> integer = UP_FROM_LEFT;
         else
-            image -> integer = UP_FROM_RIGHT;
-        image -> animate = true;
+            pacman -> integer = UP_FROM_RIGHT;
+        pacman -> animate = true;
     }
 }
 
@@ -96,14 +91,14 @@ void pacman_turn_down(void){
         !maze_walls[pacman_position_y - 1][pacman_position_x]) ||
        (offset_x > 0.5 &&
         !maze_walls[pacman_position_y - 1][pacman_position_x + 1])){
-        if(image -> integer == DOWN_FROM_LEFT ||
-           image -> integer == DOWN_FROM_RIGHT)
+        if(pacman -> integer == DOWN_FROM_LEFT ||
+           pacman -> integer == DOWN_FROM_RIGHT)
             return;
-        else if(image -> integer == LEFT || image -> integer == UP_FROM_RIGHT)
-            image -> integer = DOWN_FROM_LEFT;
+        else if(pacman -> integer == LEFT || pacman -> integer == UP_FROM_RIGHT)
+            pacman -> integer = DOWN_FROM_LEFT;
         else
-            image -> integer = DOWN_FROM_RIGHT;
-        image -> animate = true;
+            pacman -> integer = DOWN_FROM_RIGHT;
+        pacman -> animate = true;
     }
 }
 
@@ -117,12 +112,12 @@ static void pacman_half_move(void){
         movement = slow_down * BASE_SPEED * 0.5;
     else
         movement = default_speed[level][0] * BASE_SPEED * 0.5;
-    switch(image -> integer){
+    switch(pacman -> integer){
     case LEFT:
         if(offset_y == 0.0){
             if(offset_x == 0.0 &&
                 maze_walls[pacman_position_y][pacman_position_x - 1])
-                image -> animate = false;
+                pacman -> animate = false;
             else if(maze_walls[pacman_position_y][pacman_position_x]){
                 offset_x = 0.0;
                 pacman_position_x ++;
@@ -161,7 +156,7 @@ static void pacman_half_move(void){
         if(offset_x == 0.0){
             if(offset_y == 0.0 &&
                maze_walls[pacman_position_y - 1][pacman_position_x])
-                image -> animate = false;
+                pacman -> animate = false;
             else if(maze_walls[pacman_position_y][pacman_position_x]){
                 offset_y = 0.0;
                 pacman_position_y ++;
@@ -208,7 +203,7 @@ static void pacman_half_move(void){
                 offset_x += movement;
             else{
                 offset_x = 0.0;
-                image -> animate = false;
+                pacman -> animate = false;
             }
         }
         else if(offset_y < 0.5){
@@ -251,7 +246,7 @@ static void pacman_half_move(void){
                 offset_y += movement;
             else{
                 offset_y = 0.0;
-                image -> animate = false;
+                pacman -> animate = false;
             }
         }
         else if(offset_x < 0.5){
@@ -290,12 +285,12 @@ static void pacman_half_move(void){
     default:
         return;
     }
-    if(image -> integer == LEFT &&
+    if(pacman -> integer == LEFT &&
        (pacman_position_x < 0 || (pacman_position_x == 0 && offset_x == 0))){
         pacman_position_x = MAZE_WIDTH - 1;
         offset_x = 0;
     }
-    else if(image -> integer == RIGHT && pacman_position_x >= MAZE_WIDTH - 1){
+    else if(pacman -> integer == RIGHT && pacman_position_x >= MAZE_WIDTH - 1){
         pacman_position_x = 0;
         offset_x = 0;
     }
@@ -310,19 +305,22 @@ static void pacman_half_move(void){
         printf("%f %f\n", prev_x, prev_y);
         pacman_print_position();
     }
-    if(image -> integer != DEAD){
+    if(pacman -> integer != DEAD){
         if(pacman_position_x == blinky_position_x &&
            pacman_position_y == blinky_position_y)
             ghost_eat_or_get_eaten(blinky);
+        else if(pacman_position_x == pinky_position_x &&
+                pacman_position_y == pinky_position_y)
+            ghost_eat_or_get_eaten(pinky);
     }
 }
 
 void pacman_move(void){
-    if(image -> integer == DEAD){
+    if(pacman -> integer == DEAD){
         ghost_carry_pacman(killer, &pacman_position_x,
                            &pacman_position_y, &offset_x, &offset_y);
     }
-    else if(image -> animate){
+    else if(pacman -> animate){
         pacman_half_move();
         pacman_half_move();
     }
@@ -337,14 +335,14 @@ void pacman_print_position(void){
 }
 
 void pacman_transform(void){
-    perspective_transform(image, pacman_position_x, pacman_position_y, offset_x, offset_y, PACMAN_SIZE);
+    perspective_transform(pacman, pacman_position_x, pacman_position_y, offset_x, offset_y, PACMAN_SIZE);
 }
 
 void pacman_killed_by(struct interface *ghost){
-    if(image -> integer != DEAD){
-        image -> integer = DEAD;
+    if(pacman -> integer != DEAD){
+        pacman -> integer = DEAD;
         killer = ghost;
-        image -> animate = false;
+        pacman -> animate = false;
         W.stop_music("music1.mp3");
         W.play_sound(kill_sound);
         ghost_slow_down(ghost);

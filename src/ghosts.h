@@ -24,7 +24,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "includes.h"
 
 extern int blinky_position_x, blinky_position_y;
-extern struct interface *blinky;
+extern int pinky_position_x, pinky_position_y;
+extern struct interface *blinky, *pinky;
 
 void ghosts_init(void);
 void ghosts_transform(void);

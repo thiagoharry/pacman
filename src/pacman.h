@@ -23,7 +23,14 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "weaver/weaver.h"
 #include "includes.h"
 
+// LEFT and RIGHT defined at game.h
+#define UP_FROM_LEFT    2
+#define UP_FROM_RIGHT   3
+#define DOWN_FROM_LEFT  4
+#define DOWN_FROM_RIGHT 5
+
 extern int pacman_position_x, pacman_position_y;
+extern struct interface *pacman;
 
 void pacman_init(void);
 void pacman_transform(void);
