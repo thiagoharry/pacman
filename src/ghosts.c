@@ -28,6 +28,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #define DOWN             3
 #define EPSILON        0.0
 #define DECISION_POINTS 34
+// Ghosts have 3 modes of behaviour mutually exclusive:
 #define SCATTER          0
 #define CHASE            1
 #define FRIGHTNED        2
@@ -136,6 +137,8 @@ static void enter_mode(int new_mode){
         pinky_target_y = MAZE_HEIGHT + 2;
         break;
     case FRIGHTNED:
+        W.cancel(ghosts_blink);
+        W.cancel(ghosts_stop_frightned_mode);
         if(is_alive(blinky))
             ghost_blue(blinky);
         if(is_alive(pinky))
@@ -143,7 +146,10 @@ static void enter_mode(int new_mode){
         if(default_speed[level][3] >= 1.0)
             W.run_futurelly(ghosts_blink, default_speed[level][3] - 1.0);
         else{
-            ghosts_blink();
+            if(is_scared(blinky))
+                ghost_blink(blinky);
+            if(is_scared(pinky))
+                ghost_blink(pinky);
             W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
         }
         break;
@@ -153,13 +159,13 @@ static void enter_mode(int new_mode){
 static void mode_change(void){
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
+    // Increment number of mode changes. Maximum: 7
     mode_count ++;
-    if(mode_count >= 8) mode_count = 7;
     if(mode == SCATTER)
         enter_mode(CHASE);
     else
         enter_mode(SCATTER);
-    if(mode_count != 7){
+    if(mode_count < 7){
             W.run_futurelly(mode_change, mode_duration[level][mode_count]);
     }
 }
@@ -522,10 +528,11 @@ void ghost_slow_down(struct interface *ghost){
 void ghosts_fright(void){
     W.cancel(ghosts_stop_frightned_mode);
     W.cancel(ghosts_blink);
-    if(mode != FRIGHTNED)
+    if(mode != FRIGHTNED){
         remaining_time_to_change_mode = W.cancel(mode_change);
-    enter_mode(FRIGHTNED);}
-
+    }
+    enter_mode(FRIGHTNED);
+}
 
 void ghosts_stop_frightned_mode(void){
     blinky -> b = 0.0;
