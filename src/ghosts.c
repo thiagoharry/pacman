@@ -38,8 +38,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #define ghost_blue(G)   (G -> r = 1.0, G -> b = 1.0, G -> g = 0.0)
 #define ghost_blink(G)  (G -> r = 1.0, G -> b = 1.0, G -> g = 1.0)
 
-#define is_alive(G)  (G -> r == 1.0)
-#define is_scared(G) (G -> b == 1.0)
+#define is_alive(G)   (G -> r == 1.0)
+#define is_scared(G)  (G -> b == 1.0)
 
 static int decision_points[DECISION_POINTS][2] =
     {
@@ -85,18 +85,25 @@ static int cruise_elroy_activation[21][2] = {//244
 static struct interface *stopped_ghost = NULL;
 static int mode, mode_count, last_mode = CHASE;
 static float remaining_time_to_change_mode;
-static float blinky_offset_x, blinky_offset_y, pinky_offset_x, pinky_offset_y;
-static int blinky_target_x, blinky_target_y, pinky_target_x, pinky_target_y;
+static float blinky_offset_x, blinky_offset_y;
+static float pinky_offset_x, pinky_offset_y;
+static float inky_offset_x, inky_offset_y;
+static int blinky_target_x, blinky_target_y;
+static int pinky_target_x, pinky_target_y;
+static int inky_target_x, inky_target_y;
 static struct sound *eaten;
 int blinky_position_x, blinky_position_y;
 int pinky_position_x, pinky_position_y;
-struct interface *blinky, *pinky;
+int inky_position_x, inky_position_y;
+struct interface *blinky, *pinky, *inky;
 
 static void ghosts_blink(void){
     if(is_scared(blinky))
         ghost_blink(blinky);
     if(is_scared(pinky))
         ghost_blink(pinky);
+    if(is_scared(inky))
+        ghost_blink(inky);
     W.run_futurelly(ghosts_stop_frightned_mode, 1.0);
 }
 
@@ -123,18 +130,23 @@ static void enter_mode(int new_mode){
     if(mode == CHASE || mode == SCATTER){
         reverse_direction(blinky);
         reverse_direction(pinky);
+        reverse_direction(inky);
     }
     if(mode != FRIGHTNED)
         last_mode = mode;
     mode = new_mode;
     switch(mode){
     case SCATTER:
+        // Blinky acts in scatter moe only if he isn't in Cruise Elroy baaviour
         if(W.game -> pellets_eaten < cruise_elroy_activation[level][0]){
             blinky_target_x = 27;
             blinky_target_y = MAZE_HEIGHT + 2;
         }
+        // The other ghosts always act in scatter mode if asked
         pinky_target_x = 3;
         pinky_target_y = MAZE_HEIGHT + 2;
+        inky_target_x = MAZE_WIDTH - 1;
+        inky_target_y = 0;
         break;
     case FRIGHTNED:
         W.cancel(ghosts_blink);
@@ -143,13 +155,20 @@ static void enter_mode(int new_mode){
             ghost_blue(blinky);
         if(is_alive(pinky))
             ghost_blue(pinky);
+        if(is_alive(inky))
+            ghost_blue(inky);
         if(default_speed[level][3] >= 1.0)
             W.run_futurelly(ghosts_blink, default_speed[level][3] - 1.0);
         else{
+            // This code is for later levels, when the ghosts aren't
+            // frightned for enough time to run the 'ghost_blink'
+            // routine
             if(is_scared(blinky))
                 ghost_blink(blinky);
             if(is_scared(pinky))
                 ghost_blink(pinky);
+            if(is_scared(inky))
+                ghost_blink(inky);
             W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
         }
         break;
@@ -175,19 +194,26 @@ void ghosts_init(void){
     if(level >= 5) level = 4;
     blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
     pinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "pinky.png");
+    inky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "inky.png");
     eaten = W.new_sound("bite2.wav");
     blinky -> integer = RIGHT;
     pinky -> integer = DOWN;
+    inky -> integer = DOWN;
     ghost_normal(blinky);
-    ghost_normal(pinky);
     blinky_position_x = 14;
     blinky_position_y = 19;
+    blinky_offset_x = 0.5;
+    blinky_offset_y = 0.0;
+    ghost_normal(pinky);
     pinky_position_x = 14;
     pinky_position_y = 16;
     pinky_offset_x = 0.5;
     pinky_offset_y = 0.0;
-    blinky_offset_x = 0.5;
-    blinky_offset_y = 0.0;
+    ghost_normal(inky);
+    inky_position_x = 13;
+    inky_position_y = 16;
+    inky_offset_x = 0.0;
+    inky_offset_y = 0.0;
     mode_count = 0;
     enter_mode(SCATTER);
     W.run_futurelly(mode_change, mode_duration[level][mode_count]);
@@ -198,6 +224,8 @@ void ghosts_transform(void){
                           blinky_offset_x, blinky_offset_y, GHOST_SIZE);
     perspective_transform(pinky, pinky_position_x, pinky_position_y,
                           pinky_offset_x, pinky_offset_y, GHOST_SIZE);
+    perspective_transform(inky, inky_position_x, inky_position_y,
+                          inky_offset_x, inky_offset_y, GHOST_SIZE);
 }
 
 static void ghosts_half_move(struct interface *ghost, int *position_x,
@@ -268,53 +296,76 @@ static void ghosts_half_move(struct interface *ghost, int *position_x,
     }
 }
 
+static void choose_chase_target(void){
+    int level = W.game -> level - 1;
+    if(level >= 21) level = 20;
+    if(mode == CHASE){
+        // Blinky target
+        blinky_target_x = pacman_position_x;
+        blinky_target_y = pacman_position_y;
+        //Pinky target
+        switch(pacman -> integer){
+        case LEFT:
+            pinky_target_x = pacman_position_x - 4;
+            pinky_target_y = pacman_position_y;
+            break;
+        case RIGHT:
+            pinky_target_x = pacman_position_x + 4;
+            pinky_target_y = pacman_position_y;
+            break;
+        case UP_FROM_LEFT:
+        case UP_FROM_RIGHT:
+            pinky_target_x = pacman_position_x;
+            pinky_target_y = pacman_position_y + 4;
+            break;
+        default:
+            pinky_target_x = pacman_position_x;
+            pinky_target_y = pacman_position_y - 4;
+            break;
+        }
+        // Inky target
+        inky_target_x = blinky_position_x + 2 *
+            (pinky_target_x - blinky_position_x);
+        inky_target_y = blinky_position_y + 2 *
+            (pinky_target_y - blinky_position_y);
+    }
+    else if(W.game -> pellets_eaten >= cruise_elroy_activation[level][0]){
+        // Cruise Elroy
+        blinky_target_x = pacman_position_x;
+        blinky_target_y = pacman_position_y;
+    }
+}
+
 static void choose_direction(struct interface *ghost, int position_x,
                              int position_y){
     float distance[4] = {5000.0, 5000.0, 5000.0, 5000.0};
     int level = W.game -> level - 1;
     int target_x = 0, target_y = 0;
     if(level >= 21) level = 20;
+    choose_chase_target();
     if(ghost == blinky){
-        if(blinky -> r == 0.0){
+        if(!is_alive(blinky)){
             blinky_target_x = 14;
             blinky_target_y = 19;
-        }
-        else if(mode == CHASE ||
-                W.game -> pellets_eaten >= cruise_elroy_activation[level][0]){
-            blinky_target_x = pacman_position_x;
-            blinky_target_y = pacman_position_y;
         }
         target_x = blinky_target_x;
         target_y = blinky_target_y;
     }
     else if(ghost == pinky){
-        if(pinky -> r == 0.0){
+        if(!is_alive(pinky)){
             pinky_target_x = 14;
             pinky_target_y = 16;
         }
-        else if(mode == CHASE){
-            switch(pacman -> integer){
-            case LEFT:
-                pinky_target_x = pacman_position_x - 4;
-                pinky_target_y = pacman_position_y;
-                break;
-            case RIGHT:
-                pinky_target_x = pacman_position_x + 4;
-                pinky_target_y = pacman_position_y;
-                break;
-            case UP_FROM_LEFT:
-            case UP_FROM_RIGHT:
-                pinky_target_x = pacman_position_x;
-                pinky_target_y = pacman_position_y + 4;
-                break;
-            default:
-                pinky_target_x = pacman_position_x;
-                pinky_target_y = pacman_position_y - 4;
-                break;
-            }
-        }
         target_x = pinky_target_x;
         target_y = pinky_target_y;
+    }
+    else if(ghost == inky){
+        if(!is_alive(inky)){
+            inky_target_x = 13;
+            inky_target_y = 16;
+        }
+        target_x = inky_target_x;
+        target_y = inky_target_y;
     }
     if(ghost -> integer != DOWN && !maze_walls[position_y + 1][position_x])
         distance[UP] = hypot(target_x - position_x,
@@ -329,11 +380,14 @@ static void choose_direction(struct interface *ghost, int position_x,
        !maze_walls[position_y][position_x - 1])
         distance[LEFT] = hypot(target_x - (position_x - 1),
                                target_y - position_y);
+    // Ignore upper region where ghosts cannot turn up
     if(position_y == 19 && ghost -> integer != DOWN)
         return;
+    // Ignore other region where ghosts cannot turn up
     if(position_y == 7 && position_x > 12 && position_x < 18 &&
        ghost -> integer != DOWN)
         return;
+    // If ghosts are scared, they don't use the rational decision:
     if(ghost -> b == 1.0 && ghost -> r == 1.0){
         int direction = W.random() % 4;
         if(distance[direction] != 5000.0)
@@ -348,6 +402,7 @@ static void choose_direction(struct interface *ghost, int position_x,
             ghost -> integer = RIGHT;
         return;
     }
+    // Make the decision
     if(distance[UP] <= distance[DOWN] && distance[UP] <= distance[LEFT] &&
        distance[UP] <= distance[RIGHT])
         ghost -> integer = UP;
@@ -414,7 +469,7 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     // Set speed:
     if(*position_y == 16 && (*position_x < 7 || *position_x > 22))
         movement = default_speed[level][2] * BASE_SPEED; // Tunnel
-    else if(ghost -> b == 1.0 || ghost -> r == 0.0)
+    else if(is_scared(ghost) || !is_alive(ghost))
         movement = default_speed[level][1] * BASE_SPEED; // Frightened
     else if(ghost == blinky &&
             W.game -> pellets_eaten >= cruise_elroy_activation[level][1])
@@ -498,6 +553,8 @@ void ghosts_move(void){
                      &blinky_offset_x, &blinky_offset_y);
     ghosts_full_move(pinky, &pinky_position_x, &pinky_position_y,
                      &pinky_offset_x, &pinky_offset_y);
+    ghosts_full_move(inky, &inky_position_x, &inky_position_y,
+                     &inky_offset_x, &inky_offset_y);
 }
 
 void ghost_carry_pacman(struct interface *ghost, int *position_x,
@@ -513,6 +570,12 @@ void ghost_carry_pacman(struct interface *ghost, int *position_x,
         *position_y = pinky_position_y;
         *offset_x = pinky_offset_x;
         *offset_y = pinky_offset_y;
+    }
+    else if(ghost == inky){
+        *position_x = inky_position_x;
+        *position_y = inky_position_y;
+        *offset_x = inky_offset_x;
+        *offset_y = inky_offset_y;
     }
 }
 
@@ -539,6 +602,8 @@ void ghosts_stop_frightned_mode(void){
     blinky -> g = 0.0;
     pinky -> b = 0.0;
     pinky -> g = 0.0;
+    inky -> b = 0.0;
+    inky -> g = 0.0;
     W.run_futurelly(mode_change, remaining_time_to_change_mode);
     enter_mode(last_mode);
 }

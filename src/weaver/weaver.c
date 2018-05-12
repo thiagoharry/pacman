@@ -67,7 +67,7 @@ W.flush_input();
 W.reload_all_plugins();
 #endif
 /*:357*//*509:*/
-#line 11271 "cweb/weaver.w"
+#line 11269 "cweb/weaver.w"
 
 if(_changed_resolution){
 _final_shader[_number_of_loops]= W_DEFAULT_SHADER;
@@ -76,7 +76,7 @@ else{
 _final_shader[_number_of_loops]= W_NONE;
 }
 /*:509*//*773:*/
-#line 17054 "cweb/weaver.w"
+#line 17052 "cweb/weaver.w"
 
 {
 int i;
@@ -112,23 +112,23 @@ pthread_mutex_unlock(&_scheduler_mutex);
 #endif
 }
 /*:369*//*400:*/
-#line 8860 "cweb/weaver.w"
+#line 8858 "cweb/weaver.w"
 
 _flush_interfaces();
 /*:400*//*472:*/
-#line 10560 "cweb/weaver.w"
+#line 10558 "cweb/weaver.w"
 
 _clean_interface_queue();
 /*:472*//*514:*/
-#line 11315 "cweb/weaver.w"
+#line 11313 "cweb/weaver.w"
 
 W.final_shader_integer= 0;
 /*:514*//*591:*/
-#line 12619 "cweb/weaver.w"
+#line 12617 "cweb/weaver.w"
 
 _finalize_all();
 /*:591*//*771:*/
-#line 16990 "cweb/weaver.w"
+#line 16988 "cweb/weaver.w"
 
 {
 #ifdef W_MULTITHREAD
@@ -202,15 +202,15 @@ pthread_mutex_unlock(&_scheduler_mutex);
 #endif
 }
 /*:370*//*401:*/
-#line 8867 "cweb/weaver.w"
+#line 8865 "cweb/weaver.w"
 
 _flush_interfaces();
 /*:401*//*473:*/
-#line 10567 "cweb/weaver.w"
+#line 10565 "cweb/weaver.w"
 
 _clean_interface_queue();
 /*:473*//*510:*/
-#line 11280 "cweb/weaver.w"
+#line 11278 "cweb/weaver.w"
 
 if(_changed_resolution){
 _final_shader[_number_of_loops]= W_DEFAULT_SHADER;
@@ -219,15 +219,15 @@ else{
 _final_shader[_number_of_loops]= W_NONE;
 }
 /*:510*//*513:*/
-#line 11308 "cweb/weaver.w"
+#line 11306 "cweb/weaver.w"
 
 W.final_shader_integer= _final_shader_integer[_number_of_loops-1];
 /*:513*//*592:*/
-#line 12623 "cweb/weaver.w"
+#line 12621 "cweb/weaver.w"
 
 _finalize_all();
 /*:592*//*770:*/
-#line 16955 "cweb/weaver.w"
+#line 16953 "cweb/weaver.w"
 
 {
 #ifdef W_MULTITHREAD
@@ -277,7 +277,7 @@ W.flush_input();
 W.reload_all_plugins();
 #endif
 /*:357*//*509:*/
-#line 11271 "cweb/weaver.w"
+#line 11269 "cweb/weaver.w"
 
 if(_changed_resolution){
 _final_shader[_number_of_loops]= W_DEFAULT_SHADER;
@@ -286,7 +286,7 @@ else{
 _final_shader[_number_of_loops]= W_NONE;
 }
 /*:509*//*773:*/
-#line 17054 "cweb/weaver.w"
+#line 17052 "cweb/weaver.w"
 
 {
 int i;
@@ -344,7 +344,7 @@ W.flush_input();
 W.reload_all_plugins();
 #endif
 /*:357*//*509:*/
-#line 11271 "cweb/weaver.w"
+#line 11269 "cweb/weaver.w"
 
 if(_changed_resolution){
 _final_shader[_number_of_loops]= W_DEFAULT_SHADER;
@@ -353,7 +353,7 @@ else{
 _final_shader[_number_of_loops]= W_NONE;
 }
 /*:509*//*773:*/
-#line 17054 "cweb/weaver.w"
+#line 17052 "cweb/weaver.w"
 
 {
 int i;
@@ -375,14 +375,14 @@ sem_post(&(_music[i].semaphore));
 #line 4339 "cweb/weaver.w"
 
 /*512:*/
-#line 11299 "cweb/weaver.w"
+#line 11297 "cweb/weaver.w"
 
 {
 _final_shader_integer[_number_of_loops-1]= W.final_shader_integer;
 W.final_shader_integer= 0;
 }
 /*:512*//*772:*/
-#line 17028 "cweb/weaver.w"
+#line 17026 "cweb/weaver.w"
 
 {
 int i;
@@ -581,7 +581,7 @@ _using_original_cursor= false;
 }
 #endif
 /*:321*//*373:*/
-#line 8345 "cweb/weaver.w"
+#line 8343 "cweb/weaver.w"
 
 void _run_periodically(void(*f)(void),float t){
 int i;
@@ -610,7 +610,7 @@ W_MAX_SCHEDULING);
 }
 }
 /*:373*//*374:*/
-#line 8378 "cweb/weaver.w"
+#line 8376 "cweb/weaver.w"
 
 void _run_futurelly(void(*f)(void),float t){
 int i;
@@ -639,7 +639,7 @@ W_MAX_SCHEDULING);
 }
 }
 /*:374*//*375:*/
-#line 8412 "cweb/weaver.w"
+#line 8410 "cweb/weaver.w"
 
 float _cancel(void(*f)(void)){
 int i;
@@ -671,7 +671,7 @@ pthread_mutex_unlock(&_scheduler_mutex);
 return return_value;
 }
 /*:375*//*376:*/
-#line 8450 "cweb/weaver.w"
+#line 8448 "cweb/weaver.w"
 
 float _period(void(*f)(void)){
 int i;
@@ -695,7 +695,7 @@ pthread_mutex_lock(&_scheduler_mutex);
 return result;
 }
 /*:376*//*588:*/
-#line 12557 "cweb/weaver.w"
+#line 12555 "cweb/weaver.w"
 
 void _finalize_after(void*data,void(*finalizer)(void*)){
 struct _finalize_element*el;
@@ -730,7 +730,7 @@ pthread_mutex_unlock(&_finalizing_mutex);
 #endif
 }
 /*:588*//*590:*/
-#line 12599 "cweb/weaver.w"
+#line 12597 "cweb/weaver.w"
 
 void _finalize_all(void){
 #ifdef W_MULTITHREAD
@@ -747,7 +747,7 @@ pthread_mutex_unlock(&_finalizing_mutex);
 #endif
 }
 /*:590*//*594:*/
-#line 12637 "cweb/weaver.w"
+#line 12635 "cweb/weaver.w"
 
 void _finalize_this(void*data,bool remove){
 #ifdef W_MULTITHREAD
@@ -998,14 +998,14 @@ for(j= 0;j<W_MAX_SCHEDULING;j++)
 _scheduled_functions[i][j].f= NULL;
 }
 /*:367*//*378:*/
-#line 8484 "cweb/weaver.w"
+#line 8482 "cweb/weaver.w"
 
 W.run_periodically= &_run_periodically;
 W.run_futurelly= &_run_futurelly;
 W.cancel= &_cancel;
 W.period= &_period;
 /*:378*//*383:*/
-#line 8571 "cweb/weaver.w"
+#line 8569 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 W.enable_plugin= &_Wenable_plugin;
@@ -1013,14 +1013,14 @@ W.disable_plugin= &_Wdisable_plugin;
 W.is_plugin_enabled= &_Wis_enabled;
 #endif
 /*:383*//*387:*/
-#line 8620 "cweb/weaver.w"
+#line 8618 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 W.get_plugin_data= &_Wget_plugin_data;
 W.set_plugin_data= &_Wset_plugin_data;
 #endif
 /*:387*//*396:*/
-#line 8803 "cweb/weaver.w"
+#line 8801 "cweb/weaver.w"
 
 {
 int i,j;
@@ -1035,7 +1035,7 @@ exit(1);
 #endif
 }
 /*:396*//*402:*/
-#line 8878 "cweb/weaver.w"
+#line 8876 "cweb/weaver.w"
 
 {
 GLenum dummy;
@@ -1056,7 +1056,7 @@ glewExperimental+= dummy;
 glewExperimental-= dummy;
 }
 /*:402*//*404:*/
-#line 8911 "cweb/weaver.w"
+#line 8909 "cweb/weaver.w"
 
 {
 _interface_vertices[0]= -0.5;
@@ -1090,31 +1090,31 @@ glEnableVertexAttribArray(0);
 glBindVertexArray(0);
 }
 /*:404*//*409:*/
-#line 9048 "cweb/weaver.w"
+#line 9046 "cweb/weaver.w"
 
 W.new_interface= &_new_interface;
 /*:409*//*413:*/
-#line 9095 "cweb/weaver.w"
+#line 9093 "cweb/weaver.w"
 
 W.destroy_interface= &_destroy_interface;
 /*:413*//*417:*/
-#line 9161 "cweb/weaver.w"
+#line 9159 "cweb/weaver.w"
 
 W.copy_interface= &_copy_interface;
 /*:417*//*422:*/
-#line 9260 "cweb/weaver.w"
+#line 9258 "cweb/weaver.w"
 
 W.move_interface= &_move_interface;
 /*:422*//*426:*/
-#line 9339 "cweb/weaver.w"
+#line 9337 "cweb/weaver.w"
 
 W.resize_interface= &_resize_interface;
 /*:426*//*430:*/
-#line 9419 "cweb/weaver.w"
+#line 9417 "cweb/weaver.w"
 
 W.rotate_interface= &_rotate_interface;
 /*:430*//*453:*/
-#line 9867 "cweb/weaver.w"
+#line 9865 "cweb/weaver.w"
 
 {
 GLuint vertex,fragment;
@@ -1144,7 +1144,7 @@ glGetAttribLocation(_default_interface_shader.program_shader,
 "vertex_position");
 }
 /*:453*//*457:*/
-#line 9999 "cweb/weaver.w"
+#line 9997 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -1190,7 +1190,7 @@ number_of_shaders++;
 #endif
 
 /*:457*//*458:*/
-#line 10048 "cweb/weaver.w"
+#line 10046 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 
@@ -1210,7 +1210,7 @@ _shader_list[i].initialized= false;
 
 #endif
 /*:458*//*459:*/
-#line 10074 "cweb/weaver.w"
+#line 10072 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 
@@ -1271,13 +1271,13 @@ _compile_and_insert_new_shader(path,shader_number-1);
 }
 #endif
 /*:459*//*460:*/
-#line 10140 "cweb/weaver.w"
+#line 10138 "cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 #include "../../.hidden_code/initialize_shader.c"
 #endif
 /*:460*//*465:*/
-#line 10406 "cweb/weaver.w"
+#line 10404 "cweb/weaver.w"
 
 {
 int i,j;
@@ -1286,7 +1286,7 @@ for(j= 0;j<W_MAX_INTERFACES;j++)
 _interface_queue[i][j]= NULL;
 }
 /*:465*//*483:*/
-#line 10828 "cweb/weaver.w"
+#line 10826 "cweb/weaver.w"
 
 {
 _changed_resolution= false;
@@ -1303,7 +1303,7 @@ glGenFramebuffers(1,&_framebuffer);
 glBindFramebuffer(GL_FRAMEBUFFER,_framebuffer);
 }
 /*:483*//*486:*/
-#line 10861 "cweb/weaver.w"
+#line 10859 "cweb/weaver.w"
 
 {
 
@@ -1330,7 +1330,7 @@ glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,
 GL_TEXTURE_2D,_texture,0);
 }
 /*:486*//*488:*/
-#line 10899 "cweb/weaver.w"
+#line 10897 "cweb/weaver.w"
 
 {
 glGenRenderbuffers(1,&_depth_stencil);
@@ -1344,7 +1344,7 @@ GL_RENDERBUFFER,_depth_stencil);
 glBindFramebuffer(GL_FRAMEBUFFER,0);
 }
 /*:488*//*495:*/
-#line 11005 "cweb/weaver.w"
+#line 11003 "cweb/weaver.w"
 
 {
 GLuint vertex,fragment;
@@ -1392,33 +1392,33 @@ _framebuffer_matrix[11]= _framebuffer_matrix[12]=
 _framebuffer_matrix[13]= _framebuffer_matrix[14]= 0.0;
 }
 /*:495*//*500:*/
-#line 11206 "cweb/weaver.w"
+#line 11204 "cweb/weaver.w"
 
 W.change_resolution= &_change_resolution;
 /*:500*//*505:*/
-#line 11239 "cweb/weaver.w"
+#line 11237 "cweb/weaver.w"
 
 W.change_final_shader= &_change_final_shader;
 /*:505*//*507:*/
-#line 11254 "cweb/weaver.w"
+#line 11252 "cweb/weaver.w"
 
 W.final_shader_integer= 0;
 /*:507*//*526:*/
-#line 11460 "cweb/weaver.w"
+#line 11458 "cweb/weaver.w"
 
 {
 _initialize_sound();
 }
 /*:526*//*537:*/
-#line 11593 "cweb/weaver.w"
+#line 11591 "cweb/weaver.w"
 
 W.select_sound_device= &_select_sound_device;
 /*:537*//*541:*/
-#line 11626 "cweb/weaver.w"
+#line 11624 "cweb/weaver.w"
 
 W.current_sound_device= &_current_sound_device;
 /*:541*//*550:*/
-#line 11799 "cweb/weaver.w"
+#line 11797 "cweb/weaver.w"
 
 W.pending_files= 0;
 #ifdef W_MULTITHREAD
@@ -1428,19 +1428,19 @@ exit(1);
 }
 #endif
 /*:550*//*574:*/
-#line 12406 "cweb/weaver.w"
+#line 12404 "cweb/weaver.w"
 
 W.new_sound= &_new_sound;
 /*:574*//*578:*/
-#line 12438 "cweb/weaver.w"
+#line 12436 "cweb/weaver.w"
 
 W.play_sound= &_play_sound;
 /*:578*//*582:*/
-#line 12487 "cweb/weaver.w"
+#line 12485 "cweb/weaver.w"
 
 W.destroy_sound= &_destroy_sound;
 /*:582*//*585:*/
-#line 12525 "cweb/weaver.w"
+#line 12523 "cweb/weaver.w"
 
 {
 int i;
@@ -1455,7 +1455,7 @@ exit(1);
 #endif
 }
 /*:585*//*643:*/
-#line 14418 "cweb/weaver.w"
+#line 14416 "cweb/weaver.w"
 
 {
 _empty_image[0]= _empty_image[1]= _empty_image[2]= _empty_image[3]= '\0';
@@ -1467,7 +1467,7 @@ GL_UNSIGNED_BYTE,&_empty_texture);
 glBindTexture(GL_TEXTURE_2D,0);
 }
 /*:643*//*660:*/
-#line 14791 "cweb/weaver.w"
+#line 14789 "cweb/weaver.w"
 
 {
 GLuint vertex,fragment;
@@ -1499,7 +1499,7 @@ glGetAttribLocation(_image_interface_shader.program_shader,
 "vertex_position");
 }
 /*:660*//*695:*/
-#line 15653 "cweb/weaver.w"
+#line 15651 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -1507,48 +1507,48 @@ _initialize_database();
 }
 #endif
 /*:695*//*702:*/
-#line 15707 "cweb/weaver.w"
+#line 15705 "cweb/weaver.w"
 
 W.write_integer= &_write_integer;
 /*:702*//*707:*/
-#line 15779 "cweb/weaver.w"
+#line 15777 "cweb/weaver.w"
 
 W.write_float= &_write_float;
 /*:707*//*712:*/
-#line 15847 "cweb/weaver.w"
+#line 15845 "cweb/weaver.w"
 
 W.write_string= &_write_string;
 /*:712*//*718:*/
-#line 15921 "cweb/weaver.w"
+#line 15919 "cweb/weaver.w"
 
 W.read_integer= &_read_integer;
 W.read_float= &_read_float;
 W.read_string= &_read_string;
 /*:718*//*728:*/
-#line 16171 "cweb/weaver.w"
+#line 16169 "cweb/weaver.w"
 
 W.delete_integer= &_delete_integer;
 W.delete_float= &_delete_float;
 W.delete_string= &_delete_string;
 W.delete_all= &_delete_all;
 /*:728*//*751:*/
-#line 16683 "cweb/weaver.w"
+#line 16681 "cweb/weaver.w"
 
 W.play_music= &_play_music;
 /*:751*//*755:*/
-#line 16744 "cweb/weaver.w"
+#line 16742 "cweb/weaver.w"
 
 W.pause_music= &_pause_music;
 /*:755*//*761:*/
-#line 16849 "cweb/weaver.w"
+#line 16847 "cweb/weaver.w"
 
 W.stop_music= &_stop_music;
 /*:761*//*765:*/
-#line 16880 "cweb/weaver.w"
+#line 16878 "cweb/weaver.w"
 
 W.get_volume= &_get_volume;
 /*:765*//*769:*/
-#line 16940 "cweb/weaver.w"
+#line 16938 "cweb/weaver.w"
 
 W.increase_volume= &_increase_volume;
 /*:769*/
@@ -1754,7 +1754,7 @@ _plugins[i]._fini_plugin(&W);
 #line 3694 "cweb/weaver.w"
 
 /*527:*/
-#line 11466 "cweb/weaver.w"
+#line 11464 "cweb/weaver.w"
 
 {
 _finalize_sound();
@@ -1781,45 +1781,45 @@ exit(1);
 pthread_mutex_destroy(&_scheduler_mutex);
 #endif
 /*:368*//*397:*/
-#line 8821 "cweb/weaver.w"
+#line 8819 "cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 if(pthread_mutex_destroy(&_interface_mutex)!=0)
 perror("Finalizing interface mutex:");
 #endif
 /*:397*//*454:*/
-#line 9899 "cweb/weaver.w"
+#line 9897 "cweb/weaver.w"
 
 glDeleteProgram(_default_interface_shader.program_shader);
 /*:454*//*484:*/
-#line 10845 "cweb/weaver.w"
+#line 10843 "cweb/weaver.w"
 
 glDeleteFramebuffers(1,&_framebuffer);
 /*:484*//*489:*/
-#line 10915 "cweb/weaver.w"
+#line 10913 "cweb/weaver.w"
 
 glDeleteTextures(1,&_texture);
 glDeleteRenderbuffers(1,&_depth_stencil);
 /*:489*//*551:*/
-#line 11808 "cweb/weaver.w"
+#line 11806 "cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 pthread_mutex_destroy(&(W._pending_files_mutex));
 #endif
 /*:551*//*586:*/
-#line 12543 "cweb/weaver.w"
+#line 12541 "cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 pthread_mutex_destroy(&_finalizing_mutex);
 #endif
 /*:586*//*644:*/
-#line 14430 "cweb/weaver.w"
+#line 14428 "cweb/weaver.w"
 
 {
 glDeleteTextures(1,&_empty_texture);
 }
 /*:644*//*698:*/
-#line 15680 "cweb/weaver.w"
+#line 15678 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 {
@@ -2287,12 +2287,10 @@ break;
 if(_scheduled_functions[_number_of_loops][i].period<
 W.t-_scheduled_functions[_number_of_loops][i].last_execution){
 f= _scheduled_functions[_number_of_loops][i].f;
-if(_scheduled_functions[_number_of_loops][i].periodic==false){
+if(!_scheduled_functions[_number_of_loops][i].periodic){
 int j;
 _scheduled_functions[_number_of_loops][i].f= NULL;
 for(j= i+1;j<W_MAX_SCHEDULING;j++){
-if(_scheduled_functions[_number_of_loops][j-1].f==NULL)
-break;
 _scheduled_functions[_number_of_loops][j-1].periodic= 
 _scheduled_functions[_number_of_loops][j].periodic;
 _scheduled_functions[_number_of_loops][j-1].last_execution= 
@@ -2302,7 +2300,7 @@ _scheduled_functions[_number_of_loops][j].period;
 _scheduled_functions[_number_of_loops][j-1].f= 
 _scheduled_functions[_number_of_loops][j].f;
 }
-_scheduled_functions[_number_of_loops][j-1].f= NULL;
+_scheduled_functions[_number_of_loops][W_MAX_SCHEDULING-1].f= NULL;
 i--;
 }
 else
@@ -2323,7 +2321,7 @@ void _render(void){
 
 glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 /*490:*/
-#line 10925 "cweb/weaver.w"
+#line 10923 "cweb/weaver.w"
 
 if(_final_shader[_number_of_loops]!=W_NONE){
 glBindFramebuffer(GL_FRAMEBUFFER,_framebuffer);
@@ -2336,7 +2334,7 @@ glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 
 /*476:*/
-#line 10592 "cweb/weaver.w"
+#line 10590 "cweb/weaver.w"
 
 {
 
@@ -2374,13 +2372,13 @@ current_shader=
 type-1]);
 }
 /*661:*/
-#line 14826 "cweb/weaver.w"
+#line 14824 "cweb/weaver.w"
 
 else if(_interface_queue[_number_of_loops][i]->type==W_INTERFACE_IMAGE){
 current_shader= &_image_interface_shader;
 }
 /*:661*/
-#line 10628 "cweb/weaver.w"
+#line 10626 "cweb/weaver.w"
 
 else{
 current_shader= &_default_interface_shader;
@@ -2405,7 +2403,7 @@ glUniformMatrix4fv(current_shader->_uniform_model_view,1,false,
 _interface_queue[_number_of_loops][i]->
 _transform_matrix);
 /*662:*/
-#line 14835 "cweb/weaver.w"
+#line 14833 "cweb/weaver.w"
 
 
 if(_interface_queue[_number_of_loops][i]->animate&&
@@ -2437,7 +2435,7 @@ glBindTexture(GL_TEXTURE_2D,
 _interface_queue[_number_of_loops][i]->
 _texture[_interface_queue[_number_of_loops][i]->current_frame]);
 /*:662*/
-#line 10651 "cweb/weaver.w"
+#line 10649 "cweb/weaver.w"
 
 
 glEnableVertexAttribArray(current_shader->_attribute_vertex_position);
@@ -2457,7 +2455,7 @@ glEnable(GL_DEPTH_TEST);
 #line 2058 "cweb/weaver.w"
 
 /*496:*/
-#line 11063 "cweb/weaver.w"
+#line 11061 "cweb/weaver.w"
 
 if(_final_shader[_number_of_loops]!=W_NONE){
 struct _shader*current_shader;
@@ -2490,12 +2488,12 @@ glUniform1f(current_shader->_uniform_time,
 glUniformMatrix4fv(current_shader->_uniform_model_view,1,false,
 _framebuffer_matrix);
 /*508:*/
-#line 11261 "cweb/weaver.w"
+#line 11259 "cweb/weaver.w"
 
 glUniform1i(current_shader->_uniform_integer,
 W.final_shader_integer);
 /*:508*/
-#line 11094 "cweb/weaver.w"
+#line 11092 "cweb/weaver.w"
 
 glDrawArrays(GL_TRIANGLE_FAN,0,4);
 glDisableVertexAttribArray(current_shader->_attribute_vertex_position);

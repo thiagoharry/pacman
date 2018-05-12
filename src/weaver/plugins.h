@@ -87,13 +87,13 @@ int _Wget_plugin(char*plugin_name);
 
 void _reload_all_plugins(void);
 /*:353*//*380:*/
-#line 8499 "cweb/weaver.w"
+#line 8497 "cweb/weaver.w"
 
 bool _Wenable_plugin(int plugin_id);
 bool _Wdisable_plugin(int plugin_id);
 bool _Wis_enabled(int plugin_id);
 /*:380*//*384:*/
-#line 8590 "cweb/weaver.w"
+#line 8588 "cweb/weaver.w"
 
 void*_Wget_plugin_data(int plugin_id);
 bool _Wset_plugin_data(int plugin_id,void*data);
