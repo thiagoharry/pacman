@@ -26,6 +26,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #define RIGHT            1
 #define UP               2
 #define DOWN             3
+#define STUCK            4
 #define EPSILON        0.0
 #define DECISION_POINTS 34
 // Ghosts have 3 modes of behaviour mutually exclusive:
@@ -40,6 +41,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #define is_alive(G)   (G -> r == 1.0)
 #define is_scared(G)  (G -> b == 1.0)
+#define is_stuck(G)   (G -> integer == STUCK)
 
 static int decision_points[DECISION_POINTS][2] =
     {
@@ -83,7 +85,7 @@ static int cruise_elroy_activation[21][2] = {//244
     {124, 184}, {124, 184}, {124, 184}
 };
 static struct interface *stopped_ghost = NULL;
-static int mode, mode_count, last_mode = CHASE;
+static int mode, mode_count, last_mode = CHASE, pellet_counter = -1;
 static float remaining_time_to_change_mode;
 static float blinky_offset_x, blinky_offset_y;
 static float pinky_offset_x, pinky_offset_y;
@@ -96,6 +98,26 @@ int blinky_position_x, blinky_position_y;
 int pinky_position_x, pinky_position_y;
 int inky_position_x, inky_position_y;
 struct interface *blinky, *pinky, *inky;
+
+static void stuck_ghost(void){
+    if(pellet_counter < 0)
+        pellet_counter = W.game -> pellets_eaten;
+}
+
+static void release_stuck_ghost(void){
+    if(is_stuck(inky))
+        inky -> integer = RIGHT;
+    pellet_counter = -1;
+}
+
+static void try_to_release_stuck_ghost(void){
+    if(is_stuck(inky)){
+        if(W.game -> level > 1 ||
+           (W.game -> pellets_eaten - pellet_counter >= 30))
+            release_stuck_ghost();
+    }
+}
+
 
 static void ghosts_blink(void){
     if(is_scared(blinky))
@@ -120,6 +142,8 @@ static void reverse_direction(struct interface *ghost){
         break;
     case DOWN:
         ghost -> integer = UP;
+        break;
+    default:
         break;
     }
 }
@@ -192,30 +216,31 @@ static void mode_change(void){
 void ghosts_init(void){
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
-    blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
-    pinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "pinky.png");
-    inky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "inky.png");
     eaten = W.new_sound("bite2.wav");
-    blinky -> integer = RIGHT;
-    pinky -> integer = DOWN;
-    inky -> integer = DOWN;
+    blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
     ghost_normal(blinky);
+    blinky -> integer = RIGHT;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
     blinky_offset_y = 0.0;
+    pinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "pinky.png");
     ghost_normal(pinky);
+    pinky -> integer = DOWN;
     pinky_position_x = 14;
     pinky_position_y = 16;
     pinky_offset_x = 0.5;
     pinky_offset_y = 0.0;
+    inky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "inky.png");
     ghost_normal(inky);
-    inky_position_x = 13;
+    inky -> integer = STUCK;
+    inky_position_x = 12;
     inky_position_y = 16;
-    inky_offset_x = 0.0;
+    inky_offset_x = 0.5;
     inky_offset_y = 0.0;
     mode_count = 0;
     enter_mode(SCATTER);
+    stuck_ghost();
     W.run_futurelly(mode_change, mode_duration[level][mode_count]);
 }
 
@@ -553,8 +578,10 @@ void ghosts_move(void){
                      &blinky_offset_x, &blinky_offset_y);
     ghosts_full_move(pinky, &pinky_position_x, &pinky_position_y,
                      &pinky_offset_x, &pinky_offset_y);
-    ghosts_full_move(inky, &inky_position_x, &inky_position_y,
-                     &inky_offset_x, &inky_offset_y);
+    try_to_release_stuck_ghost();
+    if(!is_stuck(inky))
+        ghosts_full_move(inky, &inky_position_x, &inky_position_y,
+                         &inky_offset_x, &inky_offset_y);
 }
 
 void ghost_carry_pacman(struct interface *ghost, int *position_x,
