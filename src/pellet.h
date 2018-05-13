@@ -23,6 +23,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "weaver/weaver.h"
 #include "includes.h"
 
+extern long when_was_last_pellet_eaten;
+
 void pellet_init(void);
 int pellet_eat(int x, int y);
 

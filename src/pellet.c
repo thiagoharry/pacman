@@ -62,8 +62,11 @@ static float slow_down[21][2] = {
     {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87},
     {0.79, 0.79}};
 
+long when_was_last_pellet_eaten;
+
 void pellet_init(void){
   int i, j;
+  when_was_last_pellet_eaten = W.t;
   W.game -> pellets_eaten = 0;
   if(initialized)
     return;
@@ -94,6 +97,7 @@ int pellet_eat(int x, int y){
             level = 20;
         pellets[y][x] -> visible = false;
         W.game -> pellets_eaten ++;
+        when_was_last_pellet_eaten = W.t;
         if(value == 2){
             pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][0]));
             W.play_sound(super_wakka);

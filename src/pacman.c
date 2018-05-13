@@ -23,6 +23,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #define PACMAN_SIZE  46.0
 #define BASE_SPEED    0.4
 
+#define is_dead(P) (P -> integer == DEAD)
+
 struct interface *pacman;
 static struct interface *killer = NULL;
 struct sound *kill_sound;
@@ -51,6 +53,8 @@ void pacman_init(void){
 }
 
 void pacman_turn_right(void){
+    if(is_dead(pacman))
+        return;
     if((offset_y < 0.5 &&
         !maze_walls[pacman_position_y][pacman_position_x + 1]) ||
        (offset_y > 0.5 && !maze_walls[pacman_position_y + 1][pacman_position_x + 1])){
@@ -60,6 +64,8 @@ void pacman_turn_right(void){
 }
 
 void pacman_turn_left(void){
+    if(is_dead(pacman))
+        return;
     if((offset_y < 0.5 &&
         !maze_walls[pacman_position_y][pacman_position_x - 1]) ||
        (offset_y > 0.5 && !maze_walls[pacman_position_y + 1][pacman_position_x - 1])){
@@ -69,6 +75,8 @@ void pacman_turn_left(void){
 }
 
 void pacman_turn_up(void){
+    if(is_dead(pacman))
+        return;
     if((offset_x < 0.5 &&
         !maze_walls[pacman_position_y + 1][pacman_position_x]) ||
        (offset_x > 0.5 &&
@@ -84,6 +92,8 @@ void pacman_turn_up(void){
 }
 
 void pacman_turn_down(void){
+    if(is_dead(pacman))
+        return;
     if(pacman_position_x > 12 && pacman_position_x < 16 &&
        pacman_position_y == 19)
         return; // Não entre na área dos fantasmas

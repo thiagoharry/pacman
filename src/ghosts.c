@@ -115,6 +115,12 @@ static void try_to_release_stuck_ghost(void){
         if(W.game -> level > 1 ||
            (W.game -> pellets_eaten - pellet_counter >= 30))
             release_stuck_ghost();
+        else if(W.game -> level == 1 &&
+                (W.t - when_was_last_pellet_eaten) > 4000000l)
+            release_stuck_ghost();
+        else if(W.game -> level > 1 &&
+                (W.t - when_was_last_pellet_eaten) > 3000000l)
+            release_stuck_ghost();
     }
 }
 
@@ -386,7 +392,7 @@ static void choose_direction(struct interface *ghost, int position_x,
     }
     else if(ghost == inky){
         if(!is_alive(inky)){
-            inky_target_x = 13;
+            inky_target_x = 12;
             inky_target_y = 16;
         }
         target_x = inky_target_x;
@@ -526,9 +532,34 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
                 movement = 0.5 - *offset_x;
                 *offset_x = 0.5;
                 ghost -> integer = DOWN;
-                ghost -> integer = DOWN;
             }
         }
+    }
+    // Special case 2: Need to exit ghost pen
+    else if(is_alive(ghost) && *position_y == 16 && *position_x == 14 &&
+        *offset_y == 0.0){
+        *offset_x += movement;
+        if(*offset_x >= 0.5){
+            movement = *offset_x - 0.5;
+            *offset_x = 0.5;
+            ghost -> integer = UP;
+        }
+        else{
+            *offset_x -= movement;
+            if(*offset_x <= 0.5){
+                movement = 0.5 - *offset_x;
+                *offset_x = 0.5;
+                ghost -> integer = UP;
+            }
+        }
+    }
+    // Special case 3: Inky want to revive:
+    else if(!is_alive(ghost) && *position_y == 16 && *position_x == 12 &&
+       *offset_y == 0.0 && ghost == inky){
+        *offset_x = 0.5;
+        ghost_normal(ghost);
+        ghost -> integer = STUCK;
+        stuck_ghost();
     }
     // Move to next tile
     else if(*offset_x <= EPSILON && *offset_y <= EPSILON){
@@ -566,6 +597,9 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
             ghost -> integer = UP;
             if(!is_alive(ghost))
                 ghost_normal(ghost);
+        }
+        else if(ghost == inky){
+            ghost -> integer = LEFT;
         }
     }
     // Resume movement:
