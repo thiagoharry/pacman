@@ -30,6 +30,7 @@ static struct interface *killer = NULL;
 struct sound *kill_sound;
 static float offset_x, offset_y;
 static float slow_down;
+
 static float default_speed[21][2] = {
     {0.8, 0.9}, {0.9, 0.95}, {0.9, 0.95}, {0.9, 0.95}, {1.0, 1.0}, {1.0, 1.0},
     {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0}, {1.0, 1.0},
@@ -37,6 +38,8 @@ static float default_speed[21][2] = {
     {1.0, 1.0}, {1.0, 1.0}, {0.9, 0.9}};
 
 int pacman_position_x, pacman_position_y;
+
+bool fast = false;
 
 void pacman_init(void){
     pacman_position_x = 14;
@@ -120,8 +123,10 @@ static void pacman_half_move(void){
     if(level > 20) level = 20;
     if(slow_down < default_speed[level][0])
         movement = slow_down * BASE_SPEED * 0.5;
-    else
+    else if(!fast)
         movement = default_speed[level][0] * BASE_SPEED * 0.5;
+    else
+        movement = default_speed[level][1] * BASE_SPEED * 0.5;
     switch(pacman -> integer){
     case LEFT:
         if(offset_y == 0.0){
@@ -363,4 +368,12 @@ void pacman_killed_by(struct interface *ghost){
         W.play_sound(kill_sound);
         ghost_slow_down(ghost);
     }
+}
+
+void pacman_speed_up(void){
+    fast = true;
+}
+
+void pacman_speed_down(void){
+    fast = false;
 }

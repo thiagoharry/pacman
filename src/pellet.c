@@ -99,13 +99,19 @@ int pellet_eat(int x, int y){
         W.game -> pellets_eaten ++;
         when_was_last_pellet_eaten = W.t;
         if(value == 2){
-            pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][0]));
+            if(!fast)
+                pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][0]));
+            else
+                pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][1]));
             W.play_sound(super_wakka);
             ghosts_fright();
         }
         else{
             W.play_sound(wakka);
-            pacman_slow_down(slow_down[level][0]);
+            if(!fast)
+                pacman_slow_down(slow_down[level][0]);
+            else
+                pacman_slow_down(slow_down[level][1]);
         }
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
             fruits_appear();

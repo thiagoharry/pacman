@@ -161,6 +161,7 @@ static void ghosts_blink(void){
     if(is_scared(clyde))
         ghost_blink(clyde);
     W.run_futurelly(ghosts_stop_frightned_mode, 1.0);
+    W.run_futurelly(pacman_speed_down, 1.0);
 }
 
 static void reverse_direction(struct interface *ghost){
@@ -216,6 +217,7 @@ static void enter_mode(int new_mode){
     case FRIGHTNED:
         W.cancel(ghosts_blink);
         W.cancel(ghosts_stop_frightned_mode);
+        W.cancel(pacman_speed_down);
         if(is_alive(blinky))
             ghost_blue(blinky);
         if(is_alive(pinky))
@@ -239,6 +241,7 @@ static void enter_mode(int new_mode){
             if(is_scared(clyde))
                 ghost_blink(clyde);
             W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
+            W.run_futurelly(pacman_speed_down, default_speed[level][3]);
         }
         break;
     }
@@ -750,6 +753,7 @@ void ghosts_fright(void){
         remaining_time_to_change_mode = W.cancel(mode_change);
     }
     enter_mode(FRIGHTNED);
+    pacman_speed_up();
 }
 
 void ghosts_stop_frightned_mode(void){

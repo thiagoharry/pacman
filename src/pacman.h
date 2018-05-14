@@ -31,6 +31,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 extern int pacman_position_x, pacman_position_y;
 extern struct interface *pacman;
+extern bool fast;
 
 void pacman_init(void);
 void pacman_transform(void);
@@ -42,5 +43,7 @@ void pacman_move(void);
 void pacman_slow_down(float);
 void pacman_print_position(void);
 void pacman_killed_by(struct interface *);
+void pacman_speed_up(void);
+void pacman_speed_down(void);
 
 #endif
