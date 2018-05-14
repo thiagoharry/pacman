@@ -322,6 +322,12 @@ static void pacman_half_move(void){
         else if(pacman_position_x == pinky_position_x &&
                 pacman_position_y == pinky_position_y)
             ghost_eat_or_get_eaten(pinky);
+        else if(pacman_position_x == inky_position_x &&
+                pacman_position_y == inky_position_y)
+            ghost_eat_or_get_eaten(inky);
+        else if(pacman_position_x == clyde_position_x &&
+                pacman_position_y == clyde_position_y)
+            ghost_eat_or_get_eaten(clyde);
     }
 }
 

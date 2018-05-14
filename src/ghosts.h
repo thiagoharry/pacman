@@ -26,7 +26,8 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 extern int blinky_position_x, blinky_position_y;
 extern int pinky_position_x, pinky_position_y;
 extern int inky_position_x, inky_position_y;
-extern struct interface *blinky, *pinky, *inky;
+extern int clyde_position_x, clyde_position_y;
+extern struct interface *blinky, *pinky, *inky, *clyde;
 
 void ghosts_init(void);
 void ghosts_transform(void);

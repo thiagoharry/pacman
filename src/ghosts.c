@@ -90,14 +90,17 @@ static float remaining_time_to_change_mode;
 static float blinky_offset_x, blinky_offset_y;
 static float pinky_offset_x, pinky_offset_y;
 static float inky_offset_x, inky_offset_y;
+static float clyde_offset_x, clyde_offset_y;
 static int blinky_target_x, blinky_target_y;
 static int pinky_target_x, pinky_target_y;
 static int inky_target_x, inky_target_y;
+static int clyde_target_x, clyde_target_y;
 static struct sound *eaten;
 int blinky_position_x, blinky_position_y;
 int pinky_position_x, pinky_position_y;
 int inky_position_x, inky_position_y;
-struct interface *blinky, *pinky, *inky;
+int clyde_position_x, clyde_position_y;
+struct interface *blinky, *pinky, *inky, *clyde;
 
 static void stuck_ghost(void){
     if(pellet_counter < 0)
@@ -105,13 +108,24 @@ static void stuck_ghost(void){
 }
 
 static void release_stuck_ghost(void){
-    if(is_stuck(inky))
+    if(is_stuck(pinky))
+        pinky -> integer = UP;
+    else if(is_stuck(inky))
         inky -> integer = RIGHT;
-    pellet_counter = -1;
+    else if(is_stuck(clyde))
+        clyde -> integer = LEFT;
+    if(!is_stuck(clyde) && !is_stuck(inky))
+        pellet_counter = -1;
+    else{
+        pellet_counter = W.game -> pellets_eaten;
+        when_was_last_pellet_eaten = W.t;
+    }
 }
 
 static void try_to_release_stuck_ghost(void){
-    if(is_stuck(inky)){
+    if(is_stuck(pinky))
+        release_stuck_ghost();
+    else if(is_stuck(inky)){
         if(W.game -> level > 1 ||
            (W.game -> pellets_eaten - pellet_counter >= 30))
             release_stuck_ghost();
@@ -120,6 +134,18 @@ static void try_to_release_stuck_ghost(void){
             release_stuck_ghost();
         else if(W.game -> level > 1 &&
                 (W.t - when_was_last_pellet_eaten) > 3000000l)
+            release_stuck_ghost();
+    }
+    else if(is_stuck(clyde)){
+        if(W.game -> level == 1 &&
+           (W.game -> pellets_eaten - pellet_counter >= 60 ||
+            (W.t - when_was_last_pellet_eaten) > 4000000l))
+            release_stuck_ghost();
+        else if(W.game -> level == 2 &&
+                (W.game -> pellets_eaten - pellet_counter >= 50 ||
+                 (W.t - when_was_last_pellet_eaten) > 3000000l))
+            release_stuck_ghost();
+        else if(W.game -> level > 2)
             release_stuck_ghost();
     }
 }
@@ -132,6 +158,8 @@ static void ghosts_blink(void){
         ghost_blink(pinky);
     if(is_scared(inky))
         ghost_blink(inky);
+    if(is_scared(clyde))
+        ghost_blink(clyde);
     W.run_futurelly(ghosts_stop_frightned_mode, 1.0);
 }
 
@@ -158,9 +186,14 @@ static void enter_mode(int new_mode){
     int level = W.game -> level - 1;
     if(level >= 21) level = 20;
     if(mode == CHASE || mode == SCATTER){
-        reverse_direction(blinky);
-        reverse_direction(pinky);
-        reverse_direction(inky);
+        if(is_alive(blinky))
+            reverse_direction(blinky);
+        if(is_alive(pinky))
+            reverse_direction(pinky);
+        if(is_alive(inky))
+            reverse_direction(inky);
+        if(is_alive(clyde))
+            reverse_direction(clyde);
     }
     if(mode != FRIGHTNED)
         last_mode = mode;
@@ -177,6 +210,8 @@ static void enter_mode(int new_mode){
         pinky_target_y = MAZE_HEIGHT + 2;
         inky_target_x = MAZE_WIDTH - 1;
         inky_target_y = 0;
+        clyde_target_x = 0;
+        clyde_target_y = 0;
         break;
     case FRIGHTNED:
         W.cancel(ghosts_blink);
@@ -187,6 +222,8 @@ static void enter_mode(int new_mode){
             ghost_blue(pinky);
         if(is_alive(inky))
             ghost_blue(inky);
+        if(is_alive(clyde))
+            ghost_blue(clyde);
         if(default_speed[level][3] >= 1.0)
             W.run_futurelly(ghosts_blink, default_speed[level][3] - 1.0);
         else{
@@ -199,6 +236,8 @@ static void enter_mode(int new_mode){
                 ghost_blink(pinky);
             if(is_scared(inky))
                 ghost_blink(inky);
+            if(is_scared(clyde))
+                ghost_blink(clyde);
             W.run_futurelly(ghosts_stop_frightned_mode, default_speed[level][3]);
         }
         break;
@@ -232,7 +271,7 @@ void ghosts_init(void){
     blinky_offset_y = 0.0;
     pinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "pinky.png");
     ghost_normal(pinky);
-    pinky -> integer = DOWN;
+    pinky -> integer = STUCK;
     pinky_position_x = 14;
     pinky_position_y = 16;
     pinky_offset_x = 0.5;
@@ -244,6 +283,13 @@ void ghosts_init(void){
     inky_position_y = 16;
     inky_offset_x = 0.5;
     inky_offset_y = 0.0;
+    clyde = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "clyde.png");
+    ghost_normal(clyde);
+    clyde -> integer = STUCK;
+    clyde_position_x = 16;
+    clyde_position_y = 16;
+    clyde_offset_x = 0.5;
+    clyde_offset_y = 0.0;
     mode_count = 0;
     enter_mode(SCATTER);
     stuck_ghost();
@@ -257,6 +303,8 @@ void ghosts_transform(void){
                           pinky_offset_x, pinky_offset_y, GHOST_SIZE);
     perspective_transform(inky, inky_position_x, inky_position_y,
                           inky_offset_x, inky_offset_y, GHOST_SIZE);
+    perspective_transform(clyde, clyde_position_x, clyde_position_y,
+                          clyde_offset_x, clyde_offset_y, GHOST_SIZE);
 }
 
 static void ghosts_half_move(struct interface *ghost, int *position_x,
@@ -359,6 +407,16 @@ static void choose_chase_target(void){
             (pinky_target_x - blinky_position_x);
         inky_target_y = blinky_position_y + 2 *
             (pinky_target_y - blinky_position_y);
+        // Clyde target
+        if(hypot(clyde_position_x - pacman_position_x,
+                 clyde_position_y - pacman_position_y) > 8.0){
+            clyde_target_x = pacman_position_x;
+            clyde_target_y = pacman_position_y;
+        }
+        else{
+            clyde_target_x = 0;
+            clyde_target_y = 0;
+        }
     }
     else if(W.game -> pellets_eaten >= cruise_elroy_activation[level][0]){
         // Cruise Elroy
@@ -397,6 +455,14 @@ static void choose_direction(struct interface *ghost, int position_x,
         }
         target_x = inky_target_x;
         target_y = inky_target_y;
+    }
+    else if(ghost == clyde){
+        if(!is_alive(clyde)){
+            clyde_target_x = 16;
+            clyde_target_y = 16;
+        }
+        target_x = clyde_target_x;
+        target_y = clyde_target_y;
     }
     if(ghost -> integer != DOWN && !maze_walls[position_y + 1][position_x])
         distance[UP] = hypot(target_x - position_x,
@@ -559,7 +625,19 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
         *offset_x = 0.5;
         ghost_normal(ghost);
         ghost -> integer = STUCK;
-        stuck_ghost();
+        if(pinky -> integer != STUCK)
+            stuck_ghost();
+        return;
+    }
+    // Special case 3: Clyde want to revive:
+    else if(!is_alive(ghost) && *position_y == 16 && *position_x == 16 &&
+            *offset_y == 0.0 && ghost == clyde){
+        *offset_x = 0.5;
+        ghost_normal(ghost);
+        ghost -> integer = STUCK;
+        if(pinky -> integer != STUCK && inky -> integer != STUCK)
+            stuck_ghost();
+        return;
     }
     // Move to next tile
     else if(*offset_x <= EPSILON && *offset_y <= EPSILON){
@@ -594,12 +672,18 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
             *offset_x == 0.5){
         if(ghost == pinky || ghost == blinky || is_alive(ghost)){
             // After entering the ghost pen
-            ghost -> integer = UP;
+            if(!is_alive(ghost) && ghost == pinky)
+                ghost -> integer = STUCK;
+            else
+                ghost -> integer = UP;
             if(!is_alive(ghost))
                 ghost_normal(ghost);
         }
         else if(ghost == inky){
             ghost -> integer = LEFT;
+        }
+        else if(ghost == clyde){
+            ghost -> integer = RIGHT;
         }
     }
     // Resume movement:
@@ -610,12 +694,16 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
 void ghosts_move(void){
     ghosts_full_move(blinky, &blinky_position_x, &blinky_position_y,
                      &blinky_offset_x, &blinky_offset_y);
-    ghosts_full_move(pinky, &pinky_position_x, &pinky_position_y,
-                     &pinky_offset_x, &pinky_offset_y);
     try_to_release_stuck_ghost();
+    if(!is_stuck(pinky))
+        ghosts_full_move(pinky, &pinky_position_x, &pinky_position_y,
+                     &pinky_offset_x, &pinky_offset_y);
     if(!is_stuck(inky))
         ghosts_full_move(inky, &inky_position_x, &inky_position_y,
                          &inky_offset_x, &inky_offset_y);
+    if(!is_stuck(clyde))
+        ghosts_full_move(clyde, &clyde_position_x, &clyde_position_y,
+                         &clyde_offset_x, &clyde_offset_y);
 }
 
 void ghost_carry_pacman(struct interface *ghost, int *position_x,
@@ -637,6 +725,12 @@ void ghost_carry_pacman(struct interface *ghost, int *position_x,
         *position_y = inky_position_y;
         *offset_x = inky_offset_x;
         *offset_y = inky_offset_y;
+    }
+    else if(ghost == clyde){
+        *position_x = clyde_position_x;
+        *position_y = clyde_position_y;
+        *offset_x = clyde_offset_x;
+        *offset_y = clyde_offset_y;
     }
 }
 
@@ -665,6 +759,8 @@ void ghosts_stop_frightned_mode(void){
     pinky -> g = 0.0;
     inky -> b = 0.0;
     inky -> g = 0.0;
+    clyde -> b = 0.0;
+    clyde -> g = 0.0;
     W.run_futurelly(mode_change, remaining_time_to_change_mode);
     enter_mode(last_mode);
 }
