@@ -28,12 +28,15 @@ static struct sound *eat;
 void fruits_init(void){
     int x_pos = (maze_space[13][14].x + maze_space[13][15].x) / 2;
     int y_pos = maze_space[13][14].y;
-    if(initialized)
+    if(initialized){
+        cherry -> visible = false;
+        W.cancel(fruits_disappear);
         return;
+    }
     cherry = W.new_interface(5, x_pos, y_pos, FRUIT_SIZE, FRUIT_SIZE, "cherry.png");
+    cherry -> visible = false;
     // Sound under Creative Commons by Jason Shaw at audionautix.com
     eat = W.new_sound("bite1.wav");
-    cherry -> visible = false;
     initialized = true;
 }
 

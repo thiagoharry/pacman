@@ -30,6 +30,7 @@ static struct interface *killer = NULL;
 struct sound *kill_sound;
 static float offset_x, offset_y;
 static float slow_down;
+static bool initialized = false;
 
 static float default_speed[21][2] = {
     {0.8, 0.9}, {0.9, 0.95}, {0.9, 0.95}, {0.9, 0.95}, {1.0, 1.0}, {1.0, 1.0},
@@ -46,13 +47,15 @@ void pacman_init(void){
     pacman_position_y = 7;
     offset_x = 0.5;
     offset_y = 0.0;
-    pacman = W.new_interface(6, 100, 100, PACMAN_SIZE,
-                            PACMAN_SIZE, "pacman.gif");
+    if(!initialized)
+        pacman = W.new_interface(6, 100, 100, PACMAN_SIZE,
+                                 PACMAN_SIZE, "pacman.gif");
     pacman -> animate = false;
     pacman -> current_frame = 2;
     pacman -> integer = RIGHT;
     slow_down = 1.0;
     kill_sound = W.new_sound("ghost.wav");
+    initialized = true;
 }
 
 void pacman_turn_right(void){

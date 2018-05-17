@@ -62,6 +62,14 @@ LOOP_END: // Code executed at the end of the loop
     return;
 }
 
+void level_up(void){
+    W.game -> level ++;
+    pellet_init();
+    pacman_init();
+    fruits_init();
+    ghosts_init();
+}
+
 int main(void){
   Winit(); // Initializes Weaver
   resolution_init();

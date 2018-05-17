@@ -68,8 +68,13 @@ void pellet_init(void){
   int i, j;
   when_was_last_pellet_eaten = W.t;
   W.game -> pellets_eaten = 0;
-  if(initialized)
-    return;
+  if(initialized){
+      for(i = 0; i < MAZE_HEIGHT; i ++)
+          for(j = 0; j < MAZE_WIDTH; j ++)
+              if(pellet_distribution[i][j])
+                  pellets[i][j] -> visible = true;
+      return;
+  }
   for(i = 0; i < MAZE_HEIGHT; i ++)
     for(j = 0; j < MAZE_WIDTH; j ++)
       if(pellet_distribution[i][j]){
@@ -115,6 +120,8 @@ int pellet_eat(int x, int y){
         }
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
             fruits_appear();
+        else if(W.game -> pellets_eaten >= 244)
+            level_up();
     }
     return value;
 }

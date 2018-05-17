@@ -36,5 +36,6 @@ struct _game_struct{
 
 MAIN_LOOP main_loop(void);
 void game_init(void);
+void level_up(void);
 
 #endif

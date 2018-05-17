@@ -95,6 +95,7 @@ static int blinky_target_x, blinky_target_y;
 static int pinky_target_x, pinky_target_y;
 static int inky_target_x, inky_target_y;
 static int clyde_target_x, clyde_target_y;
+static bool initialized = false;
 static struct sound *eaten;
 int blinky_position_x, blinky_position_y;
 int pinky_position_x, pinky_position_y;
@@ -264,29 +265,37 @@ static void mode_change(void){
 void ghosts_init(void){
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
-    eaten = W.new_sound("bite2.wav");
-    blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
+    if(!initialized){
+        eaten = W.new_sound("bite2.wav");
+        blinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "blinky.png");
+        pinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "pinky.png");
+        inky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "inky.png");
+        clyde = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "clyde.png");
+    }
+    else{
+        W.cancel(mode_change);
+        W.cancel(ghosts_stop_frightned_mode);
+        W.cancel(pacman_speed_down);
+        W.cancel(ghosts_blink);
+    }
     ghost_normal(blinky);
     blinky -> integer = RIGHT;
     blinky_position_x = 14;
     blinky_position_y = 19;
     blinky_offset_x = 0.5;
     blinky_offset_y = 0.0;
-    pinky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "pinky.png");
     ghost_normal(pinky);
     pinky -> integer = STUCK;
     pinky_position_x = 14;
     pinky_position_y = 16;
     pinky_offset_x = 0.5;
     pinky_offset_y = 0.0;
-    inky = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "inky.png");
     ghost_normal(inky);
     inky -> integer = STUCK;
     inky_position_x = 12;
     inky_position_y = 16;
     inky_offset_x = 0.5;
     inky_offset_y = 0.0;
-    clyde = W.new_interface(7, 0, 0, GHOST_SIZE, GHOST_SIZE, "clyde.png");
     ghost_normal(clyde);
     clyde -> integer = STUCK;
     clyde_position_x = 16;
@@ -297,6 +306,7 @@ void ghosts_init(void){
     enter_mode(SCATTER);
     stuck_ghost();
     W.run_futurelly(mode_change, mode_duration[level][mode_count]);
+    initialized = true;
 }
 
 void ghosts_transform(void){
