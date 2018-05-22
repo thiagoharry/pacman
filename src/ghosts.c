@@ -21,7 +21,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "ghosts.h"
 
 #define GHOST_SIZE    46.0
-#define BASE_SPEED     0.4
+#define BASE_SPEED     0.37
 #define LEFT             0
 #define RIGHT            1
 #define UP               2
@@ -86,7 +86,7 @@ static int cruise_elroy_activation[21][2] = {//244
 };
 static struct interface *stopped_ghost = NULL;
 static int mode, mode_count, last_mode = CHASE, pellet_counter = -1;
-static float remaining_time_to_change_mode;
+static float remaining_time_to_change_mode = 0.0;
 static float blinky_offset_x, blinky_offset_y;
 static float pinky_offset_x, pinky_offset_y;
 static float inky_offset_x, inky_offset_y;
@@ -185,6 +185,7 @@ static void reverse_direction(struct interface *ghost){
 }
 
 static void enter_mode(int new_mode){
+    printf("%d -> %d\n", mode, new_mode);
     int level = W.game -> level - 1;
     if(level >= 21) level = 20;
     if(mode == CHASE || mode == SCATTER){
@@ -249,6 +250,7 @@ static void enter_mode(int new_mode){
 }
 
 static void mode_change(void){
+    printf("MODE CHANGE\n");
     int level = W.game -> level - 1;
     if(level >= 5) level = 4;
     // Increment number of mode changes. Maximum: 7
@@ -306,6 +308,7 @@ void ghosts_init(void){
     enter_mode(SCATTER);
     stuck_ghost();
     W.run_futurelly(mode_change, mode_duration[level][mode_count]);
+    printf("Muda modo em %f\n", mode_duration[level][mode_count]);
     initialized = true;
 }
 
@@ -761,6 +764,8 @@ void ghosts_fright(void){
     W.cancel(ghosts_blink);
     if(mode != FRIGHTNED){
         remaining_time_to_change_mode = W.cancel(mode_change);
+        printf("Interrompemos, depois retomar em %f.\n",
+               remaining_time_to_change_mode);
     }
     enter_mode(FRIGHTNED);
     pacman_speed_up();
@@ -775,6 +780,7 @@ void ghosts_stop_frightned_mode(void){
     inky -> g = 0.0;
     clyde -> b = 0.0;
     clyde -> g = 0.0;
+    printf("Retorne o mode change em %f segundos\n", remaining_time_to_change_mode);
     W.run_futurelly(mode_change, remaining_time_to_change_mode);
     enter_mode(last_mode);
 }

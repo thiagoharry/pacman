@@ -21,7 +21,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "pacman.h"
 
 #define PACMAN_SIZE  46.0
-#define BASE_SPEED    0.4
+#define BASE_SPEED    0.37
 
 #define is_dead(P) (P -> integer == DEAD)
 

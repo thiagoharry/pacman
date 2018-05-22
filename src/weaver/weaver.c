@@ -651,7 +651,8 @@ pthread_mutex_lock(&_scheduler_mutex);
 for(i= 0;i<W_MAX_SCHEDULING;i++){
 if(_scheduled_functions[_number_of_loops][i].f==f){
 period= _scheduled_functions[_number_of_loops][i].period;
-last_execution= _scheduled_functions[_number_of_loops][i].period;
+last_execution= _scheduled_functions[_number_of_loops][i].last_execution;
+return_value= ((float)(period-(W.t-last_execution)))/1000000.0;
 for(;i<W_MAX_SCHEDULING-1;i++){
 _scheduled_functions[_number_of_loops][i].f= 
 _scheduled_functions[_number_of_loops][i+1].f;
@@ -661,7 +662,6 @@ _scheduled_functions[_number_of_loops][i].last_execution=
 _scheduled_functions[_number_of_loops][i+1].last_execution;
 }
 _scheduled_functions[_number_of_loops][i].f= NULL;
-return_value= ((float)((W.t-last_execution)-period))/1000000.0;;
 break;
 }
 }
