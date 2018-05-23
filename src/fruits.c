@@ -38,7 +38,7 @@ static struct interface *key;
 static bool initialized = false;
 static struct sound *eat;
 
-#define FRUIT_SIZE 33.992715
+#define FRUIT_SIZE 33
 
 void fruits_init(void){
     int x_pos = (maze_space[13][14].x + maze_space[13][15].x) / 2;

@@ -27,7 +27,7 @@
 #define W_INTERNAL_MEMORY 128000
 // When compiling for the web, we usually need aditional memory. So we
 // sum the memory above with the value below:
-#define W_WEB_MEMORY 2097152
+#define W_WEB_MEMORY 20971520
 
 // If you wont use multiple threads, you can comment this:
 //#define W_MULTITHREAD
