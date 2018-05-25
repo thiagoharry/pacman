@@ -278,6 +278,7 @@ void ghosts_init(void){
         W.cancel(pacman_speed_down);
         W.cancel(ghosts_blink);
     }
+    stopped_ghost = NULL;
     ghost_normal(blinky);
     blinky -> integer = RIGHT;
     blinky_position_x = 14;
@@ -577,7 +578,9 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     int level = W.game -> level - 1;
     if(level > 20) level = 20;
     // Set speed:
-    if(*position_y == 16 && (*position_x < 7 || *position_x > 22))
+    if(!is_alive(ghost))
+        movement  = 0.5;
+    else if(*position_y == 16 && (*position_x < 7 || *position_x > 22))
         movement = default_speed[level][2] * BASE_SPEED; // Tunnel
     else if(is_scared(ghost) || !is_alive(ghost))
         movement = default_speed[level][1] * BASE_SPEED; // Frightened
@@ -592,8 +595,7 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     if(ghost == stopped_ghost)
         movement *= 0.25;
     // Try to kill pacman:
-    if(*position_x == pacman_position_x && *position_y == pacman_position_y &&
-        ghost -> r == 1.0)
+    if(pacman_collision(*position_x, *position_y, *offset_x, *offset_y))
         ghost_eat_or_get_eaten(ghost);
     // Special case 1: Need to enter in ghost pen
     if(!is_alive(ghost) && *position_y == 19 && *position_x == 14){
@@ -670,12 +672,8 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
             turn_if_necessary(ghost, *position_x, *position_y);
     }
     // Try to kill pacman again:
-    if(*position_x == pacman_position_x && *position_y == pacman_position_y &&
-        ghost -> r == 1.0){
-        if(ghost -> b < 0.2)
-            pacman_killed_by(ghost);
-        else
-            ghost_eat_or_get_eaten(ghost);
+    if(pacman_collision(*position_x, *position_y, *offset_x, *offset_y)){
+        ghost_eat_or_get_eaten(ghost);
     }
     if(*position_x == 14 && *offset_x == 0.5 && *position_y == 19 &&
        ghost -> integer == UP && *offset_y == 0.0){ // After exit ghost room

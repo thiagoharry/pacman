@@ -32,10 +32,12 @@ struct _game_struct{
   // don't change it's name. Access it in W.game variable.
     int pellets_eaten;
     int level;
+    bool game_over;
 } _game;
 
 MAIN_LOOP main_loop(void);
 void game_init(void);
 void level_up(void);
+void lose_life(void);
 
 #endif

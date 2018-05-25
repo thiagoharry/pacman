@@ -25,7 +25,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #define is_dead(P) (P -> integer == DEAD)
 
-struct interface *pacman;
+struct interface *pacman, *pacman_life;
 static struct interface *killer = NULL;
 struct sound *kill_sound;
 static float offset_x, offset_y;
@@ -47,9 +47,12 @@ void pacman_init(void){
     pacman_position_y = 7;
     offset_x = 0.5;
     offset_y = 0.0;
-    if(!initialized)
+    if(!initialized){
         pacman = W.new_interface(6, 100, 100, PACMAN_SIZE,
                                  PACMAN_SIZE, "pacman.gif");
+        pacman_life = W. new_interface(8, 100, 20, 200, 40, "pacman_life.png");
+        pacman_life -> integer = 5;
+    }
     pacman -> animate = false;
     pacman -> current_frame = 2;
     pacman -> integer = RIGHT;
@@ -323,20 +326,6 @@ static void pacman_half_move(void){
         printf("%f %f\n", prev_x, prev_y);
         pacman_print_position();
     }
-    if(pacman -> integer != DEAD){
-        if(pacman_position_x == blinky_position_x &&
-           pacman_position_y == blinky_position_y)
-            ghost_eat_or_get_eaten(blinky);
-        else if(pacman_position_x == pinky_position_x &&
-                pacman_position_y == pinky_position_y)
-            ghost_eat_or_get_eaten(pinky);
-        else if(pacman_position_x == inky_position_x &&
-                pacman_position_y == inky_position_y)
-            ghost_eat_or_get_eaten(inky);
-        else if(pacman_position_x == clyde_position_x &&
-                pacman_position_y == clyde_position_y)
-            ghost_eat_or_get_eaten(clyde);
-    }
 }
 
 void pacman_move(void){
@@ -370,6 +359,7 @@ void pacman_killed_by(struct interface *ghost){
         W.stop_music("music1.mp3");
         W.play_sound(kill_sound);
         ghost_slow_down(ghost);
+        W.run_futurelly(lose_life, 3.0);
     }
 }
 
@@ -379,4 +369,18 @@ void pacman_speed_up(void){
 
 void pacman_speed_down(void){
     fast = false;
+}
+
+// Something collides with pacman when it's distance is llesser than 0.5 tiles
+bool pacman_collision(int x, int y, float object_offset_x,
+                     float object_offset_y){
+    float object_x = (float) x + object_offset_x;
+    float object_y = (float) y + object_offset_y;
+    float pacman_x = (float) pacman_position_x + offset_x;
+    float pacman_y = (float) pacman_position_y + offset_y;
+    return hypot(object_x - pacman_x, object_y - pacman_y) <= 0.5;
+}
+
+int pacman_increment_life(int increment){
+    return(pacman_life -> integer += increment);
 }

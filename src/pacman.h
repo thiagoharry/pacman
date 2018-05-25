@@ -45,5 +45,7 @@ void pacman_print_position(void);
 void pacman_killed_by(struct interface *);
 void pacman_speed_up(void);
 void pacman_speed_down(void);
+bool pacman_collision(int, int, float, float);
+int pacman_increment_life(int);
 
 #endif

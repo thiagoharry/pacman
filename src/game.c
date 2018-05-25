@@ -56,7 +56,8 @@ LOOP_BODY: // Code executed every loop iteration
 
     pacman_transform();
     ghosts_transform();
-
+    if(W.game -> game_over)
+        Wexit_loop();
 LOOP_END: // Code executed at the end of the loop
     W.stop_music("music1.mp3");
     return;
@@ -70,6 +71,15 @@ void level_up(void){
     ghosts_init();
 }
 
+void lose_life(void){
+    int new_life;
+    pacman_init();
+    ghosts_init();
+    new_life = pacman_increment_life(-1);
+    if(new_life == 0)
+        W.game -> game_over = true;
+}
+
 int main(void){
   Winit(); // Initializes Weaver
   resolution_init();
@@ -80,4 +90,5 @@ int main(void){
 
 void game_init(void){
     W.game -> level = 1;
+    W.game -> game_over = false;
 }
