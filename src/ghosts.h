@@ -27,6 +27,7 @@ extern int blinky_position_x, blinky_position_y;
 extern int pinky_position_x, pinky_position_y;
 extern int inky_position_x, inky_position_y;
 extern int clyde_position_x, clyde_position_y;
+extern bool ghosts_use_global_pellet_counter;
 extern struct interface *blinky, *pinky, *inky, *clyde;
 
 void ghosts_init(void);
@@ -38,5 +39,6 @@ void ghost_slow_down(struct interface *);
 void ghosts_fright(void);
 void ghosts_stop_frightned_mode(void);
 void ghost_eat_or_get_eaten(struct interface *);
+
 
 #endif

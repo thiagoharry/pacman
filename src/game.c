@@ -35,7 +35,6 @@ LOOP_INIT: // Code executed during loop initialization
     pacman_init();
     fruits_init();
     ghosts_init();
-    W.play_music("music1.mp3", true);
 LOOP_BODY: // Code executed every loop iteration
     if(W.keyboard[W_ESC])
         Wexit_loop();
@@ -48,8 +47,9 @@ LOOP_BODY: // Code executed every loop iteration
     else if(W.keyboard[W_RIGHT])
         pacman_turn_right();
     else if(W.keyboard[W_C] == 1){
-        pacman_print_position();
-        ghosts_debug();
+        //pacman_print_position();
+        //ghosts_debug();
+        printf("%d\n", ghosts_use_global_pellet_counter);
     }
     ghosts_move();
     pacman_move();
@@ -69,6 +69,7 @@ void level_up(void){
     pacman_init();
     fruits_init();
     ghosts_init();
+    ghosts_use_global_pellet_counter = false;
 }
 
 void lose_life(void){
@@ -76,6 +77,7 @@ void lose_life(void){
     pacman_init();
     ghosts_init();
     new_life = pacman_increment_life(-1);
+    ghosts_use_global_pellet_counter = true;
     if(new_life == 0)
         W.game -> game_over = true;
 }

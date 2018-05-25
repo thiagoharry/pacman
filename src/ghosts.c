@@ -97,14 +97,16 @@ static int inky_target_x, inky_target_y;
 static int clyde_target_x, clyde_target_y;
 static bool initialized = false;
 static struct sound *eaten;
+static int global_pellet_counter = 0;
 int blinky_position_x, blinky_position_y;
 int pinky_position_x, pinky_position_y;
 int inky_position_x, inky_position_y;
 int clyde_position_x, clyde_position_y;
+bool ghosts_use_global_pellet_counter = false;
 struct interface *blinky, *pinky, *inky, *clyde;
 
 static void stuck_ghost(void){
-    if(pellet_counter < 0)
+    if(pellet_counter < 0 && !ghosts_use_global_pellet_counter)
         pellet_counter = W.game -> pellets_eaten;
 }
 
@@ -123,31 +125,55 @@ static void release_stuck_ghost(void){
     }
 }
 
+static bool is_pacman_too_much_time_without_eating(void){
+    if(W.game -> level == 1 &&
+       (W.t - when_was_last_pellet_eaten) > 4000000l)
+        return true;
+    else if(W.game -> level > 1 &&
+            (W.t - when_was_last_pellet_eaten) > 3000000l)
+        return true;
+    return false;
+}
+
 static void try_to_release_stuck_ghost(void){
-    if(is_stuck(pinky))
-        release_stuck_ghost();
-    else if(is_stuck(inky)){
-        if(W.game -> level > 1 ||
-           (W.game -> pellets_eaten - pellet_counter >= 30))
-            release_stuck_ghost();
-        else if(W.game -> level == 1 &&
-                (W.t - when_was_last_pellet_eaten) > 4000000l)
-            release_stuck_ghost();
-        else if(W.game -> level > 1 &&
-                (W.t - when_was_last_pellet_eaten) > 3000000l)
+    if(is_stuck(pinky)){
+        if(ghosts_use_global_pellet_counter){
+            if(W.game -> pellets_eaten - global_pellet_counter >= 7 ||
+               is_pacman_too_much_time_without_eating())
+                release_stuck_ghost();
+        }
+        else
             release_stuck_ghost();
     }
+    else if(is_stuck(inky)){
+        if(ghosts_use_global_pellet_counter){
+            if(W.game -> pellets_eaten - global_pellet_counter >= 17 ||
+               is_pacman_too_much_time_without_eating())
+                release_stuck_ghost();
+        }
+        else{
+            if(W.game -> level > 1 ||
+               (W.game -> pellets_eaten - pellet_counter >= 30) ||
+               is_pacman_too_much_time_without_eating())
+                release_stuck_ghost();
+        }
+    }
     else if(is_stuck(clyde)){
-        if(W.game -> level == 1 &&
-           (W.game -> pellets_eaten - pellet_counter >= 60 ||
-            (W.t - when_was_last_pellet_eaten) > 4000000l))
-            release_stuck_ghost();
-        else if(W.game -> level == 2 &&
-                (W.game -> pellets_eaten - pellet_counter >= 50 ||
-                 (W.t - when_was_last_pellet_eaten) > 3000000l))
-            release_stuck_ghost();
-        else if(W.game -> level > 2)
-            release_stuck_ghost();
+        if(ghosts_use_global_pellet_counter){
+            if(W.game -> pellets_eaten - global_pellet_counter >= 17 ||
+               is_pacman_too_much_time_without_eating())
+                release_stuck_ghost();
+        }
+        else{
+            if(is_pacman_too_much_time_without_eating() ||
+               (W.game -> level == 1 &&
+                W.game -> pellets_eaten - pellet_counter >= 60) ||
+               (W.game -> level == 2 &&
+                W.game -> pellets_eaten - pellet_counter >= 50)){
+                release_stuck_ghost();
+                ghosts_use_global_pellet_counter = false;
+            }
+        }
     }
 }
 
@@ -203,7 +229,9 @@ static void enter_mode(int new_mode){
     switch(mode){
     case SCATTER:
         // Blinky acts in scatter moe only if he isn't in Cruise Elroy baaviour
-        if(W.game -> pellets_eaten < cruise_elroy_activation[level][0]){
+        // or in the moments in the beginning of game
+        if(W.game -> pellets_eaten < cruise_elroy_activation[level][0] ||
+            ghosts_use_global_pellet_counter){
             blinky_target_x = 27;
             blinky_target_y = MAZE_HEIGHT + 2;
         }
@@ -277,6 +305,7 @@ void ghosts_init(void){
         W.cancel(ghosts_stop_frightned_mode);
         W.cancel(pacman_speed_down);
         W.cancel(ghosts_blink);
+        when_was_last_pellet_eaten = W.t;
     }
     stopped_ghost = NULL;
     ghost_normal(blinky);
@@ -432,7 +461,8 @@ static void choose_chase_target(void){
             clyde_target_y = 0;
         }
     }
-    else if(W.game -> pellets_eaten >= cruise_elroy_activation[level][0]){
+    else if(W.game -> pellets_eaten >= cruise_elroy_activation[level][0] &&
+            !ghosts_use_global_pellet_counter){
         // Cruise Elroy
         blinky_target_x = pacman_position_x;
         blinky_target_y = pacman_position_y;
@@ -585,10 +615,12 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
     else if(is_scared(ghost) || !is_alive(ghost))
         movement = default_speed[level][1] * BASE_SPEED; // Frightened
     else if(ghost == blinky &&
-            W.game -> pellets_eaten >= cruise_elroy_activation[level][1])
+            W.game -> pellets_eaten >= cruise_elroy_activation[level][1] &&
+            !ghosts_use_global_pellet_counter)
         movement = default_speed[level][5] * BASE_SPEED; // Cruise elroy 2
     else if(ghost == blinky &&
-            W.game -> pellets_eaten >= cruise_elroy_activation[level][0])
+            W.game -> pellets_eaten >= cruise_elroy_activation[level][0] &&
+            !ghosts_use_global_pellet_counter)
         movement = default_speed[level][4] * BASE_SPEED; // Cruise elroy 1
     else
         movement = default_speed[level][0] * BASE_SPEED; // Normal
@@ -780,8 +812,10 @@ void ghosts_stop_frightned_mode(void){
 void ghost_eat_or_get_eaten(struct interface *ghost){
     if(ghost -> r == 0.0)
         return;
-    if(ghost -> b < 0.2)
+    if(ghost -> b < 0.2){
         pacman_killed_by(ghost);
+        global_pellet_counter = W.game -> pellets_eaten;
+    }
     else{
         ghost_dead(ghost);
         W.play_sound(eaten);
