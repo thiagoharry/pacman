@@ -35,6 +35,7 @@ LOOP_INIT: // Code executed during loop initialization
     pacman_init();
     fruits_init();
     ghosts_init();
+    score_init();
 LOOP_BODY: // Code executed every loop iteration
     if(W.keyboard[W_ESC])
         Wexit_loop();

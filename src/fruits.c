@@ -145,4 +145,36 @@ bool fruits_are_visible(void){
 void fruits_get_eaten(void){
     fruits_disappear();
     W.play_sound(eat);
+    switch(W.game -> level){
+    case 1:
+        score_increment(100);
+        break;
+    case 2:
+        score_increment(300);
+        break;
+    case 3:
+    case 4:
+        score_increment(500);
+        break;
+    case 5:
+    case 6:
+        score_increment(700);
+        break;
+    case 7:
+    case 8:
+        score_increment(1000);
+        break;
+    case 9:
+    case 10:
+        score_increment(2000);
+        break;
+    case 11:
+    case 12:
+        score_increment(3000);
+        break;
+    default:
+        score_increment(5000);
+        break;
+    }
+
 }

@@ -98,6 +98,7 @@ static int clyde_target_x, clyde_target_y;
 static bool initialized = false;
 static struct sound *eaten;
 static int global_pellet_counter = 0;
+static int combo = 0;
 int blinky_position_x, blinky_position_y;
 int pinky_position_x, pinky_position_y;
 int inky_position_x, inky_position_y;
@@ -528,8 +529,11 @@ static void choose_direction(struct interface *ghost, int position_x,
     if(position_y == 7 && position_x > 12 && position_x < 18 &&
        ghost -> integer != DOWN)
         return;
-    // If ghosts are scared, they don't use the rational decision:
-    if(ghost -> b == 1.0 && ghost -> r == 1.0){
+    // If ghosts are scared, they don't use the rational
+    // decision. Also use this abount once every 256 times, which is
+    // about once per level, just to add some nondeterminism:
+    if((ghost -> b == 1.0 && ghost -> r == 1.0) ||
+       !(W.random() % 256)){
         int direction = W.random() % 4;
         if(distance[direction] != 5000.0)
             ghost -> integer = direction;
@@ -794,6 +798,7 @@ void ghosts_fright(void){
     }
     enter_mode(FRIGHTNED);
     pacman_speed_up();
+    combo = 0;
 }
 
 void ghosts_stop_frightned_mode(void){
@@ -819,5 +824,20 @@ void ghost_eat_or_get_eaten(struct interface *ghost){
     else{
         ghost_dead(ghost);
         W.play_sound(eaten);
+        switch(combo){
+        case 0:
+            score_increment(200);
+            break;
+        case 1:
+            score_increment(400);
+            break;
+        case 2:
+            score_increment(800);
+            break;
+        default:
+            score_increment(1600);
+            break;
+        }
+        combo ++;
     }
 }

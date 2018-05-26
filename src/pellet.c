@@ -109,6 +109,7 @@ int pellet_eat(int x, int y){
             else
                 pacman_slow_down(1.0 - 3.0 *(1.0 - slow_down[level][1]));
             W.play_sound(super_wakka);
+            score_increment(50);
             ghosts_fright();
         }
         else{
@@ -117,6 +118,7 @@ int pellet_eat(int x, int y){
                 pacman_slow_down(slow_down[level][0]);
             else
                 pacman_slow_down(slow_down[level][1]);
+            score_increment(10);
         }
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
             fruits_appear();
