@@ -58,7 +58,6 @@ void pacman_init(void){
     pacman -> integer = RIGHT;
     slow_down = 1.0;
     kill_sound = W.new_sound("ghost.wav");
-    W.play_music("music1.mp3", true);
     initialized = true;
 }
 

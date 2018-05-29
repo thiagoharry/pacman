@@ -20,6 +20,14 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "game.h"
 
 static struct interface *sky, *grass, *horizon;
+static struct sound *start_sound;
+
+static bool game_started = false;
+
+void begin_game(void){
+    game_started = true;
+    W.play_music("music2.mp3", true);
+}
 
 MAIN_LOOP main_loop(void){ // The game loop
 LOOP_INIT: // Code executed during loop initialization
@@ -30,37 +38,39 @@ LOOP_INIT: // Code executed during loop initialization
                             "grass.png");
     horizon = W.new_interface(3, W.width / 2, 653,
                               W.width, 10, "horizon.png");
+    start_sound = W.new_sound("start.wav");
     maze_init();
     pellet_init();
     pacman_init();
     fruits_init();
     ghosts_init();
     score_init();
+    //W.play_sound(start_sound);
+    W.play_music("music2.mp3", true);
+    game_started = false;
+    W.run_futurelly(begin_game, 4.0);
 LOOP_BODY: // Code executed every loop iteration
-    if(W.keyboard[W_ESC])
-        Wexit_loop();
-    else if(W.keyboard[W_UP])
-        pacman_turn_up();
-    else if(W.keyboard[W_DOWN])
-        pacman_turn_down();
-    else if(W.keyboard[W_LEFT])
-        pacman_turn_left();
-    else if(W.keyboard[W_RIGHT])
-        pacman_turn_right();
-    else if(W.keyboard[W_C] == 1){
-        //pacman_print_position();
-        //ghosts_debug();
-        printf("%d\n", ghosts_use_global_pellet_counter);
+    if(game_started){
+        if(W.keyboard[W_ESC])
+            Wexit_loop();
+        else if(W.keyboard[W_UP])
+            pacman_turn_up();
+        else if(W.keyboard[W_DOWN])
+            pacman_turn_down();
+        else if(W.keyboard[W_LEFT])
+            pacman_turn_left();
+        else if(W.keyboard[W_RIGHT])
+            pacman_turn_right();
+        ghosts_move();
+        pacman_move();
     }
-    ghosts_move();
-    pacman_move();
 
     pacman_transform();
     ghosts_transform();
     if(W.game -> game_over)
         Wexit_loop();
 LOOP_END: // Code executed at the end of the loop
-    W.stop_music("music1.mp3");
+    W.stop_music("music2.mp3");
     return;
 }
 
@@ -71,6 +81,10 @@ void level_up(void){
     fruits_init();
     ghosts_init();
     ghosts_use_global_pellet_counter = false;
+    W.pause_music("music2.mp3");
+    game_started = false;
+    W.play_sound(start_sound);
+    W.run_futurelly(begin_game, 4.0);
 }
 
 void lose_life(void){
