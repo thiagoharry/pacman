@@ -756,19 +756,19 @@ void(*delete_all)(void);
 
 bool(*play_music)(char*,bool);
 /*:750*//*754:*/
-#line 16741 "cweb/weaver.w"
+#line 16734 "cweb/weaver.w"
 
 bool(*pause_music)(char*);
 /*:754*//*760:*/
-#line 16846 "cweb/weaver.w"
+#line 16838 "cweb/weaver.w"
 
 bool(*stop_music)(char*);
 /*:760*//*764:*/
-#line 16877 "cweb/weaver.w"
+#line 16869 "cweb/weaver.w"
 
 float(*get_volume)(char*);
 /*:764*//*768:*/
-#line 16937 "cweb/weaver.w"
+#line 16929 "cweb/weaver.w"
 
 float(*increase_volume)(char*,float);
 /*:768*/

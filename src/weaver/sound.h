@@ -110,23 +110,23 @@ bool _play_music(char*,bool);
 
 bool _pause_music(char*);
 /*:752*//*756:*/
-#line 16751 "cweb/weaver.w"
+#line 16744 "cweb/weaver.w"
 
 bool _resume_music(char*);
 /*:756*//*758:*/
-#line 16796 "cweb/weaver.w"
+#line 16789 "cweb/weaver.w"
 
 bool _stop_music(char*);
 /*:758*//*762:*/
-#line 16855 "cweb/weaver.w"
+#line 16847 "cweb/weaver.w"
 
 float _get_volume(char*);
 /*:762*//*766:*/
-#line 16888 "cweb/weaver.w"
+#line 16880 "cweb/weaver.w"
 
 float _increase_volume(char*,float);
 /*:766*//*776:*/
-#line 17126 "cweb/weaver.w"
+#line 17118 "cweb/weaver.w"
 
 #if W_TARGET == W_ELF && !defined(W_DISABLE_MP3)
 void*_music_thread(void*);
