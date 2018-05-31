@@ -19,14 +19,23 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #include "game.h"
 
-static struct interface *sky, *grass, *horizon;
+static struct interface *sky, *grass, *horizon, *ready, *digit;
 static struct sound *start_sound;
+
 
 static bool game_started = false;
 
 void begin_game(void){
-    game_started = true;
-    W.play_music("music2.mp3", true);
+    digit -> integer --;
+    digit -> visible = true;
+    if(digit -> integer <= 0){
+        game_started = true;
+        ready -> visible = false;
+        digit -> visible = false;
+        W.play_music("music2.mp3", true);
+    }
+    else
+        W.run_futurelly(begin_game, 1.0);
 }
 
 MAIN_LOOP main_loop(void){ // The game loop
@@ -38,6 +47,13 @@ LOOP_INIT: // Code executed during loop initialization
                             "grass.png");
     horizon = W.new_interface(3, W.width / 2, 653,
                               W.width, 10, "horizon.png");
+    ready = W.new_interface(5, W.width / 2, W.height / 2 - 20,
+                            91, 30, "ready.png");
+    digit = W.new_interface(9, W.width / 2, W.height / 2 - 27,
+                            15, 15, "digits.png");
+    sky -> visible = false;
+    digit -> visible = false;
+    digit -> integer = 4;
     start_sound = W.new_sound("start.wav");
     maze_init();
     pellet_init();
@@ -48,7 +64,7 @@ LOOP_INIT: // Code executed during loop initialization
     //W.play_sound(start_sound);
     W.play_music("music2.mp3", true);
     game_started = false;
-    W.run_futurelly(begin_game, 4.0);
+    W.run_futurelly(begin_game, 1.0);
 LOOP_BODY: // Code executed every loop iteration
     if(game_started){
         if(W.keyboard[W_ESC])
@@ -84,7 +100,10 @@ void level_up(void){
     W.pause_music("music2.mp3");
     game_started = false;
     W.play_sound(start_sound);
-    W.run_futurelly(begin_game, 4.0);
+    ready -> visible = true;
+    digit -> visible = false;
+    digit -> integer = 4;
+    W.run_futurelly(begin_game, 1.0);
 }
 
 void lose_life(void){
@@ -97,6 +116,8 @@ void lose_life(void){
         W.game -> game_over = true;
         score_save();
     }
+    else
+        W.play_music("music2.mp3", true);
 }
 
 int main(void){

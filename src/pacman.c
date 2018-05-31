@@ -356,7 +356,7 @@ void pacman_killed_by(struct interface *ghost){
         pacman -> integer = DEAD;
         killer = ghost;
         pacman -> animate = false;
-        W.stop_music("music1.mp3");
+        W.pause_music("music2.mp3");
         W.play_sound(kill_sound);
         ghost_slow_down(ghost);
         W.run_futurelly(lose_life, 3.0);

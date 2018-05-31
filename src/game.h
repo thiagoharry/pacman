@@ -40,5 +40,6 @@ MAIN_LOOP main_loop(void);
 void game_init(void);
 void level_up(void);
 void lose_life(void);
+void begin_game(void);
 
 #endif
