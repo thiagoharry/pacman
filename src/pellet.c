@@ -62,12 +62,18 @@ static float slow_down[21][2] = {
     {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87}, {0.87, 0.87},
     {0.79, 0.79}};
 
+static int power_pellets_eaten;
+static bool activate_pellet_achievement;
+
 long when_was_last_pellet_eaten;
+
 
 void pellet_init(void){
   int i, j;
   when_was_last_pellet_eaten = W.t;
   W.game -> pellets_eaten = 0;
+  power_pellets_eaten = 0;
+  activate_pellet_achievement = false;
   if(initialized){
       for(i = 0; i < MAZE_HEIGHT; i ++)
           for(j = 0; j < MAZE_WIDTH; j ++)
@@ -111,6 +117,7 @@ int pellet_eat(int x, int y){
             W.play_sound(super_wakka);
             score_increment(50);
             ghosts_fright();
+            power_pellets_eaten ++;
         }
         else{
             W.play_sound(wakka);
@@ -119,11 +126,19 @@ int pellet_eat(int x, int y){
             else
                 pacman_slow_down(slow_down[level][1]);
             score_increment(10);
+            if(W.game -> pellets_eaten == 240 && power_pellets_eaten == 0)
+                activate_pellet_achievement = true;
         }
         if(W.game -> pellets_eaten == 70 || W.game -> pellets_eaten == 170)
             fruits_appear();
-        else if(W.game -> pellets_eaten >= 244)
+        else if(W.game -> pellets_eaten >= 244){
+            if(activate_pellet_achievement &&
+               !achievement_has(ACHIEVEMENT_PELLET)){
+                achievement_new(ACHIEVEMENT_PELLET);
+                pacman_show_achievement();
+            }
             level_up();
+        }
     }
     return value;
 }

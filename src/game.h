@@ -34,6 +34,8 @@ struct _game_struct{
     int level;
     bool game_over;
     int stored_high_score;
+    int ghosts_eaten_this_stage;
+    int fruits_eaten_this_stage;
 } _game;
 
 MAIN_LOOP main_loop(void);

@@ -17,17 +17,30 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _achievement_h_
+#define _achievement_h_
 
 #include "weaver/weaver.h"
-#include "game.h"
-#include "pellet.h"
-#include "maze.h"
-#include "pacman.h"
-#include "resolution.h"
-#include "fruits.h"
-#include "ghosts.h"
-#include "perspective.h"
-#include "score.h"
-#include "achievement.h"
-#include "intro.h"
-#include "intro.h"
+#include "includes.h"
+
+#define ACHIEVEMENT_CHERRY     0
+#define ACHIEVEMENT_STRAWBERRY 1
+#define ACHIEVEMENT_PEACH      2
+#define ACHIEVEMENT_APPLE      3
+#define ACHIEVEMENT_GRAPE      4
+#define ACHIEVEMENT_SHIP       5
+#define ACHIEVEMENT_BELL       6
+#define ACHIEVEMENT_KEY        7
+#define ACHIEVEMENT_GHOST      8
+#define ACHIEVEMENT_PICKY      9
+#define ACHIEVEMENT_PELLET    10
+#define ACHIEVEMENT_TIME      11
+
+void achievement_init(void);
+void achievement_show(void);
+void achievement_hide(void);
+void achievement_save(void);
+void achievement_new(int);
+bool achievement_has(int);
+
+#endif

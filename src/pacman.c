@@ -25,7 +25,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 #define is_dead(P) (P -> integer == DEAD)
 
-struct interface *pacman, *pacman_life;
+struct interface *pacman, *pacman_life, *achievement;
 static struct interface *killer = NULL;
 struct sound *kill_sound;
 static float offset_x, offset_y;
@@ -50,8 +50,10 @@ void pacman_init(void){
     if(!initialized){
         pacman = W.new_interface(6, 100, 100, PACMAN_SIZE,
                                  PACMAN_SIZE, "pacman.gif");
-        pacman_life = W. new_interface(8, 100, 20, 200, 40, "pacman_life.png");
+        pacman_life = W.new_interface(8, 100, 20, 200, 40, "pacman_life.png");
         pacman_life -> integer = 5;
+        achievement = W.new_interface(10, 100, 20, 70, 66, "achievement_unlock.png");
+        achievement -> visible = false;
     }
     pacman -> animate = false;
     pacman -> current_frame = 2;
@@ -349,6 +351,8 @@ void pacman_print_position(void){
 
 void pacman_transform(void){
     perspective_transform(pacman, pacman_position_x, pacman_position_y, offset_x, offset_y, PACMAN_SIZE);
+    if(achievement -> visible)
+        W.move_interface(achievement, pacman -> x, pacman -> y + 50);
 }
 
 void pacman_killed_by(struct interface *ghost){
@@ -383,4 +387,12 @@ bool pacman_collision(int x, int y, float object_offset_x,
 
 int pacman_increment_life(int increment){
     return(pacman_life -> integer += increment);
+}
+
+void pacman_show_achievement(void){
+    achievement -> visible = true;
+    W.run_futurelly(pacman_hide_achievement, 2.0);
+}
+void pacman_hide_achievement(void){
+    achievement -> visible = false;
 }

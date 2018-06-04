@@ -29,11 +29,12 @@ static struct interface *apple;
 // Credit: https://commons.wikimedia.org/wiki/File:Grape_icon.png, OTRS
 static struct interface *grape;
 static struct interface *galaxian;
-// Credit: https://pixabay.com/en/musical-instrument-flute-trumpet-1595358/
-// Credit: https://pixabay.com/en/instrument-music-played-hobby-2505099/
+// https://commons.wikimedia.org/wiki/File:Nuvola_apps_bell.svg
 static struct interface *instruments;
 // Credit: https://pixabay.com/en/key-metal-plain-307753/
 static struct interface *key;
+
+// https://pixabay.com/en/book-open-book-an-empty-book-notes-1129923/
 
 static bool initialized = false;
 static struct sound *eat;
@@ -43,6 +44,7 @@ static struct sound *eat;
 void fruits_init(void){
     int x_pos = (maze_space[13][14].x + maze_space[13][15].x) / 2;
     int y_pos = maze_space[13][14].y;
+    W.game -> fruits_eaten_this_stage = 0;
     if(initialized){
         fruits_disappear();
         W.cancel(fruits_disappear);
@@ -145,35 +147,68 @@ bool fruits_are_visible(void){
 void fruits_get_eaten(void){
     fruits_disappear();
     W.play_sound(eat);
+    W.game -> fruits_eaten_this_stage ++;
     switch(W.game -> level){
     case 1:
         score_increment(100);
+        if(!achievement_has(ACHIEVEMENT_CHERRY)){
+            achievement_new(ACHIEVEMENT_CHERRY);
+            pacman_show_achievement();
+        }
         break;
     case 2:
         score_increment(300);
+        if(!achievement_has(ACHIEVEMENT_STRAWBERRY)){
+            achievement_new(ACHIEVEMENT_STRAWBERRY);
+            pacman_show_achievement();
+        }
         break;
     case 3:
     case 4:
         score_increment(500);
+        if(!achievement_has(ACHIEVEMENT_PEACH)){
+            achievement_new(ACHIEVEMENT_PEACH);
+            pacman_show_achievement();
+        }
         break;
     case 5:
     case 6:
         score_increment(700);
+        if(!achievement_has(ACHIEVEMENT_APPLE)){
+            achievement_new(ACHIEVEMENT_APPLE);
+            pacman_show_achievement();
+        }
         break;
     case 7:
     case 8:
         score_increment(1000);
+        if(!achievement_has(ACHIEVEMENT_GRAPE)){
+            achievement_new(ACHIEVEMENT_GRAPE);
+            pacman_show_achievement();
+        }
         break;
     case 9:
     case 10:
         score_increment(2000);
+        if(!achievement_has(ACHIEVEMENT_SHIP)){
+            achievement_new(ACHIEVEMENT_SHIP);
+            pacman_show_achievement();
+        }
         break;
     case 11:
     case 12:
         score_increment(3000);
+        if(!achievement_has(ACHIEVEMENT_BELL)){
+            achievement_new(ACHIEVEMENT_BELL);
+            pacman_show_achievement();
+        }
         break;
     default:
         score_increment(5000);
+        if(!achievement_has(ACHIEVEMENT_KEY)){
+            achievement_new(ACHIEVEMENT_KEY);
+            pacman_show_achievement();
+        }
         break;
     }
 

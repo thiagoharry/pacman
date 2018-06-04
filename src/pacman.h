@@ -47,5 +47,7 @@ void pacman_speed_up(void);
 void pacman_speed_down(void);
 bool pacman_collision(int, int, float, float);
 int pacman_increment_life(int);
+void pacman_show_achievement(void);
+void pacman_hide_achievement(void);
 
 #endif

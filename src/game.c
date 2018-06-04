@@ -21,9 +21,14 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 
 static struct interface *sky, *grass, *horizon, *ready, *digit;
 static struct sound *start_sound;
-
-
 static bool game_started = false;
+
+void clock_achievement(void){
+    if(!achievement_has(ACHIEVEMENT_TIME)){
+        achievement_new(ACHIEVEMENT_TIME);
+        pacman_show_achievement();
+    }
+}
 
 void begin_game(void){
     digit -> integer --;
@@ -32,7 +37,10 @@ void begin_game(void){
         game_started = true;
         ready -> visible = false;
         digit -> visible = false;
-        W.play_music("music2.mp3", true);
+        if(W.game -> level > 1)
+            W.play_music("music2.mp3", true);
+        ghosts_init();
+        W.run_futurelly(clock_achievement, 180.0);
     }
     else
         W.run_futurelly(begin_game, 1.0);
@@ -61,7 +69,6 @@ LOOP_INIT: // Code executed during loop initialization
     fruits_init();
     ghosts_init();
     score_init();
-    //W.play_sound(start_sound);
     W.play_music("music2.mp3", true);
     game_started = false;
     W.run_futurelly(begin_game, 1.0);
@@ -91,7 +98,15 @@ LOOP_END: // Code executed at the end of the loop
 }
 
 void level_up(void){
+    W.cancel(clock_achievement);
     W.game -> level ++;
+    if(W.game -> ghosts_eaten_this_stage == 0 &&
+       W.game -> fruits_eaten_this_stage == 2){
+        if(!achievement_has(ACHIEVEMENT_PICKY)){
+            achievement_new(ACHIEVEMENT_PICKY);
+            pacman_show_achievement();
+        }
+    }
     pellet_init();
     pacman_init();
     fruits_init();
@@ -99,15 +114,16 @@ void level_up(void){
     ghosts_use_global_pellet_counter = false;
     W.pause_music("music2.mp3");
     game_started = false;
-    W.play_sound(start_sound);
     ready -> visible = true;
     digit -> visible = false;
     digit -> integer = 4;
     W.run_futurelly(begin_game, 1.0);
+    W.play_sound(start_sound);
 }
 
 void lose_life(void){
     int new_life;
+    W.cancel(clock_achievement);
     pacman_init();
     ghosts_init();
     new_life = pacman_increment_life(-1);
@@ -115,6 +131,8 @@ void lose_life(void){
     if(new_life == 0){
         W.game -> game_over = true;
         score_save();
+        achievement_save();
+        Wloop(intro);
     }
     else
         W.play_music("music2.mp3", true);
@@ -124,7 +142,7 @@ int main(void){
   Winit(); // Initializes Weaver
   resolution_init();
   game_init();
-  Wloop(main_loop); // Enter a new game loop
+  Wloop(intro); // Enter a new game loop
   return 0;
 }
 

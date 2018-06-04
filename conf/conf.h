@@ -59,4 +59,5 @@
 /* Various Limits */
 #define W_MAX_SUBLOOP 2 // Max number of subloops
 #define W_MAX_SCHEDULING       6// Max periodic functions in a loop
-#define W_MAX_INTERFACES       289 // Max number of interface elements
+#define W_MAX_INTERFACES       302 // Max number of interface elements
+#define W_MAX_MUSIC            2

@@ -337,6 +337,7 @@ void ghosts_init(void){
     enter_mode(SCATTER);
     stuck_ghost();
     W.run_futurelly(mode_change, mode_duration[level][mode_count]);
+    W.game -> ghosts_eaten_this_stage = 0;
     initialized = true;
 }
 
@@ -690,6 +691,13 @@ static void ghosts_full_move(struct interface *ghost, int *position_x,
             stuck_ghost();
         return;
     }
+    // Special case 4: Prevent being stuck in ghost pen:
+    else if(is_alive(ghost) && *position_y == 16 && *position_x == 12 &&
+            *offset_y == 0.0){
+        ghost_normal(ghost);
+        ghost -> integer = RIGHT;
+        //return;
+    }
     // Move to next tile
     else if(*offset_x <= EPSILON && *offset_y <= EPSILON){
         if(is_in_decision_point(*position_x, *position_y))
@@ -824,6 +832,7 @@ void ghost_eat_or_get_eaten(struct interface *ghost){
     else{
         ghost_dead(ghost);
         W.play_sound(eaten);
+        W.game -> ghosts_eaten_this_stage ++;
         switch(combo){
         case 0:
             score_increment(200);
@@ -836,6 +845,10 @@ void ghost_eat_or_get_eaten(struct interface *ghost){
             break;
         default:
             score_increment(1600);
+            if(!achievement_has(ACHIEVEMENT_GHOST)){
+                achievement_new(ACHIEVEMENT_GHOST);
+                pacman_show_achievement();
+            }
             break;
         }
         combo ++;
