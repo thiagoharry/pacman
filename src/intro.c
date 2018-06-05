@@ -20,9 +20,27 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "intro.h"
 
 static struct interface *image, *sky, *play, *achievements, *credits;
-static struct interface *cursor, *title;
+static struct interface *cursor, *title, *credit_names;
 static int option = 0;
 static bool visible_achievement = false;
+static bool visible_credits = false;
+
+static int performance_measure_iterations;
+static int performance;
+
+static void measure_performance(void){
+    if(performance_measure_iterations < 1000){
+        performance += W.dt;
+        performance_measure_iterations ++;
+    }
+}
+
+static void check_performance(void){
+    float result = (float) performance / (float) performance_measure_iterations;
+    printf("%f\n", result);
+    if(result >= 45000.0)
+        W.game -> slow_computer  = true;
+}
 
 MAIN_LOOP intro(void){
  LOOP_INIT:
@@ -38,32 +56,72 @@ MAIN_LOOP intro(void){
                            150, 32, "menu_achievements.png");
     credits = W.new_interface(5, W.width / 2, 0.3 * W.height - 80,
                                    102, 26, "menu_credits.png");
+    credit_names = W.new_interface(5, W.width / 2, -520,
+                              744, 1053, "credits.png");
+    credit_names -> visible = false;
     cursor = W.new_interface(W_INTERFACE_PERIMETER, W.width / 2, 0.3 * W.height,
                              152, 34, 1.0, 1.0, 1.0, 1.0);
     achievement_init();
+    performance_measure_iterations = 0;
+    performance = 0;
+    W.game -> slow_computer = false;
 LOOP_BODY:
     if(visible_achievement){
-        if(W.keyboard[W_ESC])
-            Wexit_loop();
-        else if(W.keyboard[W_ENTER] == 1 ||
+        if(W.keyboard[W_ENTER] == 1 ||
                 (W.keyboard[W_ENTER] == 0 && W.keyboard[W_ANY] == 1)){
             achievement_hide();
             visible_achievement = false;
             sky -> visible = true;
             image -> visible = true;
+            title -> visible = true;
+        }
+    }
+    else if(visible_credits){
+        if(W.keyboard[W_ENTER] == 1 ||
+                (W.keyboard[W_ENTER] == 0 && W.keyboard[W_ANY] == 1) ||
+            credit_names -> y >= W.height + 520){
+            credit_names -> visible = false;
+            visible_credits = false;
+            sky -> visible = true;
+            image -> visible = true;
+            sky -> visible = true;
+            play -> visible = true;
+            achievements -> visible = true;
+            credits -> visible = true;
+            cursor -> visible = true;
+            title -> visible = true;
+            W.move_interface(credit_names, credit_names -> x, - 520);
+        }
+        else{
+            W.move_interface(credit_names, credit_names -> x,
+                             credit_names -> y + 5);
         }
     }
     else{
         if(W.keyboard[W_ESC])
             Wexit_loop();
         else if(W.keyboard[W_ENTER] == 1){
-            if(option == 0)
+            if(option == 0){
+                check_performance();
                 Wloop(main_loop);
+            }
             else if(option == 1){
                 visible_achievement = true;
                 sky -> visible = false;
                 image -> visible = false;
                 achievement_show();
+            }
+            else if(option == 2){
+                visible_credits = true;
+                credit_names -> visible = true;
+                sky -> visible = false;
+                image -> visible = false;
+                sky -> visible = false;
+                play -> visible = false;
+                achievements -> visible = false;
+                credits -> visible = false;
+                cursor -> visible = false;
+                title -> visible = false;
             }
         }
         else if(W.keyboard[W_UP] == 1 && option > 0){
@@ -74,6 +132,7 @@ LOOP_BODY:
             option ++;
             W.move_interface(cursor, cursor -> x, cursor -> y - 40);
         }
+        measure_performance();
     }
 LOOP_END:
   return;

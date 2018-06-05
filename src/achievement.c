@@ -67,9 +67,13 @@ void achievement_init(void){
                                       102, 102, "achievement_clock.png");
     for(i = 0; i < 12; i ++)
         achievements[i] -> visible = false;
-    if(!W.read_string("achievements", list_of_achievements, 12))
-        for(i = 0; i < 12; i ++)
+    if(!W.read_string("achievements", W.game -> stored_achievement, 12))
+        for(i = 0; i < 12; i ++){
             list_of_achievements[i] = 'n';
+            W.game -> stored_achievement[i] = '\n';
+        }
+    else
+        strncpy(list_of_achievements, W.game -> stored_achievement, 12);
 }
 
 void achievement_show(void){
@@ -89,7 +93,10 @@ void achievement_hide(void){
 }
 
 void achievement_save(void){
-    W.write_string("achievements", list_of_achievements);
+    if(strncmp(list_of_achievements, W.game -> stored_achievement, 12)){
+        W.write_string("achievements", list_of_achievements);
+        strncpy(W.game -> stored_achievement, list_of_achievements, 12);
+    }
 }
 
 void achievement_new(int ach){

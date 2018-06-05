@@ -59,7 +59,8 @@ LOOP_INIT: // Code executed during loop initialization
                             91, 30, "ready.png");
     digit = W.new_interface(9, W.width / 2, W.height / 2 - 27,
                             15, 15, "digits.png");
-    sky -> visible = false;
+    if(W.game -> slow_computer)
+        sky -> visible = false;
     digit -> visible = false;
     digit -> integer = 4;
     start_sound = W.new_sound("start.wav");
@@ -111,6 +112,7 @@ void level_up(void){
     pacman_init();
     fruits_init();
     ghosts_init();
+    achievement_save();
     ghosts_use_global_pellet_counter = false;
     W.pause_music("music2.mp3");
     game_started = false;
@@ -126,16 +128,18 @@ void lose_life(void){
     W.cancel(clock_achievement);
     pacman_init();
     ghosts_init();
+    achievement_save();
     new_life = pacman_increment_life(-1);
     ghosts_use_global_pellet_counter = true;
     if(new_life == 0){
         W.game -> game_over = true;
         score_save();
-        achievement_save();
         Wloop(intro);
     }
-    else
+    else{
         W.play_music("music2.mp3", true);
+        W.run_futurelly(clock_achievement, 180.0);
+    }
 }
 
 int main(void){

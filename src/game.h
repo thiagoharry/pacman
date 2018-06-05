@@ -33,7 +33,9 @@ struct _game_struct{
     int pellets_eaten;
     int level;
     bool game_over;
+    bool slow_computer;
     int stored_high_score;
+    char stored_achievement[12];
     int ghosts_eaten_this_stage;
     int fruits_eaten_this_stage;
 } _game;

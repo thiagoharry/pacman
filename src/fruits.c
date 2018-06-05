@@ -20,21 +20,13 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "fruits.h"
 
 static struct interface *cherry;
-// Credit: Felikin100 (https://pixabay.com/en/users/Felikin100-3374205), CC0
 static struct interface *strawberry;
-// Credit: https://pixabay.com/en/users/Clker-Free-Vector-Images-3736/, CC0
 static struct interface *peach;
-// Credit: https://pixabay.com/en/users/OpenClipart-Vectors-30363/, CC0
 static struct interface *apple;
-// Credit: https://commons.wikimedia.org/wiki/File:Grape_icon.png, OTRS
 static struct interface *grape;
 static struct interface *galaxian;
-// https://commons.wikimedia.org/wiki/File:Nuvola_apps_bell.svg
 static struct interface *instruments;
-// Credit: https://pixabay.com/en/key-metal-plain-307753/
 static struct interface *key;
-
-// https://pixabay.com/en/book-open-book-an-empty-book-notes-1129923/
 
 static bool initialized = false;
 static struct sound *eat;
