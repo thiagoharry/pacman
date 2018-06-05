@@ -6,6 +6,8 @@ TARGET_TEST=$(shell grep "\#define[ \t]\+W_TARGET[ \t]\+W_" conf/conf.h | grep -
 INSTALL_DATA_DIR=$(shell grep "\#define[ \t]\+W_INSTALL_DATA[ \t]\+" conf/conf.h | grep -o "\".*\"")
 INSTALL_PROG_DIR=$(shell grep "\#define[ \t]\+W_INSTALL_PROG[ \t]\+" conf/conf.h | grep -o "\".*\"")
 DEBUG_LEVEL=$(shell grep "\#define[ \t]\+W_DEBUG_LEVEL[ \t]\+" conf/conf.h | grep -o "[0-9]\+")
+DONT_USE_PNG=$(shell grep "^\#define[ \t]\+W_DISABLE_PNG" conf/conf.h)
+DONT_USE_MP3=$(shell grep "^\#define[ \t]\+W_DISABLE_MP3" conf/conf.h)
 
 ifeq ($(INSTALL_DATA_DIR),)
 INSTALL_DATA_DIR := "/usr/share/games/"$(PROG)
@@ -14,10 +16,21 @@ ifeq ($(INSTALL_PROG_DIR),)
 INSTALL_PROG_DIR := "/usr/games/"
 endif
 
+ifeq ($(DONT_USE_MP3),)
+TEST_MP3=test_mp3
+else
+TEST_MP3=
+endif
+ifeq ($(DONT_USE_PNG),)
+TEST_PNG=test_png
+else
+TEST_PNG=
+endif
+
 ifeq ($(strip $(TARGET_TEST)),W_WEB)
 web: test_emcc test_xxd shader_data make-web
 else ifeq ($(strip $(TARGET_TEST)),W_ELF)
-prog: test_cc test_xlib test_xrandr test_opengl test_openal test_xxd shader_data make-prog
+prog: test_cc test_xlib test_xrandr test_opengl test_openal test_xxd ${TEST_PNG} ${TEST_MP3} shader_data make-prog
 else
 err:
 	$(error Invalid W_TARGET in conf/conf.h)
@@ -64,6 +77,8 @@ test_openal: .weaver/have_openal
 test_opengl: .weaver/have_opengl
 test_xrandr: .weaver/have_xrandr
 test_xlib: .weaver/have_xlib
+test_png: .weaver/have_png
+test_mp3: .weaver/have_mp3
 test_cc: .weaver/have_cc
 .weaver/have_xxd:
 	@echo -n "Testing XXD.................."
@@ -146,6 +161,36 @@ test_cc: .weaver/have_cc
 	touch .error;\
 	echo "ERROR: Install OpenAL library and headers to run this command.";\
 	fi
+.weaver/have_png:
+	@echo -n "Testing PNG.................."
+	@echo "#include <png.h>" > .weaver/dummy.c
+	@echo "int main(void){ return 1; }" >> .weaver/dummy.c
+	@(gcc .weaver/dummy.c -o .weaver/a.out -lpng &> /dev/null && \
+	touch .weaver/have_png) || \
+	(clang .weaver/dummy.c -o .weaver/a.out -lpng &> /dev/null && \
+	touch .weaver/have_png) ||true
+	@if [ -e .weaver/have_png ]; then \
+	echo "OK";  \
+	else /bin/echo -e "\033[31mFAILED\033[m";\
+	touch .error;\
+	echo "ERROR: Install PNG library and headers to run this command.";\
+	echo "       Or disable PNG support adding W_DISABLE_PNG in conf/conf.h.";\
+	fi
+.weaver/have_mp3:
+	@echo -n "Testing MPG123..............."
+	@echo "#include <mpg123.h>" > .weaver/dummy.c
+	@echo "int main(void){ return 1; }" >> .weaver/dummy.c
+	@(gcc .weaver/dummy.c -o .weaver/a.out -lmpg123 &> /dev/null && \
+	touch .weaver/have_mp3) || \
+	(clang .weaver/dummy.c -o .weaver/a.out -lmpg123 &> /dev/null && \
+	touch .weaver/have_mp3) ||true
+	@if [ -e .weaver/have_mp3 ]; then \
+	echo "OK";  \
+	else /bin/echo -e "\033[31mFAILED\033[m";\
+	touch .error;\
+	echo "ERROR: Install MPG123 library and headers to run this command.";\
+	echo "       Or disable MP3 support adding W_DISABLE_MP3 in conf/conf.h.";\
+	fi
 test_emcc: .weaver/have_emcc
 .weaver/have_emcc:
 	@echo -n "Testing EMCC................."
@@ -162,6 +207,7 @@ install:
 	cp -r shaders/ ${INSTALL_DATA_DIR}/
 	cp -r sound/ ${INSTALL_DATA_DIR}/
 	cp -r image/ ${INSTALL_DATA_DIR}/
+	cp -r music/ ${INSTALL_DATA_DIR}/
 	chmod 755 ${INSTALL_DATA_DIR}/*
 	chmod 755 ${INSTALL_DATA_DIR}/shaders/*
 	install -d ${INSTALL_PROG_DIR}

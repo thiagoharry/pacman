@@ -37,7 +37,6 @@ static void measure_performance(void){
 
 static void check_performance(void){
     float result = (float) performance / (float) performance_measure_iterations;
-    printf("%f\n", result);
     if(result >= 45000.0)
         W.game -> slow_computer  = true;
 }
@@ -47,7 +46,7 @@ MAIN_LOOP intro(void){
     image = W.new_interface(5, W.width / 2, 0.5 * W.height + 127,
                             720, 460, "intro.png");
     sky = W.new_interface(1, W.width / 2, 0.5 * W.height + 324,
-                          702, W.height - 648, NULL);
+                          702, W.height - 556, NULL);
     title = W.new_interface(5, W.width / 2, 0.5 * W.height + 278,
                             222, 36, "title.png");
     play = W.new_interface(5, W.width / 2, 0.3 * W.height,

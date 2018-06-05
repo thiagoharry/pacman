@@ -10,24 +10,24 @@
 // 1: Info about non-fatal errors will be printed
 // 2: General warnings will be printed
 // Before installing and distributing this game, set the macro to 0
-#define W_DEBUG_LEVEL 2
+#define W_DEBUG_LEVEL 0
 
 // This macro determines if we are building a native program (W_ELF) or
 // a web program to be run in a browser (W_WEB). In the first case,
 // running "make" creates an executable with the project name. In the
 // second, creates a "web" directory with a web application
-#define W_TARGET W_ELF
+#define W_TARGET W_WEB
 
 // This macro determines if we are writting a C program (W_C) or a C++
 // program (W_CPP):
 #define W_SOURCE W_C
 
 // The maximum ammount of memory for the game
-#define W_MAX_MEMORY 100000000
-#define W_INTERNAL_MEMORY 128000
+#define W_MAX_MEMORY 10000000
+#define W_INTERNAL_MEMORY 200000
 // When compiling for the web, we usually need aditional memory. So we
 // sum the memory above with the value below:
-#define W_WEB_MEMORY 20971520
+#define W_WEB_MEMORY 100971520
 
 // If you wont use multiple threads, you can comment this:
 //#define W_MULTITHREAD
@@ -38,26 +38,8 @@
 // time we read and parse a file with audio, font or texture
 #define W_THREAD_POOL 0
 
-// The maximum number of Weaver classes that can be defined:
-#define W_MAX_CLASSES   100
-
-// Maximum number of instances for each Weaver Object:
-#define W_MAX_INSTANCES 100
-
-// How the objects are projected in the screen. The options are
-// W_PERSPECTIVE and W_ORTHOGONAL
-#define W_PROJECTION W_PERSPECTIVE
-// Minimal distance captured by our camera. Shouldn't be 0 when using
-// a perspective projection:
-#define W_NEAR_PLANE      0.3
-// Maximal distance captured by our camera:
-#define W_FAR_PLANE    1000.0
-// How big are the camera lens (usually an orthogonal projection needs
-// bigger lens):
-#define W_CAMERA_SIZE     0.3
-
 /* Various Limits */
 #define W_MAX_SUBLOOP 2 // Max number of subloops
-#define W_MAX_SCHEDULING       6// Max periodic functions in a loop
-#define W_MAX_INTERFACES       302 // Max number of interface elements
+#define W_MAX_SCHEDULING       7// Max periodic functions in a loop
+#define W_MAX_INTERFACES       290 // Max number of interface elements
 #define W_MAX_MUSIC            2
