@@ -106,6 +106,14 @@ int clyde_position_x, clyde_position_y;
 bool ghosts_use_global_pellet_counter = false;
 struct interface *blinky, *pinky, *inky, *clyde;
 
+static bool in_ghost_pen(int x, int y){
+  if(y > 18 || y < 16)
+    return false;
+  if(x < 12 || x > 16)
+    return false;
+  return true;
+}
+
 static void stuck_ghost(void){
     if(pellet_counter < 0 && !ghosts_use_global_pellet_counter)
         pellet_counter = W.game -> pellets_eaten;
@@ -159,7 +167,7 @@ static void try_to_release_stuck_ghost(void){
                 release_stuck_ghost();
         }
     }
-    else if(is_stuck(clyde)){
+    else if(is_stuck(clyde) && !in_ghost_pen(inky_position_x, inky_position_y)){
         if(ghosts_use_global_pellet_counter){
             if(W.game -> pellets_eaten - global_pellet_counter >= 17 ||
                is_pacman_too_much_time_without_eating())
