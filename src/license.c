@@ -17,16 +17,23 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _pellet_h_
-#define _pellet_h_
+#include "license.h"
 
-#include "weaver/weaver.h"
-#include "includes.h"
+static struct interface *image;
+static bool end = false;
 
-extern long when_was_last_pellet_eaten;
+void end_license(void){
+    end = true;
+}
 
-void pellet_init(void);
-int pellet_eat(int x, int y);
-void pellet_end(void);
-
-#endif
+MAIN_LOOP license(void){
+ LOOP_INIT:
+    image  = W.new_interface(W_INTERFACE_IMAGE, W.width / 2, W.height / 2,
+                             488, 191, "license.png");
+    W.run_futurelly(end_license, 4.0);
+ LOOP_BODY:
+    if(end)
+        Wloop(intro);
+ LOOP_END:
+  return;
+}

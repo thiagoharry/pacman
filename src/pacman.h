@@ -34,6 +34,7 @@ extern struct interface *pacman;
 extern bool fast;
 
 void pacman_init(void);
+void pacman_end(void);
 void pacman_transform(void);
 void pacman_turn_left(void);
 void pacman_turn_right(void);

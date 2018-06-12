@@ -862,3 +862,7 @@ void ghost_eat_or_get_eaten(struct interface *ghost){
         combo ++;
     }
 }
+
+void ghosts_end(void){
+    initialized = false;
+}

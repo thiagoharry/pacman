@@ -24,6 +24,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "includes.h"
 
 void fruits_init(void);
+void fruits_end(void);
 void fruits_appear(void);
 void fruits_disappear(void);
 void fruits_get_eaten(void);

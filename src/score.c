@@ -177,3 +177,8 @@ void score_save(void){
         W.game -> stored_high_score = high_score;
     }
 }
+
+void score_end(void){
+    score_save();
+    initialized = false;
+}

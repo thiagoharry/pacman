@@ -17,29 +17,14 @@ You should have received a copy of the GNU Affero General Public License
 along with pacman. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ghosts_h_
-#define _ghosts_h_
-
+#ifndef _license_h_
+#define _license_h_
 #include "weaver/weaver.h"
+
 #include "includes.h"
 
-extern int blinky_position_x, blinky_position_y;
-extern int pinky_position_x, pinky_position_y;
-extern int inky_position_x, inky_position_y;
-extern int clyde_position_x, clyde_position_y;
-extern bool ghosts_use_global_pellet_counter;
-extern struct interface *blinky, *pinky, *inky, *clyde;
+MAIN_LOOP license(void);
 
-void ghosts_init(void);
-void ghosts_end(void);
-void ghosts_transform(void);
-void ghosts_move(void);
-void ghost_carry_pacman(struct interface *, int *, int *, float *, float *);
-void ghosts_debug(void);
-void ghost_slow_down(struct interface *);
-void ghosts_fright(void);
-void ghosts_stop_frightned_mode(void);
-void ghost_eat_or_get_eaten(struct interface *);
-
+void end_license(void);
 
 #endif

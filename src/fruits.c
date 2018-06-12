@@ -205,3 +205,7 @@ void fruits_get_eaten(void){
     }
 
 }
+
+void fruits_end(void){
+    initialized = false;
+}

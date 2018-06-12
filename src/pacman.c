@@ -393,6 +393,11 @@ void pacman_show_achievement(void){
     achievement -> visible = true;
     W.run_futurelly(pacman_hide_achievement, 2.0);
 }
+
 void pacman_hide_achievement(void){
     achievement -> visible = false;
+}
+
+void pacman_end(void){
+    initialized = false;
 }

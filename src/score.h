@@ -24,6 +24,7 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "includes.h"
 
 void score_init(void);
+void score_end(void);
 void score_increment(int);
 void score_save(void);
 

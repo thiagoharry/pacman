@@ -61,6 +61,8 @@ LOOP_INIT: // Code executed during loop initialization
                             15, 15, "digits.png");
     if(W.game -> slow_computer)
         sky -> visible = false;
+    W.game -> level = 1;
+    W.game -> game_over = false;
     digit -> visible = false;
     digit -> integer = 4;
     start_sound = W.new_sound("start.wav");
@@ -75,9 +77,7 @@ LOOP_INIT: // Code executed during loop initialization
     W.run_futurelly(begin_game, 1.0);
 LOOP_BODY: // Code executed every loop iteration
     if(game_started){
-        if(W.keyboard[W_ESC])
-            Wexit_loop();
-        else if(W.keyboard[W_UP])
+        if(W.keyboard[W_UP])
             pacman_turn_up();
         else if(W.keyboard[W_DOWN])
             pacman_turn_down();
@@ -92,7 +92,7 @@ LOOP_BODY: // Code executed every loop iteration
     pacman_transform();
     ghosts_transform();
     if(W.game -> game_over)
-        Wexit_loop();
+        Wloop(intro);
 LOOP_END: // Code executed at the end of the loop
     W.stop_music("music2.mp3");
     return;
@@ -132,9 +132,7 @@ void lose_life(void){
     new_life = pacman_increment_life(-1);
     ghosts_use_global_pellet_counter = true;
     if(new_life == 0){
-        W.game -> game_over = true;
-        score_save();
-        Wloop(intro);
+        game_end();
     }
     else{
         W.play_music("music2.mp3", true);
@@ -145,15 +143,24 @@ void lose_life(void){
 int main(void){
   Winit(); // Initializes Weaver
   resolution_init();
+  W.hide_cursor();
   game_init();
-  Wloop(intro); // Enter a new game loop
+  copyleft();
   return 0;
 }
 
 void game_init(void){
-    W.game -> level = 1;
-    W.game -> game_over = false;
     if(!W.read_integer("high_score", &(W.game -> stored_high_score))){
         W.game -> stored_high_score = 0;
     }
+}
+
+void game_end(void){
+    W.game -> game_over = true;
+    W.stop_music("music2.mp3");
+    pellet_end();
+    pacman_end();
+    fruits_end();
+    ghosts_end();
+    score_end();
 }

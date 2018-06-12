@@ -142,3 +142,7 @@ int pellet_eat(int x, int y){
     }
     return value;
 }
+
+void pellet_end(void){
+    initialized = false;
+}

@@ -31,3 +31,5 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "achievement.h"
 #include "intro.h"
 #include "intro.h"
+#include "copyleft.h"
+#include "license.h"

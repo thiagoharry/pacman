@@ -20,6 +20,9 @@ along with pacman. If not, see <http://www.gnu.org/licenses/>.
 #include "intro.h"
 
 static struct interface *image, *sky, *play, *achievements, *credits;
+#if W_TARGET == W_ELF
+static struct interface *menu_exit;
+#endif
 static struct interface *cursor, *title, *credit_names;
 static int option = 0;
 static bool visible_achievement = false;
@@ -55,6 +58,10 @@ MAIN_LOOP intro(void){
                            150, 32, "menu_achievements.png");
     credits = W.new_interface(5, W.width / 2, 0.3 * W.height - 80,
                                    102, 26, "menu_credits.png");
+#if W_TARGET == W_ELF
+    menu_exit = W.new_interface(5, W.width / 2, 0.3 * W.height - 120,
+                           150, 26, "menu_sair.png");
+#endif
     credit_names = W.new_interface(5, W.width / 2, -520,
                               744, 1053, "credits.png");
     credit_names -> visible = false;
@@ -97,9 +104,7 @@ LOOP_BODY:
         }
     }
     else{
-        if(W.keyboard[W_ESC])
-            Wexit_loop();
-        else if(W.keyboard[W_ENTER] == 1){
+        if(W.keyboard[W_ENTER] == 1){
             if(option == 0){
                 check_performance();
                 Wloop(main_loop);
@@ -122,12 +127,20 @@ LOOP_BODY:
                 cursor -> visible = false;
                 title -> visible = false;
             }
+            else if(option == 3){
+                Wexit_loop();
+            }
         }
         else if(W.keyboard[W_UP] == 1 && option > 0){
             option --;
             W.move_interface(cursor, cursor -> x, cursor -> y + 40);
         }
-        else if(W.keyboard[W_DOWN] == 1 && option < 2 ){
+        else if(W.keyboard[W_DOWN] == 1 &&
+#if W_TARGET == W_ELF
+                option < 3){
+#else
+                option < 2){
+#endif
             option ++;
             W.move_interface(cursor, cursor -> x, cursor -> y - 40);
         }
