@@ -142,11 +142,11 @@ void lose_life(void){
 
 int main(void){
   Winit(); // Initializes Weaver
-  resolution_init();
+  //resolution_init();
   W.hide_cursor();
   game_init();
   Wloop(license);
-  //copyleft();
+  copyleft();
   return 0;
 }
 
