@@ -75,7 +75,8 @@ void score_init(void){
         two_thousand = W.new_interface(5, 0, 0, 30, 30, "two_thousand.png");
         three_thousand = W.new_interface(5, 0, 0, 30, 30, "three_thousand.png");
         five_thousand = W.new_interface(5, 0, 0, 30, 30, "five_thousand.png");
-        record = W.new_interface(5, W.width / 2, W.height - 15, 91, 30, "record.png");
+        record = W.new_interface(8, W.width / 2, W.height - 15, 91, 30, "record.png");
+        record -> integer = 10;
     }
     hidden_score();
     for(i = 0; i < 5; i ++)

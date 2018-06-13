@@ -359,6 +359,8 @@ glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,W.width,W.height,0,GL_RGB,
 GL_UNSIGNED_BYTE,NULL);
 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 
 
 glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,
@@ -399,13 +401,13 @@ W.resize_interface(&_interfaces[i][j],new_width,new_height);
 #endif
 }
 /*:498*//*503:*/
-#line 11226 "cweb/weaver.w"
+#line 11228 "cweb/weaver.w"
 
 void _change_final_shader(int type){
 _final_shader[_number_of_loops]= type;
 }
 /*:503*//*659:*/
-#line 14778 "cweb/weaver.w"
+#line 14780 "cweb/weaver.w"
 
 char _vertex_image_interface[]= {
 #include "vertex_image_interface.data"

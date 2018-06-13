@@ -77,11 +77,11 @@ GLfloat _framebuffer_matrix[16];
 
 void _change_resolution(int resolution_x,int resolution_y);
 /*:497*//*502:*/
-#line 11222 "cweb/weaver.w"
+#line 11224 "cweb/weaver.w"
 
 void _change_final_shader(int type);
 /*:502*//*658:*/
-#line 14773 "cweb/weaver.w"
+#line 14775 "cweb/weaver.w"
 
 extern char _vertex_image_interface[];
 extern char _fragment_image_interface[];

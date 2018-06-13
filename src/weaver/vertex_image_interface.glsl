@@ -1,5 +1,5 @@
 /*656:*/
-#line 14717 "cweb/weaver.w"
+#line 14719 "cweb/weaver.w"
 
 
 #version 100
@@ -19,7 +19,7 @@ precision lowp samplerCube;
 
 attribute vec3 vertex_position;
 /*:445*/
-#line 14731 "cweb/weaver.w"
+#line 14733 "cweb/weaver.w"
 
 
 
@@ -33,7 +33,7 @@ uniform float time;
 uniform sampler2D texture1;
 uniform int integer;
 /*:446*/
-#line 14734 "cweb/weaver.w"
+#line 14736 "cweb/weaver.w"
 
 
 varying mediump vec2 coordinate;
