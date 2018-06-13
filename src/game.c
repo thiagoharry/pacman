@@ -31,8 +31,10 @@ void clock_achievement(void){
 }
 
 void begin_game(void){
-    digit -> integer --;
-    digit -> visible = true;
+    if(W.pending_files == 0){
+        digit -> integer --;
+        digit -> visible = true;
+    }
     if(digit -> integer <= 0){
         game_started = true;
         ready -> visible = false;
