@@ -145,7 +145,8 @@ int main(void){
   resolution_init();
   W.hide_cursor();
   game_init();
-  copyleft();
+  Wloop(license);
+  //copyleft();
   return 0;
 }
 
