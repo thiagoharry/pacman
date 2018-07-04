@@ -16,7 +16,7 @@
 // a web program to be run in a browser (W_WEB). In the first case,
 // running "make" creates an executable with the project name. In the
 // second, creates a "web" directory with a web application
-#define W_TARGET W_WEB
+#define W_TARGET W_ELF
 
 // This macro determines if we are writting a C program (W_C) or a C++
 // program (W_CPP):
