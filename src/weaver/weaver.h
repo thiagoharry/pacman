@@ -1,5 +1,5 @@
 /*70:*/
-#line 1977 "cweb/weaver.w"
+#line 1999 "./cweb/weaver.w"
 
 #ifndef _weaver_h_
 #define _weaver_h_
@@ -7,13 +7,13 @@
 extern"C"{
 #endif
 /*66:*/
-#line 1928 "cweb/weaver.w"
+#line 1950 "./cweb/weaver.w"
 
 #include "conf_begin.h"
 #include "../../conf/conf.h"
 #include "conf_end.h"
 /*:66*/
-#line 1983 "cweb/weaver.w"
+#line 2005 "./cweb/weaver.w"
 
 #include <stdlib.h> 
 #include <stdbool.h> 
@@ -21,7 +21,7 @@ extern"C"{
 #include <emscripten.h> 
 #endif
 /*71:*/
-#line 2019 "cweb/weaver.w"
+#line 2041 "./cweb/weaver.w"
 
 void _awake_the_weaver(void);
 void _may_the_weaver_sleep(void)__attribute__((noreturn));
@@ -30,23 +30,23 @@ void _render(void);
 #define Winit() _awake_the_weaver()
 #define Wexit() _may_the_weaver_sleep()
 /*:71*//*79:*/
-#line 2145 "cweb/weaver.w"
+#line 2167 "./cweb/weaver.w"
 
 struct timeval _last_time;
 /*:79*//*81:*/
-#line 2162 "cweb/weaver.w"
+#line 2184 "./cweb/weaver.w"
 
 unsigned long _update_time(void);
 /*:81*//*84:*/
-#line 2208 "cweb/weaver.w"
+#line 2230 "./cweb/weaver.w"
 
 extern struct _game_struct _game;
 /*:84*//*89:*/
-#line 2370 "cweb/weaver.w"
+#line 2392 "./cweb/weaver.w"
 
 #include "memory.h"
-/*:89*//*162:*/
-#line 3846 "cweb/weaver.w"
+/*:89*//*163:*/
+#line 3873 "./cweb/weaver.w"
 
 #include <stdio.h> 
 #include <sys/time.h> 
@@ -58,8 +58,8 @@ printf("%ld us\n", (1000000 * (_end.tv_sec - _begin.tv_sec) + \
 _end.tv_usec - _begin.tv_usec)); \
 }
 
-/*:162*//*168:*/
-#line 4162 "cweb/weaver.w"
+/*:163*//*169:*/
+#line 4189 "./cweb/weaver.w"
 
 typedef void MAIN_LOOP;
 
@@ -70,33 +70,33 @@ typedef void MAIN_LOOP;
 
 
 bool _loop_begin,_running_loop;
-/*:168*//*169:*/
-#line 4188 "cweb/weaver.w"
+/*:169*//*170:*/
+#line 4215 "./cweb/weaver.w"
 
 void _Wloop(MAIN_LOOP(*f)(void))__attribute__((noreturn));
 void Wsubloop(MAIN_LOOP(*f)(void))__attribute__((noreturn));
 #define Wloop(a) ((W.pending_files)?(false):(_Wloop(a)))
-/*:169*//*170:*/
-#line 4224 "cweb/weaver.w"
+/*:170*//*171:*/
+#line 4251 "./cweb/weaver.w"
 
 bool _first_loop;
 
 int _number_of_loops;
 MAIN_LOOP(*_loop_stack[W_MAX_SUBLOOP])(void);
-/*:170*//*173:*/
-#line 4277 "cweb/weaver.w"
+/*:171*//*174:*/
+#line 4304 "./cweb/weaver.w"
 
 void _exit_loop(void)__attribute__((noreturn));
-/*:173*//*175:*/
-#line 4317 "cweb/weaver.w"
+/*:174*//*176:*/
+#line 4344 "./cweb/weaver.w"
 
 #define Wexit_loop() (_running_loop =  false)
-/*:175*//*178:*/
-#line 4397 "cweb/weaver.w"
+/*:176*//*179:*/
+#line 4424 "./cweb/weaver.w"
 
 long _lag;
-/*:178*//*181:*/
-#line 4416 "cweb/weaver.w"
+/*:179*//*182:*/
+#line 4443 "./cweb/weaver.w"
 
 #define LOOP_INIT if(!_running_loop && !W.pending_files) _exit_loop();\
   if(!_running_loop)                                                    \
@@ -109,80 +109,85 @@ long _lag;
    _render(); if(_running_loop || W.pending_files) return; \
    if(W.t == 0) goto _LABEL_0;\
    _LOOP_FINALIZATION
-/*:181*//*187:*/
-#line 4565 "cweb/weaver.w"
+/*:182*//*189:*/
+#line 4605 "./cweb/weaver.w"
 
 #include "numeric.h"
-/*:187*//*207:*/
-#line 5003 "cweb/weaver.w"
+/*:189*//*215:*/
+#line 5102 "./cweb/weaver.w"
+
+#include "trie.h"
+/*:215*//*233:*/
+#line 5510 "./cweb/weaver.w"
 
 #include <GL/glew.h> 
-/*:207*//*211:*/
-#line 5084 "cweb/weaver.w"
+/*:233*//*237:*/
+#line 5591 "./cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
+#include <pthread.h> 
 extern pthread_mutex_t _window_mutex;
 #endif
-/*:211*//*213:*/
-#line 5101 "cweb/weaver.w"
+/*:237*//*239:*/
+#line 5609 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #include "window.h"
 #endif
-/*:213*//*219:*/
-#line 5210 "cweb/weaver.w"
+/*:239*//*245:*/
+#line 5718 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #include <X11/Xlib.h> 
 extern Display*_dpy;
 #endif
-/*:219*//*222:*/
-#line 5246 "cweb/weaver.w"
+/*:245*//*248:*/
+#line 5754 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 extern int _screen;
 #endif
-/*:222*//*227:*/
-#line 5288 "cweb/weaver.w"
+/*:248*//*253:*/
+#line 5796 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #include <X11/Xlib.h> 
 extern Window _window;
 #endif
-/*:227*//*235:*/
-#line 5472 "cweb/weaver.w"
+/*:253*//*261:*/
+#line 5980 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #include <GL/glx.h> 
 extern GLXContext _context;
 #endif
-/*:235*//*242:*/
-#line 5587 "cweb/weaver.w"
+/*:261*//*268:*/
+#line 6095 "./cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 #include "canvas.h"
 #endif
-/*:242*//*272:*/
-#line 6101 "cweb/weaver.w"
+/*:268*//*298:*/
+#line 6609 "./cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 pthread_mutex_t _input_mutex;
 #endif
 
-/*:272*//*275:*/
-#line 6162 "cweb/weaver.w"
+/*:298*//*301:*/
+#line 6670 "./cweb/weaver.w"
 
 #define W_SHIFT 2 
 #define W_CTRL  3 
 #define W_ALT   4 
 #define W_ANY   6 
-/*:275*//*277:*/
-#line 6199 "cweb/weaver.w"
+/*:301*//*303:*/
+#line 6707 "./cweb/weaver.w"
 
 int _Wkey_translate(unsigned old_value,unsigned new_value);
 void _Werase_key_translations(void);
-/*:277*//*285:*/
-#line 6423 "cweb/weaver.w"
+/*:303*//*311:*/
+#line 6931 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #define W_UP          XK_Up
@@ -261,18 +266,18 @@ void _Werase_key_translations(void);
 #define W_N           XK_n
 #define W_M           XK_m
 #endif
-/*:285*//*286:*/
-#line 6515 "cweb/weaver.w"
+/*:311*//*312:*/
+#line 7023 "./cweb/weaver.w"
 
 void _Wflush_input(void);
-/*:286*//*291:*/
-#line 6568 "cweb/weaver.w"
+/*:312*//*317:*/
+#line 7076 "./cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 #include <SDL/SDL.h> 
 #endif
-/*:291*//*294:*/
-#line 6636 "cweb/weaver.w"
+/*:317*//*320:*/
+#line 7144 "./cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 #define W_UP          SDLK_UP
@@ -351,8 +356,8 @@ void _Wflush_input(void);
 #define W_N           SDLK_n
 #define W_M           SDLK_m
 #endif
-/*:294*//*298:*/
-#line 6752 "cweb/weaver.w"
+/*:320*//*324:*/
+#line 7260 "./cweb/weaver.w"
 
 struct _mouse{
 
@@ -360,8 +365,8 @@ struct _mouse{
 long buttons[7];
 int x,y,dx,dy,ddx,ddy;
 };
-/*:298*//*300:*/
-#line 6770 "cweb/weaver.w"
+/*:324*//*326:*/
+#line 7278 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 #define W_MOUSE_LEFT   Button1
@@ -377,13 +382,13 @@ int x,y,dx,dy,ddx,ddy;
 #define W_MOUSE_B1     4
 #define W_MOUSE_B2     5
 #endif
-/*:300*//*318:*/
-#line 7092 "cweb/weaver.w"
+/*:326*//*344:*/
+#line 7600 "./cweb/weaver.w"
 
 bool _using_original_cursor;
 void _Whide_cursor(void);
-/*:318*//*366:*/
-#line 8206 "cweb/weaver.w"
+/*:344*//*392:*/
+#line 8716 "./cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 pthread_mutex_t _scheduler_mutex;
@@ -394,29 +399,29 @@ unsigned long last_execution;
 unsigned long period;
 void(*f)(void);
 }_scheduled_functions[W_MAX_SUBLOOP][W_MAX_SCHEDULING];
-/*:366*//*372:*/
-#line 8328 "cweb/weaver.w"
+/*:392*//*398:*/
+#line 8838 "./cweb/weaver.w"
 
 void _run_periodically(void(*f)(void),float t);
 void _run_futurelly(void(*f)(void),float t);
 float _cancel(void(*f)(void));
 float _period(void(*f)(void));
-/*:372*//*393:*/
-#line 8740 "cweb/weaver.w"
+/*:398*//*419:*/
+#line 9250 "./cweb/weaver.w"
 
 #include "interface.h"
-/*:393*//*441:*/
-#line 9674 "cweb/weaver.w"
+/*:419*//*467:*/
+#line 10199 "./cweb/weaver.w"
 
 #include <ctype.h>  
 #include "shaders.h"
-/*:441*//*481:*/
-#line 10802 "cweb/weaver.w"
+/*:467*//*507:*/
+#line 11353 "./cweb/weaver.w"
 
 #define W_NONE            0
 #define W_DEFAULT_SHADER -1
-/*:481*//*482:*/
-#line 10807 "cweb/weaver.w"
+/*:507*//*508:*/
+#line 11358 "./cweb/weaver.w"
 
 
 
@@ -434,27 +439,27 @@ bool _changed_resolution;
 
 
 GLuint _framebuffer;
-/*:482*//*485:*/
-#line 10853 "cweb/weaver.w"
+/*:508*//*511:*/
+#line 11404 "./cweb/weaver.w"
 
 
 
 GLuint _texture;
-/*:485*//*487:*/
-#line 10892 "cweb/weaver.w"
+/*:511*//*513:*/
+#line 11443 "./cweb/weaver.w"
 
 
 GLuint _depth_stencil;
-/*:487*//*511:*/
-#line 11295 "cweb/weaver.w"
+/*:513*//*537:*/
+#line 11846 "./cweb/weaver.w"
 
 int _final_shader_integer[W_MAX_SUBLOOP];
-/*:511*//*519:*/
-#line 11400 "cweb/weaver.w"
+/*:537*//*545:*/
+#line 11951 "./cweb/weaver.w"
 
 #include "sound.h"
-/*:519*//*584:*/
-#line 12509 "cweb/weaver.w"
+/*:545*//*610:*/
+#line 13060 "./cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 pthread_mutex_t _finalizing_mutex;
@@ -465,95 +470,99 @@ void(*finalize)(void*);
 struct _finalize_element*prev,*next;
 };
 struct _finalize_element*_finalize_list[W_MAX_SUBLOOP];
-/*:584*//*587:*/
-#line 12553 "cweb/weaver.w"
+/*:610*//*613:*/
+#line 13104 "./cweb/weaver.w"
 
 void _finalize_after(void*,void(*f)(void*));
-/*:587*//*589:*/
-#line 12595 "cweb/weaver.w"
+/*:613*//*615:*/
+#line 13146 "./cweb/weaver.w"
 
 void _finalize_all(void);
-/*:589*//*593:*/
-#line 12633 "cweb/weaver.w"
+/*:615*//*619:*/
+#line 13184 "./cweb/weaver.w"
 
 void _finalize_this(void*,bool);
-/*:593*//*599:*/
-#line 12772 "cweb/weaver.w"
+/*:619*//*625:*/
+#line 13323 "./cweb/weaver.w"
 
 #include "gif.h"
-/*:599*//*642:*/
-#line 14413 "cweb/weaver.w"
+/*:625*//*668:*/
+#line 14956 "./cweb/weaver.w"
 
 GLuint _empty_texture;
 char _empty_image[4];
-/*:642*//*690:*/
-#line 15513 "cweb/weaver.w"
+/*:668*//*716:*/
+#line 16057 "./cweb/weaver.w"
 
 #include "database.h"
-/*:690*/
-#line 1989 "cweb/weaver.w"
+/*:716*//*819:*/
+#line 18139 "./cweb/weaver.w"
+
+#include "metafont.h"
+/*:819*/
+#line 2011 "./cweb/weaver.w"
 
 
 /*75:*/
-#line 2089 "cweb/weaver.w"
+#line 2111 "./cweb/weaver.w"
 
 
 
 extern struct _weaver_struct{
 /*78:*/
-#line 2139 "cweb/weaver.w"
+#line 2161 "./cweb/weaver.w"
 
 
 unsigned long long t;
 unsigned long dt;
 /*:78*//*85:*/
-#line 2212 "cweb/weaver.w"
+#line 2234 "./cweb/weaver.w"
 
 
 struct _game_struct*game;
-/*:85*//*208:*/
-#line 5012 "cweb/weaver.w"
+/*:85*//*234:*/
+#line 5519 "./cweb/weaver.w"
 
 
 int resolution_x,resolution_y,framerate;
-/*:208*//*210:*/
-#line 5075 "cweb/weaver.w"
+/*:234*//*236:*/
+#line 5582 "./cweb/weaver.w"
 
 
 int width,height,x,y;
-/*:210*//*270:*/
-#line 6081 "cweb/weaver.w"
+/*:236*//*296:*/
+#line 6589 "./cweb/weaver.w"
 
 
 long keyboard[0xffff];
-/*:270*//*299:*/
-#line 6761 "cweb/weaver.w"
+/*:296*//*325:*/
+#line 7269 "./cweb/weaver.w"
 
 
 struct _mouse mouse;
-/*:299*//*506:*/
-#line 11247 "cweb/weaver.w"
+/*:325*//*532:*/
+#line 11798 "./cweb/weaver.w"
 
 
 int final_shader_integer;
-/*:506*//*529:*/
-#line 11481 "cweb/weaver.w"
+/*:532*//*555:*/
+#line 12032 "./cweb/weaver.w"
 
 
 int number_of_sound_devices;
 char**sound_device_name;
-/*:529*//*549:*/
-#line 11793 "cweb/weaver.w"
+/*:555*//*575:*/
+#line 12344 "./cweb/weaver.w"
 
 unsigned pending_files;
 #ifdef W_MULTITHREAD
 pthread_mutex_t _pending_files_mutex;
 #endif
-/*:549*/
-#line 2093 "cweb/weaver.w"
+/*:575*/
+#line 2115 "./cweb/weaver.w"
 
 /*116:*/
-#line 3076 "cweb/weaver.w"
+#line 3098 "./cweb/weaver.w"
 
 
 #if W_DEBUG_LEVEL >= 1
@@ -562,12 +571,12 @@ void*(*create_arena)(size_t,char*,unsigned long);
 void*(*create_arena)(size_t);
 #endif
 /*:116*//*124:*/
-#line 3202 "cweb/weaver.w"
+#line 3224 "./cweb/weaver.w"
 
 
 int(*destroy_arena)(void*);
 /*:124*//*129:*/
-#line 3327 "cweb/weaver.w"
+#line 3349 "./cweb/weaver.w"
 
 
 #if W_DEBUG_LEVEL >= 1
@@ -576,7 +585,7 @@ void*(*alloc_arena)(void*,size_t,char*,unsigned long);
 void*(*alloc_arena)(void*,size_t);
 #endif
 /*:129*//*133:*/
-#line 3439 "cweb/weaver.w"
+#line 3461 "./cweb/weaver.w"
 
 
 #if W_DEBUG_LEVEL >= 2 && !defined(W_MULTITHREAD)
@@ -585,7 +594,7 @@ void(*free)(void*,char*,unsigned long);
 void(*free)(void*);
 #endif
 /*:133*//*139:*/
-#line 3549 "cweb/weaver.w"
+#line 3571 "./cweb/weaver.w"
 
 
 #if W_DEBUG_LEVEL >= 1
@@ -594,12 +603,12 @@ int(*breakpoint_arena)(void*,char*,unsigned long);
 int(*breakpoint_arena)(void*);
 #endif
 /*:139*//*143:*/
-#line 3615 "cweb/weaver.w"
+#line 3637 "./cweb/weaver.w"
 
 
 void(*trash_arena)(void*);
-/*:143*//*153:*/
-#line 3743 "cweb/weaver.w"
+/*:143*//*154:*/
+#line 3770 "./cweb/weaver.w"
 
 
 #if W_DEBUG_LEVEL >= 1
@@ -607,8 +616,8 @@ void*(*alloc)(size_t,char*,unsigned long);
 #else
 void*(*alloc)(size_t);
 #endif
-/*:153*//*158:*/
-#line 3811 "cweb/weaver.w"
+/*:154*//*159:*/
+#line 3838 "./cweb/weaver.w"
 
 
 #if W_DEBUG_LEVEL >= 1
@@ -617,190 +626,190 @@ int(*breakpoint)(char*,unsigned long);
 int(*breakpoint)(void);
 #endif
 void(*trash)(void);
-/*:158*//*202:*/
-#line 4899 "cweb/weaver.w"
+/*:159*//*205:*/
+#line 4953 "./cweb/weaver.w"
 
 
 unsigned long(*random)(void);
-/*:202*//*254:*/
-#line 5835 "cweb/weaver.w"
+/*:205*//*280:*/
+#line 6343 "./cweb/weaver.w"
 
 void(*resize_window)(int,int);
-/*:254*//*260:*/
-#line 5881 "cweb/weaver.w"
+/*:280*//*286:*/
+#line 6389 "./cweb/weaver.w"
 
 void(*move_window)(int,int);
-/*:260*//*279:*/
-#line 6255 "cweb/weaver.w"
+/*:286*//*305:*/
+#line 6763 "./cweb/weaver.w"
 
 int(*key_translate)(unsigned,unsigned);
 void(*erase_key_translations)(void);
-/*:279*//*288:*/
-#line 6545 "cweb/weaver.w"
+/*:305*//*314:*/
+#line 7053 "./cweb/weaver.w"
 
 void(*flush_input)(void);
-/*:288*//*322:*/
-#line 7159 "cweb/weaver.w"
+/*:314*//*348:*/
+#line 7667 "./cweb/weaver.w"
 
 void(*hide_cursor)(void);
-/*:322*//*340:*/
-#line 7740 "cweb/weaver.w"
+/*:348*//*366:*/
+#line 8244 "./cweb/weaver.w"
 
 bool(*reload_plugin)(int);
-/*:340*//*351:*/
-#line 7967 "cweb/weaver.w"
+/*:366*//*377:*/
+#line 8474 "./cweb/weaver.w"
 
 int(*get_plugin)(char*);
-/*:351*//*355:*/
-#line 8076 "cweb/weaver.w"
+/*:377*//*381:*/
+#line 8586 "./cweb/weaver.w"
 
 void(*reload_all_plugins)(void);
-/*:355*//*377:*/
-#line 8474 "cweb/weaver.w"
+/*:381*//*403:*/
+#line 8984 "./cweb/weaver.w"
 
 
 void(*run_periodically)(void(*f)(void),float);
 void(*run_futurelly)(void(*f)(void),float);
 float(*cancel)(void(*f)(void));
 float(*period)(void(*f)(void));
-/*:377*//*382:*/
-#line 8563 "cweb/weaver.w"
+/*:403*//*408:*/
+#line 9073 "./cweb/weaver.w"
 
 bool(*enable_plugin)(int);
 bool(*disable_plugin)(int);
 bool(*is_plugin_enabled)(int);
-/*:382*//*386:*/
-#line 8613 "cweb/weaver.w"
+/*:408*//*412:*/
+#line 9123 "./cweb/weaver.w"
 
 void*(*get_plugin_data)(int);
 bool(*set_plugin_data)(int,void*);
-/*:386*//*408:*/
-#line 9042 "cweb/weaver.w"
+/*:412*//*434:*/
+#line 9567 "./cweb/weaver.w"
 
 struct interface*(*new_interface)(int,int,int,int,int,...);
-/*:408*//*412:*/
-#line 9090 "cweb/weaver.w"
+/*:434*//*438:*/
+#line 9615 "./cweb/weaver.w"
 
 bool(*destroy_interface)(struct interface*);
-/*:412*//*416:*/
-#line 9156 "cweb/weaver.w"
+/*:438*//*442:*/
+#line 9681 "./cweb/weaver.w"
 
 struct interface*(*copy_interface)(struct interface*);
-/*:416*//*421:*/
-#line 9254 "cweb/weaver.w"
+/*:442*//*447:*/
+#line 9779 "./cweb/weaver.w"
 
 void(*move_interface)(struct interface*,float,float);
-/*:421*//*425:*/
-#line 9333 "cweb/weaver.w"
+/*:447*//*451:*/
+#line 9858 "./cweb/weaver.w"
 
 void(*resize_interface)(struct interface*,float,float);
-/*:425*//*429:*/
-#line 9413 "cweb/weaver.w"
+/*:451*//*455:*/
+#line 9938 "./cweb/weaver.w"
 
 void(*rotate_interface)(struct interface*,float);
-/*:429*//*499:*/
-#line 11203 "cweb/weaver.w"
+/*:455*//*525:*/
+#line 11754 "./cweb/weaver.w"
 
 void(*change_resolution)(int,int);
-/*:499*//*504:*/
-#line 11236 "cweb/weaver.w"
+/*:525*//*530:*/
+#line 11787 "./cweb/weaver.w"
 
 void(*change_final_shader)(int);
-/*:504*//*536:*/
-#line 11590 "cweb/weaver.w"
+/*:530*//*562:*/
+#line 12141 "./cweb/weaver.w"
 
 bool(*select_sound_device)(int);
-/*:536*//*540:*/
-#line 11623 "cweb/weaver.w"
+/*:562*//*566:*/
+#line 12174 "./cweb/weaver.w"
 
 int(*current_sound_device)(void);
-/*:540*//*573:*/
-#line 12403 "cweb/weaver.w"
+/*:566*//*599:*/
+#line 12954 "./cweb/weaver.w"
 
 struct sound*(*new_sound)(char*);
-/*:573*//*577:*/
-#line 12435 "cweb/weaver.w"
+/*:599*//*603:*/
+#line 12986 "./cweb/weaver.w"
 
 void(*play_sound)(struct sound*);
-/*:577*//*581:*/
-#line 12484 "cweb/weaver.w"
+/*:603*//*607:*/
+#line 13035 "./cweb/weaver.w"
 
 void(*destroy_sound)(struct sound*);
-/*:581*//*701:*/
-#line 15704 "cweb/weaver.w"
+/*:607*//*727:*/
+#line 16253 "./cweb/weaver.w"
 
 void(*write_integer)(char*,int);
-/*:701*//*706:*/
-#line 15776 "cweb/weaver.w"
+/*:727*//*732:*/
+#line 16325 "./cweb/weaver.w"
 
 void(*write_float)(char*,float);
-/*:706*//*711:*/
-#line 15844 "cweb/weaver.w"
+/*:732*//*737:*/
+#line 16393 "./cweb/weaver.w"
 
 void(*write_string)(char*,char*);
-/*:711*//*717:*/
-#line 15916 "cweb/weaver.w"
+/*:737*//*743:*/
+#line 16465 "./cweb/weaver.w"
 
 bool(*read_integer)(char*,int*);
 bool(*read_float)(char*,float*);
 bool(*read_string)(char*,char*,int);
-/*:717*//*727:*/
-#line 16165 "cweb/weaver.w"
+/*:743*//*753:*/
+#line 16714 "./cweb/weaver.w"
 
 void(*delete_integer)(char*);
 void(*delete_float)(char*);
 void(*delete_string)(char*);
 void(*delete_all)(void);
-/*:727*//*750:*/
-#line 16681 "cweb/weaver.w"
+/*:753*//*776:*/
+#line 17242 "./cweb/weaver.w"
 
 bool(*play_music)(char*,bool);
-/*:750*//*754:*/
-#line 16736 "cweb/weaver.w"
+/*:776*//*780:*/
+#line 17297 "./cweb/weaver.w"
 
 bool(*pause_music)(char*);
-/*:754*//*760:*/
-#line 16840 "cweb/weaver.w"
+/*:780*//*786:*/
+#line 17401 "./cweb/weaver.w"
 
 bool(*stop_music)(char*);
-/*:760*//*764:*/
-#line 16871 "cweb/weaver.w"
+/*:786*//*792:*/
+#line 17469 "./cweb/weaver.w"
 
 float(*get_volume)(char*);
-/*:764*//*768:*/
-#line 16931 "cweb/weaver.w"
+/*:792*//*796:*/
+#line 17529 "./cweb/weaver.w"
 
 float(*increase_volume)(char*,float);
-/*:768*/
-#line 2094 "cweb/weaver.w"
+/*:796*/
+#line 2116 "./cweb/weaver.w"
 
 }W;
 /*:75*/
-#line 1991 "cweb/weaver.w"
+#line 2013 "./cweb/weaver.w"
 
-/*330:*/
-#line 7356 "cweb/weaver.w"
+/*356:*/
+#line 7864 "./cweb/weaver.w"
 
 #include "plugins.h"
-/*:330*//*363:*/
-#line 8166 "cweb/weaver.w"
+/*:356*//*389:*/
+#line 8676 "./cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 #include "../../.hidden_code/header.h"
 #endif
-/*:363*/
-#line 1992 "cweb/weaver.w"
+/*:389*/
+#line 2014 "./cweb/weaver.w"
 
-/*327:*/
-#line 7300 "cweb/weaver.w"
+/*353:*/
+#line 7808 "./cweb/weaver.w"
 
 
 #define W_PLUGIN struct _weaver_struct *_W
 #ifdef W_PLUGIN_CODE
 #define W (*_W)
 #endif
-/*:327*/
-#line 1993 "cweb/weaver.w"
+/*:353*/
+#line 2015 "./cweb/weaver.w"
 
 #ifdef __cplusplus
 }

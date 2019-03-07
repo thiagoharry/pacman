@@ -1,5 +1,5 @@
 /*68:*/
-#line 1952 "cweb/weaver.w"
+#line 1974 "./cweb/weaver.w"
 
 #ifndef W_DEBUG_LEVEL
 #define W_DEBUG_LEVEL 0
@@ -17,7 +17,7 @@
 #define W_TARGET W_ELF
 #endif
 /*:68*//*93:*/
-#line 2446 "cweb/weaver.w"
+#line 2468 "./cweb/weaver.w"
 
 #ifndef W_MAX_MEMORY
 #warning "W_MAX_MEMORY not defined at conf/conf.h. Assuming the smallest value possible"
@@ -34,8 +34,8 @@
 #warning "W_MAX_SUBLOOP not defined at conf/conf.h. Assuming 1."
 #define W_MAX_SUBLOOP 1
 #endif
-/*:93*//*209:*/
-#line 5042 "cweb/weaver.w"
+/*:93*//*235:*/
+#line 5549 "./cweb/weaver.w"
 
 #ifndef W_DEFAULT_COLOR
 #define W_DEFAULT_COLOR 0.0, 0.0, 0.0
@@ -46,8 +46,8 @@
 #ifndef W_WIDTH
 #define W_WIDTH 0
 #endif
-/*:209*//*328:*/
-#line 7332 "cweb/weaver.w"
+/*:235*//*354:*/
+#line 7840 "./cweb/weaver.w"
 
 #ifndef W_INSTALL_DATA
 #define W_INSTALL_DATA "/usr/share/games/"W_PROG
@@ -65,11 +65,11 @@
 #ifndef W_MAX_SCHEDULING
 #define W_MAX_SCHEDULING 8
 #endif
-/*:328*//*737:*/
-#line 16419 "cweb/weaver.w"
+/*:354*//*763:*/
+#line 16968 "./cweb/weaver.w"
 
 
 #ifndef W_MAX_MUSIC
 #define W_MAX_MUSIC 1
 #endif
-/*:737*/
+/*:763*/

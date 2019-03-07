@@ -23,7 +23,7 @@
 #define W_SOURCE W_C
 
 // The maximum ammount of memory for the game
-#define W_MAX_MEMORY 10000000
+#define W_MAX_MEMORY 20000000
 #define W_INTERNAL_MEMORY 200000
 // When compiling for the web, we usually need aditional memory. So we
 // sum the memory above with the value below:

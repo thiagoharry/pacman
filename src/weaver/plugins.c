@@ -1,17 +1,15 @@
-/*332:*/
-#line 7387 "cweb/weaver.w"
+/*358:*/
+#line 7895 "./cweb/weaver.w"
 
 #include "plugins.h"
-#if W_TARGET == W_ELF
-#include <error.h> 
-#endif
-/*:332*//*335:*/
-#line 7460 "cweb/weaver.w"
+/*:358*//*361:*/
+#line 7965 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _initialize_plugin(struct _plugin_data*data,char*path){
 struct stat attr;
 char*p,buffer[256];
+size_t plugin_name_length= strlen(data->plugin_name);
 int i;
 #ifdef W_PREVENT_SELF_ENABLING_PLUGINS
 data->finished_initialization= false;
@@ -58,41 +56,37 @@ p++;
 }
 data->plugin_name[i]= '\0';
 
-buffer[0]= '\0';
-strcat(buffer,"_init_plugin_");
-strcat(buffer,data->plugin_name);
+
+memcpy(buffer,"_init_plugin_",14);
+memcpy(&buffer[13],data->plugin_name,plugin_name_length+1);
 data->_init_plugin= dlsym(data->handle,buffer);
 if(data->_init_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define %s.\n",
 data->plugin_name,buffer);
 
-buffer[0]= '\0';
-strcat(buffer,"_fini_plugin_");
-strcat(buffer,data->plugin_name);
+memcpy(buffer,"_fini_plugin_",14);
+memcpy(&buffer[13],data->plugin_name,plugin_name_length+1);
 data->_fini_plugin= dlsym(data->handle,buffer);
 if(data->_fini_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define %s.\n",
 data->plugin_name,buffer);
 
-buffer[0]= '\0';
-strcat(buffer,"_run_plugin_");
-strcat(buffer,data->plugin_name);
+memcpy(buffer,"_run_plugin_",13);
+memcpy(&buffer[12],data->plugin_name,plugin_name_length+1);
 data->_run_plugin= dlsym(data->handle,buffer);
 if(data->_run_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define %s.\n",
 data->plugin_name,buffer);
 
-buffer[0]= '\0';
-strcat(buffer,"_enable_plugin_");
-strcat(buffer,data->plugin_name);
+memcpy(buffer,"_enable_plugin_",16);
+memcpy(&buffer[15],data->plugin_name,plugin_name_length+1);
 data->_enable_plugin= dlsym(data->handle,buffer);
 if(data->_enable_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define %s.\n",
 data->plugin_name,buffer);
 
-buffer[0]= '\0';
-strcat(buffer,"_disable_plugin_");
-strcat(buffer,data->plugin_name);
+memcpy(buffer,"_disable_plugin_",17);
+memcpy(&buffer[16],data->plugin_name,plugin_name_length+1);
 data->_disable_plugin= dlsym(data->handle,buffer);
 if(data->_disable_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define %s.\n",
@@ -115,8 +109,8 @@ fprintf(stderr,"WARNING (3): New plugin loaded: %s.\n",data->plugin_name);
 #endif
 }
 #endif
-/*:335*//*337:*/
-#line 7598 "cweb/weaver.w"
+/*:361*//*363:*/
+#line 8100 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _finalize_plugin(struct _plugin_data*data){
@@ -128,7 +122,8 @@ data->_fini_plugin(&W);
 
 #ifdef W_MULTITHREAD
 if(pthread_mutex_destroy(&(data->mutex))!=0)
-error(0,1,"Finalizing plugin %s",data->plugin_name);
+fprintf(stderr,"ERROR: Finalizing plugin %s: couldn't destroy mutex.",
+data->plugin_name);
 #endif
 
 if(dlclose(data->handle)!=0)
@@ -139,14 +134,15 @@ fprintf(stderr,"WARNING (3): Plugin finalized: %s.\n",data->plugin_name);
 #endif
 }
 #endif
-/*:337*//*339:*/
-#line 7638 "cweb/weaver.w"
+/*:363*//*365:*/
+#line 8141 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 bool _reload_plugin(int plugin_id){
 char buffer[256];
 struct stat attr;
 struct _plugin_data*data= &(_plugins[plugin_id]);
+size_t string_length,plugin_name_length= strlen(data->plugin_name);
 #ifdef W_MULTITHREAD
 pthread_mutex_lock(&(data->mutex));
 #endif
@@ -189,41 +185,41 @@ return false;
 dlerror();
 
 
-buffer[0]= '\0';
-strcat(buffer,"_init_plugin_");
-strcat(buffer,data->plugin_name);
+string_length= 13;
+memcpy(buffer,"_init_plugin_",string_length+1);
+memcpy(&buffer[13],data->plugin_name,plugin_name_length+1);
 data->_init_plugin= dlsym(data->handle,buffer);
 if(data->_init_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define _init_plugin_%s.\n",
 data->plugin_name,data->plugin_name);
 
-buffer[0]= '\0';
-strcat(buffer,"_fini_plugin_");
-strcat(buffer,data->plugin_name);
+string_length= 13;
+memcpy(buffer,"_fini_plugin_",string_length+1);
+memcpy(&buffer[13],data->plugin_name,plugin_name_length+1);
 data->_fini_plugin= dlsym(data->handle,buffer);
 if(data->_fini_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define _fini_plugin_%s.\n",
 data->plugin_name,data->plugin_name);
 
-buffer[0]= '\0';
-strcat(buffer,"_run_plugin_");
-strcat(buffer,data->plugin_name);
+string_length= 12;
+memcpy(buffer,"_run_plugin_",string_length+1);
+memcpy(&buffer[12],data->plugin_name,plugin_name_length+1);
 data->_run_plugin= dlsym(data->handle,buffer);
 if(data->_run_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define _run_plugin_%s.\n",
 data->plugin_name,data->plugin_name);
 
-buffer[0]= '\0';
-strcat(buffer,"_enable_plugin_");
-strcat(buffer,data->plugin_name);
+string_length= 15;
+memcpy(buffer,"_enable_plugin_",string_length+1);
+memcpy(&buffer[15],data->plugin_name,plugin_name_length+1);
 data->_enable_plugin= dlsym(data->handle,buffer);
 if(data->_enable_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define _enable_plugin_%s.\n",
 data->plugin_name,data->plugin_name);
 
-buffer[0]= '\0';
-strcat(buffer,"_disable_plugin_");
-strcat(buffer,data->plugin_name);
+string_length= 16;
+memcpy(buffer,"_disable_plugin_",string_length+1);
+memcpy(&buffer[16],data->plugin_name,plugin_name_length+1);
 data->_disable_plugin= dlsym(data->handle,buffer);
 if(data->_disable_plugin==NULL)
 fprintf(stderr,"ERROR: Plugin %s doesn't define _disable_plugin_%s.\n",
@@ -238,16 +234,16 @@ data->plugin_name);
 return true;
 }
 #endif
-/*:339*//*342:*/
-#line 7751 "cweb/weaver.w"
+/*:365*//*368:*/
+#line 8255 "./cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 bool _reload_plugin(int plugin_id){
 return(bool)(plugin_id+1);
 }
 #endif
-/*:342*//*350:*/
-#line 7955 "cweb/weaver.w"
+/*:368*//*376:*/
+#line 8462 "./cweb/weaver.w"
 
 int _Wget_plugin(char*plugin_name){
 int i;
@@ -256,8 +252,8 @@ if(!strcmp(plugin_name,_plugins[i].plugin_name))
 return i;
 return-1;
 }
-/*:350*//*354:*/
-#line 7989 "cweb/weaver.w"
+/*:376*//*380:*/
+#line 8496 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void _reload_all_plugins(void){
@@ -268,6 +264,7 @@ pthread_mutex_lock(&(_plugin_mutex));
 char*begin= W_PLUGIN_PATH,*end= W_PLUGIN_PATH;
 char dir[256];
 DIR*directory;
+size_t dir_length,d_name_length;
 struct dirent*dp;
 while(*end!='\0'){
 end++;
@@ -280,6 +277,7 @@ continue;
 }
 strncpy(dir,begin,(size_t)(end-begin));
 dir[(end-begin)]= '\0';
+dir_length= (end-begin);
 
 directory= opendir(dir);
 if(directory==NULL){
@@ -307,13 +305,14 @@ _plugins[id].defined= false;
 }
 else{
 
-if(strlen(dir)+1+strlen(dp->d_name)> 255){
+d_name_length= strlen(dp->d_name);
+if(dir_length+1+d_name_length> 255){
 fprintf(stderr,"Ignoring plugin with too long path: %s/%s.\n",
 dir,dp->d_name);
 continue;
 }
-strcat(dir,"/");
-strcat(dir,dp->d_name);
+memcpy(&dir[dir_length],"/",2);
+memcpy(&dir[dir_length+1],dp->d_name,d_name_length);
 for(i= 0;i<_max_number_of_plugins;i++){
 if(_plugins[i].defined==false){
 _initialize_plugin(&(_plugins[i]),dir);
@@ -336,16 +335,16 @@ pthread_mutex_unlock(&(_plugin_mutex));
 }
 }
 #endif
-/*:354*//*358:*/
-#line 8098 "cweb/weaver.w"
+/*:380*//*384:*/
+#line 8608 "./cweb/weaver.w"
 
 #if W_TARGET == W_WEB
 void _reload_all_plugins(void){
 return;
 }
 #endif
-/*:358*//*381:*/
-#line 8503 "cweb/weaver.w"
+/*:384*//*407:*/
+#line 9013 "./cweb/weaver.w"
 
 bool _Wenable_plugin(int plugin_id){
 #ifdef W_PREVENT_SELF_ENABLING_PLUGINS
@@ -399,8 +398,8 @@ if(plugin_id>=_max_number_of_plugins||
 return false;
 return _plugins[plugin_id].enabled;
 }
-/*:381*//*385:*/
-#line 8593 "cweb/weaver.w"
+/*:407*//*411:*/
+#line 9103 "./cweb/weaver.w"
 
 #if W_TARGET == W_ELF
 void*_Wget_plugin_data(int plugin_id){
@@ -417,4 +416,4 @@ _plugins[plugin_id].plugin_data= data;
 return true;
 }
 #endif
-/*:385*/
+/*:411*/

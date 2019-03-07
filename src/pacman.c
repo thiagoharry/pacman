@@ -53,13 +53,13 @@ void pacman_init(void){
         pacman_life = W.new_interface(8, 100, 20, 200, 40, "pacman_life.png");
         pacman_life -> integer = 5;
         achievement = W.new_interface(10, 100, 20, 70, 66, "achievement_unlock.png");
+	kill_sound = W.new_sound("ghost.wav");
         achievement -> visible = false;
     }
     pacman -> animate = false;
     pacman -> current_frame = 2;
     pacman -> integer = RIGHT;
     slow_down = 1.0;
-    kill_sound = W.new_sound("ghost.wav");
     initialized = true;
 }
 

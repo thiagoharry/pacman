@@ -80,6 +80,9 @@ LOOP_BODY:
             sky -> visible = true;
             image -> visible = true;
             title -> visible = true;
+#if W_TARGET == W_ELF
+	    menu_exit -> visible = true;
+#endif
         }
     }
     else if(visible_credits){
@@ -96,6 +99,10 @@ LOOP_BODY:
             credits -> visible = true;
             cursor -> visible = true;
             title -> visible = true;
+#if W_TARGET == W_ELF
+	    menu_exit -> visible = true;
+#endif
+
             W.move_interface(credit_names, credit_names -> x, - 520);
         }
         else{
@@ -113,6 +120,9 @@ LOOP_BODY:
                 visible_achievement = true;
                 sky -> visible = false;
                 image -> visible = false;
+#if W_TARGET == W_ELF
+		menu_exit -> visible = false;
+#endif
                 achievement_show();
             }
             else if(option == 2){
@@ -126,6 +136,9 @@ LOOP_BODY:
                 credits -> visible = false;
                 cursor -> visible = false;
                 title -> visible = false;
+#if W_TARGET == W_ELF
+		menu_exit -> visible = false;
+#endif
             }
             else if(option == 3){
                 Wexit_loop();

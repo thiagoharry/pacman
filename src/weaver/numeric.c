@@ -1,12 +1,12 @@
-/*186:*/
-#line 4547 "cweb/weaver.w"
+/*188:*/
+#line 4586 "./cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 #include <pthread.h> 
 #endif
 #include <stdint.h> 
 #include <stdbool.h> 
-#include <sys/timeb.h>  
+#include <sys/time.h>  
 #include <string.h>  
 #include "numeric.h"
 #if W_TARGET == W_ELF
@@ -14,8 +14,9 @@
 #include <sys/stat.h>  
 #include <fcntl.h>  
 #endif
-/*189:*/
-#line 4612 "cweb/weaver.w"
+static bool initialized= false;
+/*191:*/
+#line 4652 "./cweb/weaver.w"
 
 
 static uint32_t _sfmt_sequence[624];
@@ -25,11 +26,16 @@ static int _sfmt_index;
 
 static pthread_mutex_t _sfmt_mutex;
 #endif
-/*:189*/
-#line 4561 "cweb/weaver.w"
+/*:191*//*199:*/
+#line 4758 "./cweb/weaver.w"
 
-/*201:*/
-#line 4830 "cweb/weaver.w"
+static bool use_runtime_seed= false;
+static unsigned int runtime_seed= 0;
+/*:199*/
+#line 4601 "./cweb/weaver.w"
+
+/*204:*/
+#line 4884 "./cweb/weaver.w"
 
 static void _regenerate_sequence(void){
 int i;
@@ -93,27 +99,29 @@ memcpy(r1,r2,16);
 memcpy(r2,&(_sfmt_sequence[4*i]),16);
 }
 }
-/*:201*/
-#line 4562 "cweb/weaver.w"
+/*:204*/
+#line 4602 "./cweb/weaver.w"
 
-/*191:*/
-#line 4629 "cweb/weaver.w"
+/*193:*/
+#line 4669 "./cweb/weaver.w"
 
 void _initialize_numeric_functions(void){
 uint32_t seed;
-/*194:*/
-#line 4654 "cweb/weaver.w"
+/*196:*/
+#line 4695 "./cweb/weaver.w"
 
 #if defined(W_MULTITHREAD)
-if(pthread_mutex_init(&_sfmt_mutex,NULL)!=0){
+if(!initialized&&pthread_mutex_init(&_sfmt_mutex,NULL)!=0){
 fprintf(stderr,"ERROR (0): Can't initialize mutex for random numbers.\n");
 exit(1);
 }
 #endif
-/*:194*//*196:*/
-#line 4678 "cweb/weaver.w"
+/*:196*//*198:*/
+#line 4722 "./cweb/weaver.w"
 
-{
+if(use_runtime_seed)
+seed= runtime_seed;
+else{
 #ifndef W_SEED
 #if W_TARGET == W_ELF
 bool got_seed= false;
@@ -124,15 +132,15 @@ got_seed= true;
 close(file);
 }
 if(!got_seed){
-struct timeb t;
-ftime(&t);
-seed= (uint32_t)t.time+(uint32_t)(t.millitm<<2);
+struct timeval t;
+gettimeofday(&t,NULL);
+seed= (uint32_t)t.tv_usec+(uint32_t)(t.tv_sec<<9);
 }
 #else
 {
-struct timeb t;
-ftime(&t);
-seed= (uint32_t)t.time+(uint32_t)(t.millitm<<2);
+struct timeval t;
+gettimeofday(&t,NULL);
+seed= (uint32_t)t.tv_usec+(uint32_t)(t.tv_sec<<9);
 }
 #endif
 
@@ -141,8 +149,8 @@ _sfmt_sequence[0]= seed;
 _sfmt_sequence[0]= seed= (uint32_t)W_SEED;
 #endif
 }
-/*:196*//*197:*/
-#line 4721 "cweb/weaver.w"
+/*:198*//*200:*/
+#line 4775 "./cweb/weaver.w"
 
 {
 int i;
@@ -154,8 +162,8 @@ _sfmt_sequence[i]= 1812433253ul*
 
 _sfmt_index= 0;
 }
-/*:197*//*198:*/
-#line 4765 "cweb/weaver.w"
+/*:200*//*201:*/
+#line 4819 "./cweb/weaver.w"
 
 {
 int i;
@@ -170,30 +178,31 @@ else
 _sfmt_sequence[0]++;
 }
 }
-/*:198*//*204:*/
-#line 4925 "cweb/weaver.w"
+/*:201*//*207:*/
+#line 4979 "./cweb/weaver.w"
 
 {
 _sfmt_index= -1;
 _regenerate_sequence();
+initialized= true;
 }
-/*:204*/
-#line 4632 "cweb/weaver.w"
+/*:207*/
+#line 4672 "./cweb/weaver.w"
 
 }
 void _finalize_numeric_functions(void){
-/*195:*/
-#line 4663 "cweb/weaver.w"
+/*197:*/
+#line 4704 "./cweb/weaver.w"
 
 #if defined(W_MULTITHREAD)
 pthread_mutex_destroy(&_sfmt_mutex);
 #endif
-/*:195*/
-#line 4635 "cweb/weaver.w"
+/*:197*/
+#line 4675 "./cweb/weaver.w"
 
 }
-/*:191*//*200:*/
-#line 4788 "cweb/weaver.w"
+/*:193*//*203:*/
+#line 4842 "./cweb/weaver.w"
 
 unsigned long _random(void){
 unsigned long number;
@@ -214,7 +223,15 @@ pthread_mutex_unlock(&_sfmt_mutex);
 #endif
 return number;
 }
-/*:200*/
-#line 4563 "cweb/weaver.w"
+/*:203*//*209:*/
+#line 4995 "./cweb/weaver.w"
 
-/*:186*/
+void _set_random_number_seed(unsigned int seed){
+use_runtime_seed= true;
+runtime_seed= seed;
+_initialize_numeric_functions();
+}
+/*:209*/
+#line 4603 "./cweb/weaver.w"
+
+/*:188*/

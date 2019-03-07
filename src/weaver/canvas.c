@@ -1,14 +1,14 @@
-/*244:*/
-#line 5620 "cweb/weaver.w"
+/*270:*/
+#line 6128 "./cweb/weaver.w"
 
 /*66:*/
-#line 1928 "cweb/weaver.w"
+#line 1950 "./cweb/weaver.w"
 
 #include "conf_begin.h"
 #include "../../conf/conf.h"
 #include "conf_end.h"
 /*:66*/
-#line 5621 "cweb/weaver.w"
+#line 6129 "./cweb/weaver.w"
 
 extern int make_iso_compilers_happy;
 #if W_TARGET == W_WEB
@@ -71,8 +71,8 @@ el.style.overflow= "hidden";
 void _finalize_canvas(void){
 SDL_FreeSurface(window);
 }
-/*253:*/
-#line 5810 "cweb/weaver.w"
+/*279:*/
+#line 6318 "./cweb/weaver.w"
 
 void _Wresize_window(int width,int height){
 int old_width,old_height;
@@ -88,12 +88,12 @@ old_height= W.height;
 W.width= width;
 W.height= height;
 glViewport(0,0,W.width,W.height);
-/*436:*/
-#line 9602 "cweb/weaver.w"
+/*462:*/
+#line 10127 "./cweb/weaver.w"
 
 _update_interface_screen_size();
-/*:436*//*478:*/
-#line 10679 "cweb/weaver.w"
+/*:462*//*504:*/
+#line 11230 "./cweb/weaver.w"
 
 {
 
@@ -117,21 +117,21 @@ new_height= _interfaces[i][j].height*
 W.resize_interface(&_interfaces[i][j],new_width,new_height);
 }
 }
-/*:478*/
-#line 5825 "cweb/weaver.w"
+/*:504*/
+#line 6333 "./cweb/weaver.w"
 
 #ifdef W_MULTITHREAD
 pthread_mutex_unlock(&_window_mutex);
 #endif
 }
-/*:253*//*259:*/
-#line 5873 "cweb/weaver.w"
+/*:279*//*285:*/
+#line 6381 "./cweb/weaver.w"
 
 void _Wmove_window(int width,int height){
 return;
 }
-/*:259*/
-#line 5683 "cweb/weaver.w"
+/*:285*/
+#line 6191 "./cweb/weaver.w"
 
 #endif
-/*:244*/
+/*:270*/
