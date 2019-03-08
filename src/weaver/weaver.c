@@ -445,16 +445,16 @@ static unsigned _translate_key(unsigned symbol){
 int i;
 for(i= 0;i<100;i++){
 if(_key_translate[i].original_symbol==0)
-return symbol%0xffff;
+return symbol%0x10000;
 if(_key_translate[i].original_symbol==symbol)
-return _key_translate[i].new_symbol%0xffff;
+return _key_translate[i].new_symbol%0x10000;
 }
 #if W_DEBUG_LEVEL >= 2
-if(symbol>=0xffff)
+if(symbol> 0xffff)
 fprintf(stderr,"WARNING (2): Key with unknown code pressed: %lu",
 (unsigned long)symbol);
 #endif
-return symbol%0xffff;
+return symbol%0x10000;
 }
 #endif
 /*:302*//*304:*/
@@ -892,7 +892,7 @@ glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
 {
 int i;
-for(i= 0;i<0xffff;i++)
+for(i= 0;i<=0xffff;i++)
 W.keyboard[i]= 0;
 #if W_TARGET == W_ELF
 for(i= 0;i<100;i++){

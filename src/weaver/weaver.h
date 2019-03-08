@@ -177,10 +177,10 @@ pthread_mutex_t _input_mutex;
 /*:298*//*301:*/
 #line 6670 "./cweb/weaver.w"
 
-#define W_SHIFT 2 
-#define W_CTRL  3 
-#define W_ALT   4 
-#define W_ANY   6 
+#define W_SHIFT  2 
+#define W_CTRL   3 
+#define W_ALT    4 
+#define W_ANY    6 
 /*:301*//*303:*/
 #line 6707 "./cweb/weaver.w"
 
@@ -218,9 +218,9 @@ void _Werase_key_translations(void);
 #define W_F11         XK_F11
 #define W_F12         XK_F12
 #define W_BACKSPACE   XK_BackSpace
+#define W_DELETE      XK_Delete
 #define W_TAB         XK_Tab
 #define W_PAUSE       XK_Pause
-#define W_DELETE      XK_Delete
 #define W_SCROLL_LOCK XK_Scroll_Lock
 #define W_HOME        XK_Home
 #define W_PAGE_UP     XK_Page_Up
@@ -534,7 +534,7 @@ int width,height,x,y;
 #line 6589 "./cweb/weaver.w"
 
 
-long keyboard[0xffff];
+long keyboard[0x10000];
 /*:296*//*325:*/
 #line 7269 "./cweb/weaver.w"
 
