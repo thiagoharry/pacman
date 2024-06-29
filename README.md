@@ -1,7 +1,7 @@
 # pacman
 
 A Pac-Man clone using Weaver Engine, play this game at:
-https://thiagoharry.github.com/pacman
+https://thiagoharry.github.io/pacman/
 
 ## Game Controls
 
